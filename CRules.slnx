@@ -1,0 +1,25 @@
+<Solution>
+
+  <Folder Name="/benchmarks/">
+
+    <Project Path="benchmarks/CRules.Benchmarks/CRules.Benchmarks.csproj" />
+
+  </Folder>
+
+  <Folder Name="/src/">
+
+    <Project Path="src/CRules.Abstractions/CRules.Abstractions.csproj" />
+
+    <Project Path="src/CRules/CRules.csproj" />
+
+  </Folder>
+
+  <Folder Name="/tests/">
+
+    <Project Path="tests/CRules.AotSmoke/CRules.AotSmoke.csproj" />
+
+    <Project Path="tests/CRules.Tests/CRules.Tests.csproj" />
+
+  </Folder>
+
+</Solution>

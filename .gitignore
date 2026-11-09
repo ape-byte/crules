@@ -1,0 +1,11 @@
+**/bin/
+**/obj/
+TestResults/
+BenchmarkDotNet.Artifacts/
+.tmp/
+.vs/
+*.log
+
+# Local integration adapters require a separate business repository.
+src/CRules.TokenHub/
+tests/CRules.TokenHub.Tests/
