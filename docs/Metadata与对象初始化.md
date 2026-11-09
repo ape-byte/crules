@@ -1,0 +1,96 @@
+# Metadata 有类型读取与对象结果初始化
+
+本次升级提供不可变 Metadata 快照、直接返回的目标类型 `new()` 和显式类型对象初始化。规则仍要求所有可达执行路径返回；`if/else` 分支分别返回是合法写法。本文描述当前实现，早期开发计划书与基准报告保留其原始验证范围。
+
+## 完整示例
+
+宿主上下文使用 `RuleMetadata`，不需要为每个 Metadata 键声明 DTO 属性：
+
+```csharp
+using CRules;
+
+var metadata = RuleMetadata.FromJson("""{"point_rate":2.5,"customer_tier":"vip"}""");
+var compiler = new RuleCompiler(new RuleCompileOptions
+{
+    DecimalOnly = true,
+    ReferencedTypes = [typeof(Decision)]
+});
+var rule = compiler.Compile<Input, Decision>(new RuleSource("points", "1", """
+    var rate = ctx.Metadata.RequireDecimal("point_rate");
+    var tier = ctx.Metadata.GetString("customer_tier");
+    if (tier == "vip") {
+        return new() { Action = "priced", Amount = rate * 0.9m };
+    } else {
+        return new Decision() { Action = "priced", Amount = rate };
+    }
+    """)).RequireRule();
+
+var decision = rule.Execute(new Input(metadata)); // Amount = 2.25m
+
+public sealed record Input(RuleMetadata Metadata);
+public sealed class Decision
+{
+    public string Action { get; init; } = "";
+    public decimal Amount { get; init; }
+}
+```
+
+在加载或发布时编译一次，保存句柄后重复执行。实例 DTO 通常每次执行分配一次，不能据此声明对象结果零分配。
+
+## Metadata 契约
+
+`RuleMetadata` 位于无 DynamicExpresso 依赖的 `CRules.Abstractions`，命名空间仍为 `CRules`。支持 `FromJson(string)`、`FromJson(JsonElement)` 和 `FromDictionary(IReadOnlyDictionary<string, object?>)`。构建时复制快照；原字典变更、外部 JsonDocument 释放均不影响结果。可在并发调用之间共享快照。
+
+| API | 有效值 | 缺失 / JSON null | 类型不符或数值超范围 |
+| --- | --- | --- | --- |
+| `GetString` | string | null | 抛出 MetadataReadException |
+| `GetBoolean` | bool? | null | 同上 |
+| `GetInt64` | long? | null | 同上 |
+| `GetDecimal` | decimal? | null | 同上 |
+| `GetObject` | RuleMetadata | null | 同上 |
+| 对应 `Require*` | 非空的相应类型 | 抛出 MetadataReadException | 同上 |
+
+`GetState(key)` 返回 `Missing`、`Null`、`Value`；`Contains` 对显式 null 返回 true，`IsNull` 对缺失返回 false。异常公开 Key、ExpectedType、State，消息不包含原始字段值。默认值由规则显式写出，例如 `ctx.Metadata.GetDecimal("rate") ?? 1m`；类型错误不会走默认值。
+
+键区分大小写，点号是键的普通字符，不自动解释为路径。嵌套读取使用 `RequireObject("customer").RequireString("tier")`。本轮不提供数组枚举 API、Schema 点访问或任意 dynamic 运算。原有 ExpandoObject 规则需要宿主转换上下文并改写读取方式，不会自动迁移。
+
+读取不将字符串转为数值或布尔值，也不将小数截断为 long。decimal 使用 System.Text.Json 的 decimal 读取语义；超过 decimal 精度的 JSON 数字可能按其标准语义舍入，超范围则拒绝。需精确限制输入小数位数的业务应在宿主构建时校验，不能把该 API 当作任意精度数值库。
+
+默认上限为 256 KiB UTF-8、JSON 深度 16，根节点必须是对象；重复键（包含嵌套对象）拒绝。宿主可通过构建参数调整上限。字典工厂会先执行 JSON 序列化，适合宿主认可的纯数据；它不是任意对象的执行沙箱。字典序列化阶段的成本和对象行为由宿主负责。
+
+解析发生在构建阶段，执行阶段仍有字段查找和有类型的 JSON 值读取。不要把这条路径表述为无查找或为每次执行重新解析 JSON。负向条件须显式处理未知值：
+
+```csharp
+var region = ctx.Metadata.GetString("region");
+return region != null && region != "restricted";
+```
+
+## 对象构造和类型检查
+
+支持显式类型的 `new Decision() { ... }`、`new Decision { ... }`，也支持先赋给局部变量再返回。显式类型应在 ReferencedTypes 注册。构造参数、初始化值中的表达式和隐式转换交给 DynamicExpresso 解析；CRules 只适配初始化结构并组合标准表达式树。不会在编译时执行业务 getter、构造函数或 setter。
+
+直接 `return new(...) { ... };` 依据 `TResult` 补全类型，允许空白与注释，分支内同样适用。`TResult` 为 object、接口或抽象类时，省略类型的 new 返回 CRL2008；显式具体类型仍可按上游类型规则转换到结果契约。`var x = new();` 无目标类型，拒绝。当前不补全嵌套成员值、条件表达式或括号表达式内部的目标类型 new，也不支持匿名对象。
+
+构造一次，成员值按源码顺序求值一次。支持公开可写属性（包括 init）和可写实例字段；重复初始化、只读成员、未知成员、错误类型均返回编译诊断。初始化器不是完整 C# 编译器，不承诺 required 成员等所有 C# 静态规则；业务结果完整性继续由宿主验证。
+
+DynamicExpresso 2.19.6 原始初始化路径没有完整进行成员值隐式转换，部分类型错误会从 Expression.Bind 抛出 ArgumentException。本轮通过结构适配将每个成员值按其目标类型交给上游解析，支持例如 int 常量赋给 long/decimal，并把错误包装成 CRL3001。不可解析为该结构的其他表达式仍由上游处理，能力受上游版本约束。
+
+成员政策同时覆盖构造函数、初始化目标属性/字段、属性 setter 和集合 Add 方法。普通上下文属性赋值仍不开放。`__crules_` 为内部保留的局部变量前缀。源位置在目标类型补全后映射回原始 UTF-16 偏移；无法精确定位的上游构造异常标为 Expression 精度。
+
+## 返回检查和运行范围
+
+允许完整 if/else、嵌套分支分别返回，也允许提前返回加最终返回。缺失返回路径为 CRL2005，不可达语句为 CRL2006；没有隐式末表达式返回规则。最终表达式类型必须符合 TResult。
+
+本轮验证 JIT 与 .NET 表达式树解释模式中的对象结果。解释模式测试不等于重新通过 NativeAOT 发布验收；此前 AOT 标量验证的范围不自动扩大到新 Metadata、JSON 序列化和对象初始化。新增生产集成仍需宿主成员白名单、结果校验、缓存和版本发布管理。
+
+## 验证命令
+
+```powershell
+dotnet test tests/CRules.Tests -c Release --no-restore
+dotnet build src/CRules/CRules.csproj -c Release --no-restore
+```
+
+新增回归覆盖 Metadata 全部读取类型、缺失/null/错误类型、精度与范围、输入限额、不可变快照及并发执行，以及对象构造形式、初始化转换和顺序、成员审计、原始诊断位置、所有路径返回与非法规则拒绝。历史性能数据未因本轮变更重测，不能据其推断新 Metadata 或对象结果的性能。
+
+
+2026-11-09 有类型 Metadata 与对象初始化升级验收：独立核心测试 87 项通过（原有 51 项，新增 36 项），无失败或跳过；Release 构建 0 警告、0 错误。该记录为升级时的验收，本文档整理没有重新执行性能或 NativeAOT 发布验证。

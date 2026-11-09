@@ -1,0 +1,122 @@
+{
+  "Date": "2026-11-09",
+  "Count": 100000,
+  "Rounds": 3,
+  "Seed": 20261109,
+  "WarmupPerWorker": 2000,
+  "Timer": "Stopwatch wall time, single-thread workload, no overhead subtraction",
+  "Memory": "Fresh process per row; total allocated includes workload; peak working set includes process startup/preparation/warmup",
+  "NumericSemantics": "All computations are safe integers or fixed-point units; exact item-by-item comparison; no decimal string-helper penalty",
+  "Machine": {
+    "OS": "Microsoft Windows 10.0.26200",
+    "Runtime": ".NET 10.0.12",
+    "Architecture": "X64",
+    "LogicalCores": 12
+  },
+  "Scenarios": [
+    {
+      "Id": "S1",
+      "Name": "\u65B0\u5EFA\u5C0F context \u4E0E\u7B80\u5355\u89C4\u5219",
+      "Large": false,
+      "Locals": 1,
+      "Conditions": 1,
+      "AverageContextJsonBytes": 267.75,
+      "ExpectedMin": 162445,
+      "ExpectedMax": 192840844,
+      "FlagBuckets": [
+        25078,
+        25016,
+        24888,
+        25018
+      ],
+      "VipCount": 49988,
+      "SourceSha256": "2350B63C77D85311733BB351FAA83F5B3E8B7F6D8840DD652ACB83D3C6059A25"
+    },
+    {
+      "Id": "S2",
+      "Name": "\u65B0\u5EFA\u5C0F context \u4E0E 100 \u4E2A\u4F9D\u8D56\u53D8\u91CF",
+      "Large": false,
+      "Locals": 100,
+      "Conditions": 0,
+      "AverageContextJsonBytes": 267.75,
+      "ExpectedMin": 734704,
+      "ExpectedMax": 21374981,
+      "FlagBuckets": [
+        25078,
+        25016,
+        24888,
+        25018
+      ],
+      "VipCount": 49988,
+      "SourceSha256": "16B5B7D23AA61CF2B1F4043F093FBAF79F5B9832EACD74A762B3EFCC7C427555"
+    },
+    {
+      "Id": "S3",
+      "Name": "\u65B0\u5EFA\u5C0F context \u4E0E 100 \u53D8\u91CF\u548C 32 \u6761\u4EF6",
+      "Large": false,
+      "Locals": 100,
+      "Conditions": 32,
+      "AverageContextJsonBytes": 267.75,
+      "ExpectedMin": 732114,
+      "ExpectedMax": 21363328,
+      "FlagBuckets": [
+        25078,
+        25016,
+        24888,
+        25018
+      ],
+      "VipCount": 49988,
+      "SourceSha256": "AFE24C4D04FB84FDCFAD9B5AA33EAABDDE9BD27F15F7EF2FBE51959EBC41BC12"
+    },
+    {
+      "Id": "S4",
+      "Name": "\u65B0\u5EFA\u5927 context \u4E0E\u7B80\u5355\u89C4\u5219",
+      "Large": true,
+      "Locals": 1,
+      "Conditions": 1,
+      "AverageContextJsonBytes": 11968.5625,
+      "ExpectedMin": 131013,
+      "ExpectedMax": 187779294,
+      "FlagBuckets": [
+        24918,
+        25126,
+        24965,
+        24991
+      ],
+      "VipCount": 50123,
+      "SourceSha256": "2350B63C77D85311733BB351FAA83F5B3E8B7F6D8840DD652ACB83D3C6059A25"
+    },
+    {
+      "Id": "S5",
+      "Name": "\u65B0\u5EFA\u5927 context \u4E0E 100 \u53D8\u91CF\u548C 32 \u6761\u4EF6",
+      "Large": true,
+      "Locals": 100,
+      "Conditions": 32,
+      "AverageContextJsonBytes": 11968.5625,
+      "ExpectedMin": 1992656,
+      "ExpectedMax": 20826165,
+      "FlagBuckets": [
+        24918,
+        25126,
+        24965,
+        24991
+      ],
+      "VipCount": 50123,
+      "SourceSha256": "F036C4D8BA7433E7A0B32ACD988DE461DADAF31D1E44FF8BDC916134E10F69AA"
+    }
+  ],
+  "AssemblyHashes": [
+    {
+      "File": "CRules.Abstractions.dll",
+      "Sha256": "0E982E65387DBC91CC5724C0FDA8F01FDDC52DB4AE2073CEED4F3DE4AC98A826"
+    },
+    {
+      "File": "CRules.Benchmarks.dll",
+      "Sha256": "378BB730FDC784BBEDB4E7C557F04148E3C7A99A74C0384D8EC5A2992AB10CD1"
+    },
+    {
+      "File": "CRules.dll",
+      "Sha256": "4B6F052CFD0644313F7D6E5BED09A2E551DEF8706CD10312710342A2413D9615"
+    }
+  ]
+}

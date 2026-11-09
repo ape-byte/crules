@@ -1,0 +1,41 @@
+{
+  "Date": "2026-11-09",
+  "MainMeasurementRecords": 96,
+  "MainComputationsCheckedIndividually": 9000000,
+  "PreparationRecords": 60,
+  "RegressionTests": [
+    {
+      "file": "workload-regression_net10.0_20261109173642.trx",
+      "counters": {
+        "total": "51",
+        "executed": "51",
+        "passed": "51",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    }
+  ],
+  "HtmlBrowserCheck": {
+    "passed": true,
+    "desktop": true,
+    "mobile": true,
+    "scenarioAndEntrySwitches": true,
+    "timeBasisValues": true,
+    "memorySwitches": true,
+    "downloadExactChecksum": true,
+    "defaultJintEntry": "JintSingleton",
+    "pageErrors": []
+  },
+  "Note": "Benchmark-only changes; independent core unchanged during benchmark phase. Regression records here include only standalone core tests. SetValue singleton is a supplemental batch; original manifest and supplement are retained."
+}

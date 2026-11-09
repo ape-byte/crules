@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>CRules.Benchmarks.AccountingBenchmarks-20261109-162245</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.15.8, Windows 11 (10.0.26200.9711/25H2/2025Update/HudsonValley2)
+Intel Core 5 210H 2.20GHz, 1 CPU, 12 logical and 8 physical cores
+.NET SDK 10.0.401
+  [Host]   : .NET 10.0.12 (10.0.12, 10.0.1226.42308), X64 RyuJIT x86-64-v3
+  ShortRun : .NET 10.0.12 (10.0.12, 10.0.1226.42308), X64 RyuJIT x86-64-v3
+</code></pre>
+<pre><code>Job=ShortRun  IterationCount=3  LaunchCount=1
+WarmupCount=3
+</code></pre>
+
+<table>
+<thead><tr><th>Method      </th><th>Mean </th><th>Error</th><th>StdDev</th><th>Ratio</th><th>RatioSD</th><th>Gen0</th><th>Allocated</th><th>Alloc Ratio</th>
+</tr>
+</thead><tbody><tr><td>NativeDirect</td><td>39.33 ns</td><td>13.73 ns</td><td>0.752 ns</td><td>1.00</td><td>0.02</td><td>-</td><td>-</td><td>NA</td>
+</tr><tr><td>NativeDelegate</td><td>40.84 ns</td><td>27.43 ns</td><td>1.503 ns</td><td>1.04</td><td>0.04</td><td>-</td><td>-</td><td>NA</td>
+</tr><tr><td>CRulesHot</td><td>38.73 ns</td><td>33.43 ns</td><td>1.832 ns</td><td>0.98</td><td>0.04</td><td>-</td><td>-</td><td>NA</td>
+</tr><tr><td>JintDecimalHelpers</td><td>1,458.31 ns</td><td>690.36 ns</td><td>37.841 ns</td><td>37.08</td><td>1.03</td><td>0.0763</td><td>480 B</td><td>NA</td>
+</tr></tbody></table>
+</body>
+</html>

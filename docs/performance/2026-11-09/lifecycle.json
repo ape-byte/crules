@@ -1,0 +1,85 @@
+{
+  "Date": "2026-11-09",
+  "Runtime": ".NET 10.0.12",
+  "Note": "Tail samples are serial local Stopwatch probes, include timer overhead, and are not production load SLO measurements.",
+  "Cold": [
+    {
+      "Iteration": 1,
+      "ProcessLaunchToExitMs": 258.9402,
+      "Details": {
+        "Mode": "clr",
+        "FirstEvaluationMs": 100.8071,
+        "ManagedAllocatedBytes": 463080,
+        "Result": 2
+      }
+    },
+    {
+      "Iteration": 1,
+      "ProcessLaunchToExitMs": 377.261,
+      "Details": {
+        "Mode": "jint",
+        "FirstEvaluationMs": 242.7856,
+        "ManagedAllocatedBytes": 1091992,
+        "Result": 2
+      }
+    },
+    {
+      "Iteration": 2,
+      "ProcessLaunchToExitMs": 198.1301,
+      "Details": {
+        "Mode": "clr",
+        "FirstEvaluationMs": 94.5932,
+        "ManagedAllocatedBytes": 463080,
+        "Result": 2
+      }
+    },
+    {
+      "Iteration": 2,
+      "ProcessLaunchToExitMs": 422.3741,
+      "Details": {
+        "Mode": "jint",
+        "FirstEvaluationMs": 274.2579,
+        "ManagedAllocatedBytes": 1091992,
+        "Result": 2
+      }
+    },
+    {
+      "Iteration": 3,
+      "ProcessLaunchToExitMs": 252.9252,
+      "Details": {
+        "Mode": "clr",
+        "FirstEvaluationMs": 125.6485,
+        "ManagedAllocatedBytes": 463080,
+        "Result": 2
+      }
+    },
+    {
+      "Iteration": 3,
+      "ProcessLaunchToExitMs": 385.1905,
+      "Details": {
+        "Mode": "jint",
+        "FirstEvaluationMs": 255.8764,
+        "ManagedAllocatedBytes": 1091992,
+        "Result": 2
+      }
+    }
+  ],
+  "Tail": [
+    {
+      "Name": "ClrJsonSnapshot",
+      "Count": 5000,
+      "P50Ns": 1600,
+      "P95Ns": 3000,
+      "P99Ns": 9000,
+      "AllocatedBytesPerOperation": 160
+    },
+    {
+      "Name": "JintFreshEngineJson",
+      "Count": 5000,
+      "P50Ns": 26000,
+      "P95Ns": 96300,
+      "P99Ns": 287900,
+      "AllocatedBytesPerOperation": 28136
+    }
+  ]
+}

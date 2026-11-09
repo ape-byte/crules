@@ -1,0 +1,39 @@
+{
+  "tool": "built-in image_gen",
+  "source": "../crules-icon-v2.png",
+  "selectedShape": "code-braces-with-fork",
+  "palettes": [
+    {
+      "key": "B",
+      "name": "navy-sky",
+      "title": "深蓝与天蓝",
+      "left": "#163B73",
+      "accent": "#23A8F2",
+      "prompt": "Use this attached aligned CRules icon as the edit target. Recolor ONLY. Preserve the geometry, exact relative positions, proportions, identical mirror-symmetric outer braces, upper/lower gaps, rounded caps, and the central fork with two rounded-square ends. Do not change any shape. No text, no labels, no extra elements. Crisp flat solid colors with clean transparent empty space. Transparent background, same square icon framing. The ENTIRE LEFT outer brace should be one solid #163B73. The ENTIRE RIGHT outer brace and the ENTIRE CENTRAL FORK (including both square end nodes) should be one solid #23A8F2. Two colors only. No gradients or shadows."
+    },
+    {
+      "key": "C",
+      "name": "violet-coral",
+      "title": "紫罗兰与珊瑚橙",
+      "left": "#7046D8",
+      "accent": "#FF7965",
+      "prompt": "Use this attached aligned CRules icon as the edit target. Recolor ONLY. Preserve the geometry, exact relative positions, proportions, identical mirror-symmetric outer braces, upper/lower gaps, rounded caps, and the central fork with two rounded-square ends. Do not change any shape. No text, no labels, no extra elements. Crisp flat solid colors with clean transparent empty space. Transparent background, same square icon framing. The ENTIRE LEFT outer brace should be one solid #7046D8. The ENTIRE RIGHT outer brace and the ENTIRE CENTRAL FORK (including both square end nodes) should be one solid #FF7965. Two colors only. No gradients or shadows."
+    },
+    {
+      "key": "D",
+      "name": "forest-jade",
+      "title": "墨绿与青绿",
+      "left": "#115C48",
+      "accent": "#22C998",
+      "prompt": "Use this attached aligned CRules icon as the edit target. Recolor ONLY. Preserve the geometry, exact relative positions, proportions, identical mirror-symmetric outer braces, upper/lower gaps, rounded caps, and the central fork with two rounded-square ends. Do not change any shape. No text, no labels, no extra elements. Crisp flat solid colors with clean transparent empty space. Transparent background, same square icon framing. The ENTIRE LEFT outer brace should be one solid #115C48. The ENTIRE RIGHT outer brace and the ENTIRE CENTRAL FORK (including both square end nodes) should be one solid #22C998. Two colors only. No gradients or shadows."
+    },
+    {
+      "key": "E",
+      "name": "graphite-amber",
+      "title": "石墨灰与琥珀橙",
+      "left": "#303644",
+      "accent": "#F59A24",
+      "prompt": "Use this attached aligned CRules icon as the edit target. Recolor ONLY. Preserve the geometry, exact relative positions, proportions, identical mirror-symmetric outer braces, upper/lower gaps, rounded caps, and the central fork with two rounded-square ends. Do not change any shape. No text, no labels, no extra elements. Crisp flat solid colors with clean transparent empty space. Transparent background, same square icon framing. The ENTIRE LEFT outer brace should be one solid #303644. The ENTIRE RIGHT outer brace and the ENTIRE CENTRAL FORK (including both square end nodes) should be one solid #F59A24. Two colors only. No gradients or shadows."
+    }
+  ]
+}

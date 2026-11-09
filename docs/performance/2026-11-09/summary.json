@@ -1,0 +1,140 @@
+[
+  {
+    "FullName": "CRules.Benchmarks.AccountingBenchmarks.NativeDirect",
+    "Parameters": "",
+    "MeanNs": 39.33360278606415,
+    "AllocatedBytes": 0
+  },
+  {
+    "FullName": "CRules.Benchmarks.AccountingBenchmarks.NativeDelegate",
+    "Parameters": "",
+    "MeanNs": 40.84293146928152,
+    "AllocatedBytes": 0
+  },
+  {
+    "FullName": "CRules.Benchmarks.AccountingBenchmarks.CRulesHot",
+    "Parameters": "",
+    "MeanNs": 38.73023986816406,
+    "AllocatedBytes": 0
+  },
+  {
+    "FullName": "CRules.Benchmarks.AccountingBenchmarks.JintDecimalHelpers",
+    "Parameters": "",
+    "MeanNs": 1458.3133697509766,
+    "AllocatedBytes": 480
+  },
+  {
+    "FullName": "CRules.Benchmarks.CollectionBenchmarks.NativeLinq(Count: 10)",
+    "Parameters": "Count=10",
+    "MeanNs": 29.299431045850117,
+    "AllocatedBytes": 136
+  },
+  {
+    "FullName": "CRules.Benchmarks.CollectionBenchmarks.CRulesHot(Count: 10)",
+    "Parameters": "Count=10",
+    "MeanNs": 331.6266377766927,
+    "AllocatedBytes": 200
+  },
+  {
+    "FullName": "CRules.Benchmarks.CollectionBenchmarks.JintHot(Count: 10)",
+    "Parameters": "Count=10",
+    "MeanNs": 2383.2907358805337,
+    "AllocatedBytes": 1168
+  },
+  {
+    "FullName": "CRules.Benchmarks.CollectionBenchmarks.NativeLinq(Count: 100)",
+    "Parameters": "Count=100",
+    "MeanNs": 189.03876145680746,
+    "AllocatedBytes": 136
+  },
+  {
+    "FullName": "CRules.Benchmarks.CollectionBenchmarks.CRulesHot(Count: 100)",
+    "Parameters": "Count=100",
+    "MeanNs": 542.1536445617676,
+    "AllocatedBytes": 200
+  },
+  {
+    "FullName": "CRules.Benchmarks.CollectionBenchmarks.JintHot(Count: 100)",
+    "Parameters": "Count=100",
+    "MeanNs": 11637.768046061197,
+    "AllocatedBytes": 1528
+  },
+  {
+    "FullName": "CRules.Benchmarks.CollectionBenchmarks.NativeLinq(Count: 1000)",
+    "Parameters": "Count=1000",
+    "MeanNs": 950.8074442545573,
+    "AllocatedBytes": 136
+  },
+  {
+    "FullName": "CRules.Benchmarks.CollectionBenchmarks.CRulesHot(Count: 1000)",
+    "Parameters": "Count=1000",
+    "MeanNs": 2500.839360555013,
+    "AllocatedBytes": 200
+  },
+  {
+    "FullName": "CRules.Benchmarks.CollectionBenchmarks.JintHot(Count: 1000)",
+    "Parameters": "Count=1000",
+    "MeanNs": 111486.72281901042,
+    "AllocatedBytes": 20456
+  },
+  {
+    "FullName": "CRules.Benchmarks.CompilationBenchmarks.ClrParseAuditCompile",
+    "Parameters": "",
+    "MeanNs": 536658.984375,
+    "AllocatedBytes": 130861
+  },
+  {
+    "FullName": "CRules.Benchmarks.CompilationBenchmarks.JintPrepareAst",
+    "Parameters": "",
+    "MeanNs": 5161.7645263671875,
+    "AllocatedBytes": 6888
+  },
+  {
+    "FullName": "CRules.Benchmarks.CompilationBenchmarks.JintPrepareCreateExecute",
+    "Parameters": "",
+    "MeanNs": 12720.009358723959,
+    "AllocatedBytes": 22000
+  },
+  {
+    "FullName": "CRules.Benchmarks.HostLifecycleBenchmarks.ClrJsonSnapshot",
+    "Parameters": "",
+    "MeanNs": 262.5560442606608,
+    "AllocatedBytes": 160
+  },
+  {
+    "FullName": "CRules.Benchmarks.HostLifecycleBenchmarks.JintFreshEngineJson",
+    "Parameters": "",
+    "MeanNs": 8642.562866210938,
+    "AllocatedBytes": 27832
+  },
+  {
+    "FullName": "CRules.Benchmarks.HostLifecycleBenchmarks.JintCreateAndDispose",
+    "Parameters": "",
+    "MeanNs": 788.4700457255045,
+    "AllocatedBytes": 7920
+  },
+  {
+    "FullName": "CRules.Benchmarks.RoutingBenchmarks.NativeDirect",
+    "Parameters": "",
+    "MeanNs": 0.40799429019292194,
+    "AllocatedBytes": 0
+  },
+  {
+    "FullName": "CRules.Benchmarks.RoutingBenchmarks.NativeDelegate",
+    "Parameters": "",
+    "MeanNs": 1.4120444655418396,
+    "AllocatedBytes": 0
+  },
+  {
+    "FullName": "CRules.Benchmarks.RoutingBenchmarks.CRulesHot",
+    "Parameters": "",
+    "MeanNs": 0.7500061144431432,
+    "AllocatedBytes": 0
+  },
+  {
+    "FullName": "CRules.Benchmarks.RoutingBenchmarks.JintHot",
+    "Parameters": "",
+    "MeanNs": 239.47765032450357,
+    "AllocatedBytes": 48
+  }
+]
