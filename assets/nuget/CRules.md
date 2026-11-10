@@ -35,4 +35,4 @@ This is a preview: use `Func<...>` or the runtime Type entry point; custom deleg
 - [NativeAOT](https://github.com/ape-byte/crules/blob/github/docs/NativeAOT支持.md)
 - [Known issues](https://github.com/ape-byte/crules/blob/github/docs/已知问题.md)
 
-Licensed under MIT. The CRules package depends on CRules.Abstractions and DynamicExpresso.Core; Jint and Roslyn are not production dependencies.
+Developed by **ape-byte**. Licensed under MIT. One CRules package contains both the implementation and abstractions assemblies. Its only external package dependency is DynamicExpresso.Core; Jint and Roslyn are not production dependencies.

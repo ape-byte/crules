@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\CRules\CRules.csproj" />
+    <ProjectReference Include="..\..\src\CRules.Abstractions\CRules.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

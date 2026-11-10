@@ -3,6 +3,7 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
     <PackageId>CRules.Abstractions</PackageId>
     <Description>Public execution contracts, diagnostics and the optional typed JSON DataObject for CRules. This package does not depend on DynamicExpresso.</Description>
     <ImplicitUsings>enable</ImplicitUsings>
