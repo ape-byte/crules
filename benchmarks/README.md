@@ -1,6 +1,6 @@
 # 性能对比与回退复测
 
-当前主报告：[2026-11-10 交互 HTML](../docs/performance/2026-11-10/index.html)、[文字报告](../docs/性能测试对比.md)。
+当前主报告：[文字报告](../docs/性能报告.md)。
 
 ## 三种计时口径
 
@@ -20,13 +20,13 @@
 dotnet restore benchmarks/CRules.Benchmarks --locked-mode
 dotnet build benchmarks/CRules.Benchmarks -c Release --no-restore
 # 0 轮仅导出输入、规则和期望值，不宣称执行测试。
-./benchmarks/CRules.Benchmarks/bin/Release/net10.0/CRules.Benchmarks.exe --business-suite docs/performance/repeat/business-100k 100000 0
-python benchmarks/reporting/generate-native-equivalent.py docs/performance/repeat/business-100k/rules benchmarks/CRules.Benchmarks/NativeBusinessEquivalent.cs
+./benchmarks/CRules.Benchmarks/bin/Release/net10.0/CRules.Benchmarks.exe --business-suite .tmp/performance-repeat/business-100k 100000 0
+python benchmarks/reporting/generate-native-equivalent.py .tmp/performance-repeat/business-100k/rules benchmarks/CRules.Benchmarks/NativeBusinessEquivalent.cs
 python benchmarks/reporting/prepare-baseline.py fda9f49 .tmp/perf-baseline-repeat
 dotnet restore .tmp/perf-baseline-repeat/benchmarks/CRules.Benchmarks --locked-mode
 dotnet build .tmp/perf-baseline-repeat/benchmarks/CRules.Benchmarks -c Release --no-restore
 dotnet build benchmarks/CRules.Benchmarks -c Release --no-restore
-python benchmarks/reporting/run-comparison.py .tmp/perf-baseline-repeat/benchmarks/CRules.Benchmarks/bin/Release/net10.0/CRules.Benchmarks.Before.exe benchmarks/CRules.Benchmarks/bin/Release/net10.0/CRules.Benchmarks.exe docs/performance/repeat
+python benchmarks/reporting/run-comparison.py .tmp/perf-baseline-repeat/benchmarks/CRules.Benchmarks/bin/Release/net10.0/CRules.Benchmarks.Before.exe benchmarks/CRules.Benchmarks/bin/Release/net10.0/CRules.Benchmarks.exe .tmp/performance-repeat
 ```
 
 `prepare-baseline.py` 只导出指定提交的旧核心，不切换工作分支。旧核心搭配当前相同的 benchmark 源码，仅通过条件编译适配旧公共 API。原始 worker 数据、汇总数据和程序集 SHA-256 保存在输出目录。输入样本与期望值在计时前生成，实际 context 在计时内构造。
@@ -45,8 +45,10 @@ $env:CRULES_BENCH_PROVENANCE_DIR = 'ABSOLUTE_OUTPUT/bdn/before/provenance'
 
 ```powershell
 dotnet build benchmarks/reporting/CoreAssemblyProof -c Release
-python benchmarks/reporting/collect-assembly-proof.py BASELINE_EXE CURRENT_EXE docs/performance/repeat
-python benchmarks/reporting/build-performance-report.py docs/performance/repeat
+python benchmarks/reporting/collect-assembly-proof.py BASELINE_EXE CURRENT_EXE .tmp/performance-repeat
+python benchmarks/reporting/build-performance-report.py .tmp/performance-repeat
 ```
 
-报告严格要求 141 条完整循环记录、50 条编译记录、旧版 31 / 当前 35 个成功 BDN 结果；缺失或校验不一致会失败。所有数字都保留计时范围与样本数，历史数据不会被覆盖。BDN 的新构建可能改变 PDB 路径和 MVID，二进制 SHA 不必等于直接构建；使用 CoreAssemblyProof 与 collect-assembly-proof.py 校验实际加载核心的 IL/签名指纹与对应版本一致。原来的主交互 HTML 已删除，当前模板按 CRules / Jint / 原生 C# 固定分区。
+报告严格要求 141 条完整循环记录、50 条编译记录、旧版 31 / 当前 35 个成功 BDN 结果；缺失或校验不一致会失败。所有数字都保留计时范围与样本数，历史数据不会被覆盖。BDN 的新构建可能改变 PDB 路径和 MVID，二进制 SHA 不必等于直接构建；使用 CoreAssemblyProof 与 collect-assembly-proof.py 校验实际加载核心的 IL/签名指纹与对应版本一致。报告生成器仅输出 Markdown、JSON 和 CSV。
+
+报告生成器只向指定输出目录写入测量数据和 generated-report.md，不覆盖手工维护的 docs 文档或仓库 README。正式归档数据位于 docs/data/performance/2026-11-10。

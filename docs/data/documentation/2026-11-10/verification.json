@@ -1,0 +1,46 @@
+{
+  "date": "2026-11-10",
+  "scope": "Documentation rewrite only; existing implementation untouched",
+  "topics": [
+    "NativeAOT支持.md",
+    "README.md",
+    "与Jint对比测试.md",
+    "已知问题.md",
+    "快速开始.md",
+    "性能报告.md",
+    "构造与执行.md",
+    "语法参考.md"
+  ],
+  "examples": {
+    "ruleSnippets": 19,
+    "modes": [
+      "JitCompiled",
+      "Interpreted"
+    ],
+    "inputsPerRule": 2,
+    "hostPrograms": 7,
+    "checksPassed": 83,
+    "customDelegateKnownDefectReproduced": true
+  },
+  "links": {
+    "missing": 0,
+    "referenceDirectoryDependencies": 0
+  },
+  "performanceEvidence": {
+    "filesVerified": 41,
+    "mainTableRowsVerified": 5,
+    "jintModeRowsVerified": 5,
+    "isNewBenchmarkRun": false
+  },
+  "aot": "Existing real win-x64/linux-x64 publication logs copied independently; this documentation task does not claim a new AOT publish",
+  "sha256": {
+    "docs/NativeAOT支持.md": "30c5b87a849c5a37cfc93c044408d0412053af9202ea73f72d23475e42f74d44",
+    "docs/README.md": "9e151238910a8440f3ed4345fd0d75ae6de095f5366389f2d587ff5bc7198e42",
+    "docs/与Jint对比测试.md": "3f38e0f55e01a14ba650027e66ec7f97203bcfdf5d5f749af72ac261b66146ae",
+    "docs/已知问题.md": "2fa57fc082da2bb1da86030c4c31ea286ab4647a908f9e901a13c8302430ca65",
+    "docs/快速开始.md": "dbefbfbba6aca8a8db0b422948166fbddf1fd76e7b3df2c1b3b42459fecc740b",
+    "docs/性能报告.md": "182fe41cac7887412b7bf032917bee09e35a77152cdc3b68e5e098f9648e10cf",
+    "docs/构造与执行.md": "b2964aa7a2f2a0ac34d7856c90c96bb8398ade27ed6e691883cbc958a18e72d4",
+    "docs/语法参考.md": "fc6f36c43a0121f32f319f5b5349ee9830f25eb22b38e09639a01135e162c43c"
+  }
+}

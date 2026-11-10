@@ -1,0 +1,125 @@
+{
+  "date": "2026-11-10",
+  "status": "Passed for the documented NativeAOT profile on both targets",
+  "platforms": [
+    {
+      "rid": "win-x64",
+      "sdk": "10.0.401",
+      "runtimeAndILCompiler": "10.0.14",
+      "publishExitCode": 0,
+      "runExitCode": 0,
+      "checks": [
+        "decimal_branch",
+        "repeated_inputs",
+        "scope_and_assignment",
+        "const_binding",
+        "early_return",
+        "positive_round",
+        "negative_round",
+        "bool_result",
+        "compile_diagnostic",
+        "jit_guard",
+        "divide_by_zero",
+        "overflow",
+        "unsupported_lambda_rejected",
+        "named_multiple_inputs",
+        "dictionary_initializers_and_methods",
+        "object_auto_reference_and_null",
+        "nullable_value",
+        "runtime_type_entry",
+        "switch_and_list",
+        "async_results",
+        "typed_json_data"
+      ],
+      "passed": 21,
+      "dynamicCodeSupported": false,
+      "binarySha256": "b391aef1db33649baa9376dd85c33b9c8ac60779d077c86e0b6da6f2df048f5c",
+      "binaryBytes": 9685504,
+      "warnings": {
+        "IL2026": 10,
+        "IL2055": 3,
+        "IL2060": 1,
+        "IL2070": 8,
+        "IL2072": 2,
+        "IL2075": 14,
+        "IL2090": 1,
+        "IL3050": 44
+      },
+      "expandoProbe": "single decimal property read passed",
+      "linqProbe": "unsupported; excluded from supported profile"
+    },
+    {
+      "rid": "linux-x64",
+      "sdk": "10.0.302",
+      "runtimeAndILCompiler": "10.0.14",
+      "publishExitCode": 0,
+      "runExitCode": 0,
+      "checks": [
+        "decimal_branch",
+        "repeated_inputs",
+        "scope_and_assignment",
+        "const_binding",
+        "early_return",
+        "positive_round",
+        "negative_round",
+        "bool_result",
+        "compile_diagnostic",
+        "jit_guard",
+        "divide_by_zero",
+        "overflow",
+        "unsupported_lambda_rejected",
+        "named_multiple_inputs",
+        "dictionary_initializers_and_methods",
+        "object_auto_reference_and_null",
+        "nullable_value",
+        "runtime_type_entry",
+        "switch_and_list",
+        "async_results",
+        "typed_json_data"
+      ],
+      "passed": 21,
+      "dynamicCodeSupported": false,
+      "binarySha256": "b983e16091ee9070271c17ef2127251f2ef06df27e8ba9ef30780a932cc70ce8",
+      "binaryBytes": 9377016,
+      "warnings": {
+        "IL2026": 10,
+        "IL2055": 3,
+        "IL2060": 1,
+        "IL2070": 8,
+        "IL2072": 2,
+        "IL2075": 14,
+        "IL2090": 1,
+        "IL3050": 35
+      },
+      "expandoProbe": "single decimal property read passed",
+      "linqProbe": "unsupported; excluded from supported profile"
+    }
+  ],
+  "regression": {
+    "passed": 922,
+    "failed": 0,
+    "skipped": 0
+  },
+  "changes": [
+    "Interpreted async bridge no longer creates AwaitTask<T>/AwaitValueTask<T> via MakeGenericMethod",
+    "Core preserves Task<T>.Result and ValueTask<T> method metadata",
+    "Smoke host explicitly roots closed List<decimal> constructor through Activator.CreateInstance<List<decimal>>()"
+  ],
+  "limits": [
+    "Interpreted backend required, JIT rejected with CRL4004",
+    "Host must preserve DTO/closed-generic metadata and required code",
+    "Single-field ExpandoObject probe does not certify arbitrary DLR operations",
+    "Experimental nested Lambda/LINQ remains unsupported",
+    "Linux tested in local dotnet-sdk-aot:10.0 container, not deployed to gateway",
+    "Raw trimming and AOT warnings retained; not a zero-warning AOT library certification"
+  ],
+  "commands": {
+    "windows": "dotnet publish tests/CRules.AotSmoke -c Release -r win-x64 --no-restore -o .tmp/aot-current",
+    "linux": "dotnet publish tests/CRules.AotSmoke -c Release -r linux-x64 -o /out (dotnet-sdk-aot:10.0 container; isolated source copy without Windows bin/obj or SDK-pinning global.json)"
+  },
+  "sourceSha256": {
+    "src/CRules/Compiler.cs": "df56a420fa140e16323f8d29bcd22deddafa62ee0a2967266bfdd10c50dc0489",
+    "tests/CRules.AotSmoke/Program.cs": "f13a3163509311f3bf966893acf1474109682066c3048a8cf3ee566c13c97130",
+    "tests/CRules.AotSmoke/CRules.AotSmoke.csproj": "8e5b6194d24e54e989df5206ff0f4d08cf9a41cf9eed22980a47503ec872e073"
+  }
+}

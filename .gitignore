@@ -8,6 +8,7 @@ BenchmarkDotNet.Artifacts/
 __pycache__/
 *.pyc
 
-# Local integration adapters require a separate business repository.
-src/CRules.TokenHub/
-tests/CRules.TokenHub.Tests/
+# Local maintenance tools are not part of the distributed repository.
+/tools/
+/artifacts/
+!/docs/data/aot/**/publish.log

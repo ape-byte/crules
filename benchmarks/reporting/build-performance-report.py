@@ -2,7 +2,7 @@ from pathlib import Path
 import csv, json, math, statistics as stats, sys, hashlib
 
 root=Path(__file__).resolve().parents[2]
-folder=Path(sys.argv[1]).resolve() if len(sys.argv)>1 else root/'docs/performance/2026-11-10'
+folder=Path(sys.argv[1]).resolve() if len(sys.argv)>1 else root/'docs/data/performance/2026-11-10'
 load=lambda p:json.loads(p.read_text(encoding='utf-8-sig'))
 rows=load(folder/'measurements.json'); comp=load(folder/'compilation.json')
 run=load(folder/'run-manifest.json'); inputs=load(folder/'business-100k/manifest.json')
@@ -110,8 +110,6 @@ environment=f"{cpu['Name'].strip()} · {cpu['NumberOfCores']} 核 / {cpu['Number
 html_rows=[dict(r,ResultChecksum=str(r['ResultChecksum']),ContextChecksum=str(r['ContextChecksum'])) for r in rows]
 dataset=dict(scenarios=scenarios,hotConclusion=hot,compileConclusion=compile_text,compileProbe=compile_probe,decimalObservation=decimal_note,micro=micro,api=api,pure=pure,raw=html_rows,environment=environment,manifest=run)
 payload=json.dumps(dataset,ensure_ascii=False,separators=(',',':')).replace('</','<\\/')
-template=Path(__file__).with_name('performance-report-template.html').read_text(encoding='utf-8-sig')
-(folder/'index.html').write_text(template.replace('__DATASET__',payload),encoding='utf-8',newline='\n')
 (folder/'summary.json').write_text(json.dumps(dataset,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
 with (folder/'measurements.csv').open('w',encoding='utf-8-sig',newline='') as f:
     writer=csv.DictWriter(f,fieldnames=rows[0].keys());writer.writeheader();writer.writerows(rows)
@@ -121,7 +119,7 @@ for s in scenarios:print(s['id'],s['modes']['CRules']['ms'],s['regression']['cha
 fmt=lambda value,d=2:f'{value:,.{d}f}'
 pct=lambda value:f'{value:+.2f}%'
 lines=['# CRules、Jint 与原生 C# 性能复测','',
-    '测试日期：2026-11-10。实际重跑重构前 `fda9f49` 与当前核心 `99dda85`，使用相同 benchmark 工具、输入和依赖。当前交互入口见 [重新设计的性能报告](performance/2026-11-10/index.html)。旧主交互 HTML 已移除，历史原始 JSON/CSV 保留。','',
+    '测试日期：2026-11-10。实际重跑重构前 `fda9f49` 与当前核心 `99dda85`，使用相同 benchmark 工具、输入和依赖。仅保留文字分析和 JSON/CSV 原始数据。','',
     '## 本轮结论','',hot,'',compile_text,'',
     '回退判断覆盖既有规则的强类型调用路径；新增运行时 Type 入口单独测量。NativeAOT、动态 ExpandoObject、异步等待和所有新语法组合未在本轮建立完整的性能基线。','',
     '## CRules / Jint / 原生 C#：完整循环','',
@@ -171,22 +169,6 @@ lines+=['','强类型入口直接调用具体委托。运行时 Type 入口包�
     '## 环境、验证与复现','',environment,'',
     '完整循环与编译探针固定逻辑核心 2（affinity mask 4），统一设置 DOTNET_TieredCompilation=0；各执行进程至少预热 2,000 次且不少于 750 ms。BDN 使用相同核心、默认 JIT 策略及自身预热。两类计时不混合。最初默认调度/分层编译的预检样本整体弃用，没有挑选其中更有利的轮次进入正式结果。','',
     '固定随机种子 20261109。141 条完整循环记录，其中 135 条计算记录共 13,500,000 次逐项校验，另有 6 条构建基线；50 条编译记录。旧/新实际 BDN 工作进程加载的核心 IL/签名指纹分别与对应版本一致，排除了误测同一份核心。BDN 重建可能改变 MVID/PDB 路径，因此二进制 SHA 也保留，但不要求与直接构建完全相同。','',
-    '原始数据：[执行记录](performance/2026-11-10/measurements.json)、[CSV](performance/2026-11-10/measurements.csv)、[编译记录](performance/2026-11-10/compilation.json)、[汇总及区间](performance/2026-11-10/summary.json)、[版本与程序集哈希](performance/2026-11-10/run-manifest.json)。完整复现步骤见 [benchmarks README](../benchmarks/README.md)。','',
-    '历史归档：[2026-11-09 文字数据](performance/2026-11-09/business-100k/分析报告.md)、[早期微基准](performance/2026-11-09/性能测试报告.md)。原预热方式和原生参考算法与本轮不同，不能直接把跨天数值变化归因于代码回退。本轮没有重新发布 NativeAOT。','']
-(root/'docs/性能测试对比.md').write_text('\n'.join(lines),encoding='utf-8',newline='\n')
-
-readme=root/'README.md';text=readme.read_text(encoding='utf-8-sig');start=text.index('## 与 Jint 的简要对比');end=text.index('## 十进制精度直接表达')
-section=['## 与 Jint 的简要对比','',
-    '**以下为 2026-11-10 重构后重新实测的数据。** 每次新建随机 context，计算 100,000 次并逐项校验。CRules 与同构原生 C# 各取 5 个进程中位数，Jint 取 3 个进程中位数。为统一入口，下表始终使用复用一个 Engine 的 **Jint 函数 + CLR 对象** 调用；JSON、SetValue 和准备成本另列在完整报告。','',
-    '| 场景 | CRules | Jint 函数 + CLR | 原生 C# 同构委托 | Jint / CRules 耗时比 |',
-    '| --- | ---: | ---: | ---: | ---: |']
-for s in scenarios:
-    m=s['modes'];section.append(f"| {s['shortName']} | {fmt(m['CRules']['ms'])} ms | {fmt(m['JintClr']['ms'])} ms | {fmt(m['NativeEquivalent']['ms'])} ms | **{m['JintClr']['ms']/m['CRules']['ms']:.2f}×** |")
-section+=['',hot,'',compile_text,'',
-    '本轮普通规则使用安全整数/定点语义，没有为 Jint 叠加 decimal 转换成本。相同代码结构的原生 C# 委托作为性能基线；context 构建、输入方式和机器波动都会改变收益，以上不是统一性能保证。','',
-    '| 关注点 | CRules | Jint |','| --- | --- | --- |',
-    '| 执行方式 | 有限 C# 风格函数体，编译后复用委托 | JavaScript 运行时，复用 Engine 或按需隔离 |',
-    '| 十进制计算 | 原生 decimal 与 DecimalOnly 策略 | 默认 Number 为二进制浮点，精确十进制需额外设计 |',
-    '| 调用成本 | 强类型与运行时 Type 入口分别测量 | CLR 对象、SetValue 和 JSON 入口分别测量 |','',
-    '业务探针统一固定逻辑核心、禁用分层编译；微基准使用默认 JIT 策略。完整环境、轮次范围、内存、重构前后区间和复现步骤见 [性能对比报告](docs/性能测试对比.md)；[新交互报告](docs/performance/2026-11-10/index.html) 使用橙色 CRules、蓝色 Jint、灰色原生 C# 固定分区。','',]
-readme.write_text(text[:start]+'\n'.join(section)+'\n'+text[end:],encoding='utf-8',newline='\n')
+    '本目录原始数据：[执行记录](measurements.json)、[CSV](measurements.csv)、[编译记录](compilation.json)、[汇总及区间](summary.json)、[版本与程序集哈希](run-manifest.json)。完整复现步骤见仓库 benchmarks/README.md。','',
+    '仅代表该轮测量版本；不能把跨批次数值变化直接归因于代码回退。该性能测量不包含 NativeAOT。','']
+(folder/'generated-report.md').write_text('\n'.join(lines),encoding='utf-8',newline='\n')

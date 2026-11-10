@@ -1,6 +1,0 @@
-function decide(ctx) {
-let v0 = ctx.Request.InputTokens * ctx.Pricing.InputRate + ctx.Request.OutputTokens * ctx.Pricing.OutputRate;
-if (ctx.Request.Vip) { v0 = v0 * 9; } else { v0 = v0 * 10; }
-return v0 + ctx.Request.CacheTokens * ctx.Pricing.CacheRate + ctx.Metrics[0];
-
-}
