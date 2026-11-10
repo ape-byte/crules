@@ -1,22 +1,24 @@
 # NativeAOT 支持与限制
 
+> 本文记录历史验证范围；当前接口和语法见 [编译与执行 API](编译与执行API.md) 与 [CRules Syntax 1.0](CRules-Syntax-1.0.md)。历史 NativeAOT 标量发布记录不代表本轮新增功能已完成 NativeAOT 发布验收。
+
 CRules 增加显式 `Interpreted` 后端，用于 .NET 10 NativeAOT 下的受限运行时规则求值。默认 `JitCompiled` 后端在 `RuntimeFeature.IsDynamicCodeSupported=false` 时返回 CRL4004，不会静默切换执行方式。规则句柄的 `ExecutionMode` 可供宿主审计。
 
 ## 已验证能力
 
 本机使用 Windows x64、.NET SDK 10.0.401、Visual Studio 2026 C++ 工具链和 Windows SDK 实际发布 NativeAOT 可执行文件。AOT runtime 和 ILCompiler 固定为 10.0.14，运行时输出 `DynamicCodeSupported=False`。验证工程为 `tests/CRules.AotSmoke`，运行结果与发布分析日志存于 `docs/aot/2026-11-09`，13 项必需检查全部通过。
 
-AOT 标量范围包括 decimal 运算、var/const、局部变量赋值、嵌套块、if/else、提前 return、布尔返回、舍入、编译诊断、禁止隐式退化，以及除零和溢出失败。宿主需保存上下文和所允许类型的反射元数据。动态 Metadata 不在支持范围内。
+AOT 标量范围包括 decimal 运算、var/const、局部变量赋值、嵌套块、if/else、提前 return、布尔返回、舍入、编译诊断、禁止隐式退化，以及除零和溢出失败。宿主需保存上下文和所允许类型的反射元数据。动态 动态数据 不在支持范围内。
 
 ## 接入方式
 
 ```csharp
-var compiler = new RuleCompiler(new RuleCompileOptions
+var compiler = new RuleCompiler(new CompilerOptions
 {
     DecimalOnly = true,
     ExecutionMode = RuleExecutionMode.Interpreted
 });
-var rule = compiler.Compile<MyContext, decimal>(source).RequireRule();
+var rule = compiler.Compile<MyContext, decimal>(source).RequireExecutable();
 decimal amount = rule.Execute(context);
 ```
 

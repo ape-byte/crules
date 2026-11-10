@@ -6,9 +6,14 @@
 
 ## 设计与接入
 
+当前 API 入口见 [编译与执行](编译与执行API.md)，语言范围见 [CRules Syntax 1.0](CRules-Syntax-1.0.md)。旧验证报告和 Word 计划书保留历史证据与规划，不代表当前 API。
+
 | 文档 | 内容 |
 | --- | --- |
-| [Metadata 与对象初始化](Metadata与对象初始化.md) | 有类型动态字段读取、目标类型 new、初始化审计、所有路径返回及本轮验收 |
+| [编译与执行 API](编译与执行API.md) | 配置类、命名形参、Type 签名、动态对象与异步返回值 |
+| [CRules Syntax 1.0](CRules-Syntax-1.0.md) | 当前语法清单、示例及明确限制 |
+| [Roslyn 兼容性验证](Roslyn兼容性验证.md) | 官方测试来源、移植盘点、差分方法及本轮修复 |
+| [动态数据与对象初始化](动态数据与对象初始化.md) | 有类型动态字段读取、目标类型 new、初始化审计、所有路径返回及本轮验收 |
 | [开发计划书 v1.0](CRules_开发计划书_v1.0.docx) | 可编辑 Word 计划书，包含语法、架构、里程碑、验收与风险；实现状态以当前源码和验证文档为准 |
 | [M0 技术验证](M0技术验证.md) | 公开 API 路线、局部变量绑定、执行边界及未关闭技术闸门 |
 | [M0 实施交付记录](M0实施交付记录.md) | 初始交付范围和验证记录 |
@@ -32,5 +37,6 @@
 - [单例补测说明](performance/2026-11-09/business-100k/singleton-supplement.json)：SetValue 单例入口的补充批次信息。
 - [规则与 context 样例](performance/2026-11-09/business-100k/rules/)：CRules、JavaScript 规则及 JSON 输入样例。
 - [工作负载验证记录](validation/2026-11-09/business-workloads/verification.json)：主测校验、核心回归结果与 HTML 检查记录。
+- [Syntax 1.0 重构验证记录](validation/2026-11-10/syntax-1.0/verification.json)：720 项回归、Roslyn 兼容检查、构建和文档示例验收。
 
 所有性能数字应与场景、计时范围和引擎生命周期一起阅读。结构体 context 的收益目前只有讨论和估算，未纳入实测结果。

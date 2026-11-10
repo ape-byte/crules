@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-10",
+  "sourceRevision": "143d000a02a671be2e814648c07c42487bf6163c",
+  "syntaxVersion": "1.0",
+  "sdk": "10.0.401",
+  "configuration": "Release",
+  "build": {
+    "projects": 5,
+    "warnings": 0,
+    "errors": 0,
+    "command": "dotnet build CRules.slnx -c Release --no-restore"
+  },
+  "tests": {
+    "total": 720,
+    "passed": 720,
+    "failed": 0,
+    "skipped": 0,
+    "roslynCompatibility": 584,
+    "other": 136,
+    "command": "dotnet test tests/CRules.Tests -c Release --no-build --no-restore"
+  },
+  "roslyn": {
+    "repository": "https://github.com/dotnet/roslyn",
+    "commit": "636a46f73c2006fad15339a5ba8c9ac5cd1c10c8",
+    "files": 12,
+    "inventoriedMethods": 1719,
+    "automaticallyExtractedCores": 267,
+    "curatedCores": 18,
+    "positiveCores": 285,
+    "executionModes": [
+      "JitCompiled",
+      "Interpreted"
+    ],
+    "positiveChecks": 570,
+    "negativeCases": 14,
+    "compilerPackage": "Microsoft.CodeAnalysis.CSharp 5.0.0",
+    "oracleLanguageVersion": "CSharp9",
+    "entireUpstreamSuiteExecuted": false,
+    "downloadAndExtractionReproduced": true
+  },
+  "documentation": {
+    "executedExamples": 6,
+    "outputAssertionsPassed": true,
+    "brokenLocalLinks": 0,
+    "independentBrandingChecked": true
+  },
+  "checks": {
+    "lockedRestore": true,
+    "gitDiffCheck": true
+  },
+  "limits": {
+    "nativeAotRepublished": false,
+    "performanceRemeasured": false
+  }
+}

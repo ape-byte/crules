@@ -31,9 +31,9 @@ CRules 基于 [DynamicExpresso](https://github.com/dynamicexpresso/DynamicExpres
 | --- | --- |
 | 动态规则配置 | 用同一种代码式规则承载不同条件、公式和决策，降低专用配置结构的维护成本 |
 | 强类型编译 | 准备阶段检查字段、类型和返回值，支持局部变量、`if/else`、提前返回及对象结果 |
-| 编译后重复执行 | JIT 模式将整份规则编译为一个 `Func<TContext, TResult>`，热执行不重复解析源码 |
+| 编译后重复执行 | JIT 模式将整份规则编译为一个具体类型委托，热执行不重复解析源码 |
 | decimal 数值策略 | 十进制运算可直接使用 `decimal`，支持编译期拒绝 `float/double` 运算 |
-| 可扩展上下文 | 固定字段使用公开 C# 类型，动态字段使用 `RuleMetadata` 有类型读取 |
+| 可扩展上下文 | 支持多个命名输入、普通对象与 ExpandoObject；DataObject 是可选数据工具 |
 | 适合 AI 生成 | 规则、输入和预期输出均有明确契约，方便 AI 生成、修改并交给同一引擎验证 |
 
 ## 让 AI 生成规则并验证结果
@@ -91,65 +91,45 @@ dotnet add <应用项目.csproj> reference <CRules目录>/src/CRules/CRules.cspr
 ```csharp
 using CRules;
 
-var compiler = new RuleCompiler(new RuleCompileOptions { DecimalOnly = true });
+var compiler = new RuleCompiler(new CompilerOptions { DecimalOnly = true });
+var executable = compiler.Compile<Func<decimal, decimal, decimal>>(
+    code: """
+        var amount = price;
+        amount *= discount;
+        if (amount < 0m) return 0m;
+        return Math.Round(amount, 2, MidpointRounding.ToEven);
+        """,
+    parameterNames: ["price", "discount"],
+    name: "CalculatePrice").RequireExecutable();
 
-var compilation = compiler.Compile<PriceContext, decimal>(new RuleSource(
-    RuleId: "discount",
-    Revision: "1",
-    Text: """
-        var multiplier = ctx.Metadata.GetDecimal("multiplier") ?? 1m;
-        var amount = ctx.Amount * multiplier;
+Console.WriteLine(executable.Execute(100m, 0.9m)); // 90
 
-        if (ctx.IsVip) {
-            return Math.Round(amount * 0.9m, 2, MidpointRounding.ToEven);
-        } else {
-            return Math.Round(amount, 2, MidpointRounding.ToEven);
-        }
-        """));
-
-var rule = compilation.RequireRule();
-var context = new PriceContext(100m, true,
-    RuleMetadata.FromJson("""{"multiplier":1.2}"""));
-
-Console.WriteLine(rule.Execute(context)); // 108
-
-// AI 或开发者可以按业务约定生成这些输入与期望值。
-var cases = new[]
+// 预期输出来自业务约定，可由 AI 生成 mock 后交给宿主验证。
+foreach (var test in new[] { (100m, 0.9m, 90m), (100m, 1m, 100m), (0m, 0.9m, 0m) })
 {
-    (Input: context, Expected: 108m),
-    (Input: new PriceContext(100m, true, RuleMetadata.Empty), Expected: 90m),
-    (Input: new PriceContext(100m, false, RuleMetadata.Empty), Expected: 100m),
-    (Input: new PriceContext(0m, true, RuleMetadata.Empty), Expected: 0m)
-};
-
-foreach (var test in cases)
-{
-    var actual = rule.Execute(test.Input);
-    if (actual != test.Expected)
-        throw new InvalidOperationException($"期望 {test.Expected}，实际 {actual}");
+    var actual = executable.Execute(test.Item1, test.Item2);
+    if (actual != test.Item3) throw new InvalidOperationException("输出与期望不一致。");
 }
-
-public sealed record PriceContext(decimal Amount, bool IsVip, RuleMetadata Metadata);
 ```
 
-`ctx` 的类型由 `TContext` 确定，结果类型由 `TResult` 确定。多个输入对象可以组合到同一个上下文中。`RuleId`、`Revision` 记录规则来源，`Fingerprint` 标识源码、类型与相关编译策略。请保存已编译句柄；每次调用 `Compile` 都会重新准备规则。
+支持配置类 `Compile(CompileOptions)`、单输入 `Compile<TInput, TResult>` 和多输入 `Compile<TDelegate>`。形参分别命名；单输入默认名称为 `ctx`，可改名。executable 名称可选，仅作函数描述，不承担规则存储或版本管理。代码直接传入字符串。
 
-需要在编辑器显示错误时，读取 `compilation.Success` 和 `compilation.Diagnostics`，其中包含错误码、行列及原始源码跨度；`RequireRule()` 则在编译失败时直接抛出异常。
+`Execute` 在泛型入口上是有类型委托。运行时 Type 构建使用参数数组适配，额外承担数量／类型检查和装箱成本。`ExecuteAsync` 可等待 Task/ValueTask 返回值；同步结果直接完成，不自动调度线程。更完整的配置、动态对象与异步示例见 [编译与执行 API](docs/编译与执行API.md)。
 
 ## 规则可以表达什么
 
 | 能力 | 形式 |
 | --- | --- |
 | 变量和作用域 | `var`、只读绑定 `const`、局部赋值、嵌套块 |
-| 条件和返回 | `if/else`、提前返回；所有可达路径均须返回，允许分支分别返回 |
+| 条件和返回 | `if/else`、单行 if、两种基础 switch、提前返回；所有可达路径必须返回 |
 | 对象结果 | `return new() { ... };`、`return new Decision() { ... };` |
-| 动态字段 | `RuleMetadata` 的 `GetString/GetBoolean/GetInt64/GetDecimal/GetObject` 及 `Require*` |
+| 动态输入 | 直接使用 ExpandoObject 点访问，或使用可选 DataObject 有类型读取 |
 | 宿主方法 | 公开成员与已注册类型的方法，受 `IsMemberAllowed` 策略检查 |
 | 编译诊断 | 原始源码的 UTF-16 跨度、行列、位置精度与错误码 |
 
-变量声明必须初始化，语句需要分号，分支需要花括号。`const` 是每次执行时初始化的只读绑定。Metadata 可区分缺失与 null，类型错误不静默转换或默认成零。直接返回的 `new()` 依据具体 `TResult` 推断类型，显式构造类型加入 `ReferencedTypes`。
+语法范围标为 **CRules Syntax 1.0**，不宣称完整支持某个 C# 版本。支持局部 `+=`、`-=`、`*=`、`/=`、`%=`、物化数组/List 返回、常量 switch 语句和表达式。模式匹配、集合表达式 `[1, 2]`、展开元素、插值字符串、循环与代码块内 await 均不在 1.0 范围。严格模式暂时拒绝嵌套 Lambda，实验支持通过 `AllowRuntimeLambdaBinding` 开启。
 
-当前语法不包含循环、异常语句、`async/await`、普通上下文属性赋值或完整 C#；不支持集合直接作为 `TResult`。严格模式暂时拒绝嵌套 Lambda，实验支持通过 `AllowRuntimeLambdaBinding` 显式开启。更多示例见 [Metadata 与对象初始化](docs/Metadata与对象初始化.md)。
+详细范围、示例与错误规则见 [CRules Syntax 1.0](docs/CRules-Syntax-1.0.md)。宿主项目代码可以使用自身 SDK 支持的语法；字符串内部只遵循 CRules 的支持清单。
 
 ## 轻量封装与集成边界
 
@@ -158,7 +138,7 @@ public sealed record PriceContext(decimal Amount, bool IsVip, RuleMetadata Metad
   → CRules 识别语句边界与作用域
   → DynamicExpresso 解析表达式、绑定类型与方法
   → 标准表达式树组合
-  → 一个 Func<TContext, TResult>
+  → 一个具有命名输入签名的委托
 ```
 
 CRules 使用 **DynamicExpresso.Core 2.19.6 的公开 API**，不读取上游私有字段，不 fork，也不重新实现其表达式类型系统。Jint 4.17.0 用于基准比较；核心执行不依赖 JavaScript 运行时。
@@ -172,7 +152,9 @@ NativeAOT 可显式选择 `Interpreted` 后端，已有 Windows x64 标量发布
 | 入口 | 内容 |
 | --- | --- |
 | [文档目录](docs/README.md) | 设计、接入、验证和原始证据 |
-| [Metadata 与对象初始化](docs/Metadata与对象初始化.md) | API、错误语义、对象结果与范围 |
+| [CRules Syntax 1.0](docs/CRules-Syntax-1.0.md) | 语法清单、switch/集合示例与边界 |
+| [Roslyn 兼容性验证](docs/Roslyn兼容性验证.md) | 官方测试来源与两种执行模式的差分回归 |
+| [动态数据与对象初始化](docs/动态数据与对象初始化.md) | API、错误语义、对象结果与范围 |
 | [性能对比报告](docs/性能测试对比.md) | CRules 与 Jint 的完整测试口径和结果 |
 | [M0 技术验证](docs/M0技术验证.md) | 公开 API、强类型绑定与实现边界 |
 | [开发计划书](docs/CRules_开发计划书_v1.0.docx) | 可编辑的技术设计与后续规划 |
@@ -181,7 +163,7 @@ NativeAOT 可显式选择 `Interpreted` 后端，已有 Windows x64 标量发布
 dotnet test tests/CRules.Tests -c Release
 ```
 
-核心验证覆盖分支与作用域、decimal、Metadata、对象结果、诊断、差分和并发输入。基准与验证记录均标明测量范围；新增场景应使用实际规则和上下文另行验证。
+核心验证覆盖分支与作用域、decimal、动态数据、对象结果、诊断、差分和并发输入。另从 Roslyn 官方测试提取支持范围内的函数核心，逐条与 Roslyn 编译结果比较，覆盖 JIT 与 Interpreted。基准与验证记录均标明测量范围；新增场景应使用实际规则和上下文另行验证。
 
 ## 许可证
 
