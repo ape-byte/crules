@@ -13,3 +13,4 @@ __pycache__/
 /artifacts/
 /publish/
 !/docs/data/aot/**/publish.log
+!/docs/data/compatibility/**/publish.log

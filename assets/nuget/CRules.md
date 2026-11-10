@@ -4,7 +4,7 @@
 
 CRules is a lightweight wrapper around the public APIs of DynamicExpresso. It accepts a finite C#-style function body, an input signature and a return type, then builds a reusable executable. It is not a fork or a full C# compiler.
 
-This preview targets **.NET 10**.
+This preview contains **netstandard2.0, net6.0, net8.0 and net10.0** assets. NuGet selects the nearest compatible target; .NET 9 uses net8.0. Runtime compatibility does not imply support for every compiler language version or every platform.
 
 ```csharp
 using CRules;
@@ -35,4 +35,4 @@ This is a preview: use `Func<...>` or the runtime Type entry point; custom deleg
 - [NativeAOT](https://github.com/ape-byte/crules/blob/github/docs/NativeAOT支持.md)
 - [Known issues](https://github.com/ape-byte/crules/blob/github/docs/已知问题.md)
 
-Developed by **ape-byte**. Licensed under MIT. One CRules package contains both the implementation and abstractions assemblies. Its only external package dependency is DynamicExpresso.Core; Jint and Roslyn are not production dependencies.
+Developed by **ape-byte**. Licensed under MIT. One CRules package contains both the implementation and abstractions assemblies. Its external package dependency is DynamicExpresso.Core, plus System.Text.Json 8.0.6 for netstandard2.0/net6.0; Jint and Roslyn are not production dependencies.

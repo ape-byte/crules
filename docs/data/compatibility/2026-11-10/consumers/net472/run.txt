@@ -1,0 +1,9 @@
+
+已成功生成。
+    0 个警告
+    0 个错误
+
+已用时间 00:00:01.64
+PASS package consumer JitCompiled: 6 checks
+PASS package consumer Interpreted: 6 checks
+NUGET_CONSUMER_PASS

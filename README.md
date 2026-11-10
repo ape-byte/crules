@@ -191,7 +191,7 @@ NuGet 预览包的构建、依赖、本地安装与发布验证见 [NuGet 构建
 | [与 Jint 对比测试](docs/与Jint对比测试.md) | 输入入口、数值语义、准备/分配口径 |
 
 ```powershell
-dotnet test tests/CRules.Tests -c Release
+dotnet test tests/CRules.Tests -c Release -f net10.0
 ```
 
 核心验证覆盖分支与作用域、decimal、动态数据、对象结果、诊断、差分和并发输入。另从 Roslyn 官方测试提取支持范围内的函数核心，逐条与 Roslyn 编译结果比较，覆盖 JIT 与 Interpreted。基准与验证记录均标明测量范围；新增场景应使用实际规则和上下文另行验证。
@@ -199,3 +199,5 @@ dotnet test tests/CRules.Tests -c Release
 ## 许可证
 
 本项目采用 [MIT 许可证](LICENSE)。
+
+支持的目标框架与跨版本验证见 [框架兼容性](docs/%E6%A1%86%E6%9E%B6%E5%85%BC%E5%AE%B9%E6%80%A7.md)。

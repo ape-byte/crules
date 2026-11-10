@@ -1,0 +1,14 @@
+C:\Program Files\dotnet\sdk\10.0.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.EolTargetFrameworks.targets(32,5): warning NETSDK1138: 目标框架“net6.0”不受支持，将来不会收到安全更新。有关支持策略的详细信息，请参阅 https://aka.ms/dotnet-core-support。 [C:\Work\Project\ClrRule\.tmp\nuget-validation\Matrix-net6.0\Matrix.csproj]
+C:\Program Files\dotnet\sdk\10.0.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.EolTargetFrameworks.targets(32,5): warning NETSDK1138: 目标框架“net6.0”不受支持，将来不会收到安全更新。有关支持策略的详细信息，请参阅 https://aka.ms/dotnet-core-support。 [C:\Work\Project\ClrRule\.tmp\nuget-validation\Matrix-net6.0\Matrix.csproj]
+C:\Program Files\dotnet\sdk\10.0.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.EolTargetFrameworks.targets(32,5): warning NETSDK1138: 目标框架“net6.0”不受支持，将来不会收到安全更新。有关支持策略的详细信息，请参阅 https://aka.ms/dotnet-core-support。 [C:\Work\Project\ClrRule\.tmp\nuget-validation\Matrix-net6.0\Matrix.csproj]
+
+已成功生成。
+
+C:\Program Files\dotnet\sdk\10.0.401\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.EolTargetFrameworks.targets(32,5): warning NETSDK1138: 目标框架“net6.0”不受支持，将来不会收到安全更新。有关支持策略的详细信息，请参阅 https://aka.ms/dotnet-core-support。 [C:\Work\Project\ClrRule\.tmp\nuget-validation\Matrix-net6.0\Matrix.csproj]
+    1 个警告
+    0 个错误
+
+已用时间 00:00:06.08
+PASS package consumer JitCompiled: 6 checks
+PASS package consumer Interpreted: 6 checks
+NUGET_CONSUMER_PASS

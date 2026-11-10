@@ -1,0 +1,209 @@
+{
+  "date": "2026-11-10",
+  "package": "CRules",
+  "version": "0.1.0-preview.1",
+  "frameworks": [
+    "netstandard2.0",
+    "net6.0",
+    "net8.0",
+    "net10.0"
+  ],
+  "sourceSha256": {
+    "Directory.Build.props": "fcc949c9ac1a3803ae186a3a68ee4dcefb0857f622af107b111832ff497895a8",
+    "NuGet.props": "063add3d120b4d15fe4548b1cffe1957c50d5a26566e3efc4189ed605b52be95",
+    "src/Compatibility.cs": "0bf0667c5b5a895386d33cd9351926b8ecccd93fd22383f6e2bad237150a050b",
+    "src/CRules/ArraySupport.cs": "d10eb8bda42023f066506b028b3610b4f1bf5f6da4c44f18e456f80448f4e7c0",
+    "src/CRules/Compiler.cs": "095964811d1b86d24dc3b637d80c5dcacd25328cb456506bbae93c76ca7ccdf4",
+    "src/CRules/CompilerOptions.cs": "00a0f795497f343bea7b5c7dfaefbd6d141f1bc12c08c6c859537e28c4345944",
+    "src/CRules/CRules.csproj": "dd1fc2e7feb71b3d82ce10bb067bf51fb2d0e3bb88d1fb8725c8656e0ca42d6f",
+    "src/CRules/DictionarySupport.cs": "36c7a998691a5017fc6906aa9f71b0e9b0b9eb0987650d6cdecfaa90b2910906",
+    "src/CRules/DynamicCalls.cs": "3bb7623fa1fd1549bd4732c672699cdc582a160650d8731b87602865f179842b",
+    "src/CRules/DynamicExpressoAdapter.cs": "d9d90c8d7d864d8e65ef344b415dcaa945e77852920fcb90b15dd0f3789d15e1",
+    "src/CRules/ExpressionAudit.cs": "8770c9909f00b5df37fe1ef60b9b8c1b54c8ef68d4c22ea949bb1203e6c1df99",
+    "src/CRules/ExpressionCompatibility.cs": "2d2ce72145c5f44c6fbe4617c8c0509cd24db6dd197e954c2ab72a92681da56f",
+    "src/CRules/NumericConversions.cs": "a54f37262f264e9d84ed3c6611fd44320a6dcc307b22417d995173417a6c8e8e",
+    "src/CRules/packages.lock.json": "13c2a01f901c9543639607040b79d7055eb594974e775848596382e85295e59d",
+    "src/CRules/RuntimeCompatibility.cs": "45845c019299349335dd8d6d3f47e3028af3a095ce2b3bf6437b18de55f194e2",
+    "src/CRules/SwitchSupport.cs": "8e4234b20b9c4b4951874c88620d510ddbd91251032092cbe25b09449bc2d286",
+    "src/CRules/Syntax.cs": "eab141c1d8d1bb5aa66bdef9336836eadcb99e08126987a8961b14988c7be6d7",
+    "src/CRules/TreeBuilder.cs": "3dbd391cf493e38f7a6f9104954a6026b6bf28cce8c59d38f59010aa625791f5",
+    "src/CRules/VisibleTypes.cs": "eac56d3a0b809880b066ca60d134a8edc71fa26f76638bca49ba9bba4bab46e0",
+    "src/CRules.Abstractions/CRules.Abstractions.csproj": "efbe63f533cba77e83f33b5d47f5f45dbbd9ac9592bdc51de79d217318b7ab6a",
+    "src/CRules.Abstractions/CRulesSyntax.cs": "6798b47638ed82a9681c1180411cb7bff37007a5c5442fe0418b9347fc29b834",
+    "src/CRules.Abstractions/DataObject.cs": "3ddc9dfdafd85fa5c587389b5f6675e12b03fea1a0d83be9b0243efea8fc633e",
+    "src/CRules.Abstractions/ExecutionContracts.cs": "270df827b0619d7c0b41ca4c3c5f9df1f0be84cf0680f0fed194fecb8e28c6ee",
+    "src/CRules.Abstractions/packages.lock.json": "509eb4b030c54c0b25f944f579a4083e5690ef31419ae7866214d3916bfeb04d"
+  },
+  "unitTestRuns": [
+    {
+      "runtimeTarget": "net6.0",
+      "libraryAsset": "net6.0",
+      "counters": {
+        "total": "923",
+        "executed": "923",
+        "passed": "923",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "originalTrx": "matrix_net6.0_20261110182924.trx",
+      "trxSha256": "f372b92e4410597abd9da1985a3dfc022fd5a2dd71fa231509a858864efe3304"
+    },
+    {
+      "runtimeTarget": "net8.0",
+      "libraryAsset": "net8.0",
+      "counters": {
+        "total": "923",
+        "executed": "923",
+        "passed": "923",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "originalTrx": "matrix_net8.0_20261110182923.trx",
+      "trxSha256": "23a4262986a18a7330f87d0fba1423eeae2e6ad40f9d6d2f3ab0f328c80dfde0"
+    },
+    {
+      "runtimeTarget": "net10.0",
+      "libraryAsset": "net10.0",
+      "counters": {
+        "total": "923",
+        "executed": "923",
+        "passed": "923",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "originalTrx": "matrix_net10.0_20261110182923.trx",
+      "trxSha256": "fedea0e10f3c2057232250542b80793f2e2773c23e5fbc2f78a094e01cd7056d"
+    },
+    {
+      "runtimeTarget": "net8.0",
+      "libraryAsset": "netstandard2.0",
+      "counters": {
+        "total": "923",
+        "executed": "923",
+        "passed": "923",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "originalTrx": "standard.trx",
+      "trxSha256": "b3eb161f858779d1ad488665f043b3c2bda4c1d90332b3908e091bf16a234c46"
+    }
+  ],
+  "packageConsumers": [
+    {
+      "target": "net6.0",
+      "selectedAsset": "net6.0",
+      "checksPassed": 12,
+      "modes": [
+        "JitCompiled",
+        "Interpreted"
+      ]
+    },
+    {
+      "target": "net8.0",
+      "selectedAsset": "net8.0",
+      "checksPassed": 12,
+      "modes": [
+        "JitCompiled",
+        "Interpreted"
+      ]
+    },
+    {
+      "target": "net9.0",
+      "selectedAsset": "net8.0",
+      "checksPassed": 12,
+      "modes": [
+        "JitCompiled",
+        "Interpreted"
+      ]
+    },
+    {
+      "target": "net10.0",
+      "selectedAsset": "net10.0",
+      "checksPassed": 12,
+      "modes": [
+        "JitCompiled",
+        "Interpreted"
+      ]
+    },
+    {
+      "target": "net472",
+      "selectedAsset": "netstandard2.0",
+      "checksPassed": 12,
+      "modes": [
+        "JitCompiled",
+        "Interpreted"
+      ]
+    }
+  ],
+  "nativeAot": [
+    {
+      "rid": "win-x64",
+      "target": "net10.0",
+      "checksPassed": 21,
+      "dynamicCodeSupported": false,
+      "source": "NuGet consumer"
+    },
+    {
+      "rid": "linux-x64",
+      "target": "net10.0",
+      "checksPassed": 21,
+      "dynamicCodeSupported": false,
+      "source": "project reference"
+    }
+  ],
+  "solutionBuild": {
+    "warnings": 0,
+    "errors": 0
+  },
+  "runtimes": {
+    "net6.0": "6.0.36 (workspace-private install)",
+    "net8.0": "8.0.28",
+    "net10.0": "10.0.12",
+    "net472": "Windows CLR 4.x, installed Framework 4.8.09221; not an original 4.7.2 installation"
+  },
+  "scope": "923 tests per run, including 694 Roslyn differential cases; not 3692 distinct tests. NativeAOT verified only for documented .NET 10 profile. Package consumers use PackageReference only."
+}

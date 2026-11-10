@@ -118,3 +118,7 @@ dotnet publish tests/CRules.AotSmoke -c Release -r linux-x64 -o .tmp/aot-check
 NativeAOT 解释执行没有为每条动态规则生成原生机器码。它与 JIT 委托在速度、分配、反射成本上不同，不能套用 [性能报告](性能报告.md) 的 JIT 热调用零分配结论。本轮 profile 只是功能探针的单批样本，不是正式三方 AOT 性能报告。
 
 当前没有发布前生成静态 C# 规则实现的独立后端。如果必须同时获得任意运行时热更新规则和纯静态原生执行成本，当前实现不能承诺两者兼得。
+
+## 多目标包的 AOT 选择
+
+包新增 netstandard2.0/net6.0/net8.0 不会扩大本页 AOT 承诺；.NET 10 AOT 宿主自动选 net10.0。旧目标的普通 JIT/解释测试不能替代其 AOT 验收。多目标改造后再次运行的原生验证见 [框架验证记录](data/compatibility/2026-11-10/verification.json)。

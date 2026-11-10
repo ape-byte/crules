@@ -1,0 +1,27 @@
+DynamicCodeSupported=False
+PASS decimal_branch
+PASS repeated_inputs
+PASS scope_and_assignment
+PASS const_binding
+PASS early_return
+PASS positive_round
+PASS negative_round
+PASS bool_result
+PASS compile_diagnostic
+PASS jit_guard
+PASS divide_by_zero
+PASS overflow
+PASS unsupported_lambda_rejected
+PASS named_multiple_inputs
+PASS dictionary_initializers_and_methods
+PASS object_auto_reference_and_null
+PASS nullable_value
+PASS runtime_type_entry
+PASS switch_and_list
+PASS async_results
+PASS typed_json_data
+CAPABILITY_EXPANDO_RESULT=2
+EXPERIMENTAL_LINQ_UNSUPPORTED=InvalidOperationException: CRL3001 (1,8): Invalid Operation (at index 28).
+PROFILE Interpreter: ns/op=519.67; B/op=520.000; operations=100000
+PROFILE NativeDelegate: ns/op=23.47; B/op=0.000; operations=100000
+AOT_SMOKE_PASS
