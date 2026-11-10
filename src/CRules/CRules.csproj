@@ -1,4 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../NuGet.props" />
 
   <ItemGroup>
     <ProjectReference Include="..\CRules.Abstractions\CRules.Abstractions.csproj" />
@@ -10,6 +11,8 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <PackageId>CRules</PackageId>
+    <Description>A lightweight C#-style rule executor built on DynamicExpresso public APIs. Supports typed and named inputs, expression-tree execution, dictionaries and asynchronous results. NativeAOT requires the documented interpreted profile.</Description>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
