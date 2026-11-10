@@ -82,4 +82,4 @@ object? boxedValue = await asyncExecutable.ExecuteAsync(service);
 
 代码错误返回 Compilation.Diagnostics，包含错误码、原始 UTF-16 跨度、行列和位置精度；RequireExecutable 在失败时抛出异常。缺少代码、签名为空等调用错误抛参数异常。运行时错误向调用方传播，不转成零或默认结果。
 
-JIT 与 Interpreted 都有本轮回归。历史 NativeAOT 标量发布结果不覆盖本轮新的签名适配、动态绑定和异步桥接；本轮未重新验证 NativeAOT 发布，也未重跑性能基准。
+JIT 与 Interpreted 都有本轮回归。历史 NativeAOT 标量发布结果不覆盖本轮新的签名适配、动态绑定和异步桥接；NativeAOT 尚未重新发布；后续 JIT 性能复测及调用入口成本见 [性能报告](性能测试对比.md)。

@@ -24,8 +24,8 @@
 | 文档 | 内容 |
 | --- | --- |
 | [性能测试对比：文字版](性能测试对比.md) | 推荐阅读入口；五种随机新建 context 场景，Jint 单例与隔离模式，时间、分配、GC、工作集、准备成本及复现方法 |
-| [十万次工作负载交互报告](performance/2026-11-09/business-100k/index.html) | 离线 HTML；按场景、Jint 入口、计时和内存口径切换，并可下载数据 |
-| [本轮自动生成分析](performance/2026-11-09/business-100k/分析报告.md) | 根据本轮原始记录生成的详细表格 |
+| [重构后性能交互报告](performance/2026-11-10/index.html) | 重新设计的离线 HTML；明确划分 CRules / Jint / 原生 C#，包含配对回退与准备成本 |
+| [历史批次自动分析](performance/2026-11-09/business-100k/分析报告.md) | 2026-11-09 原始记录生成的详细表格 |
 | [早期微基准报告](performance/2026-11-09/性能测试报告.md) | BenchmarkDotNet 原生 C#、CRules、Jint 标量／集合和生命周期微基准；计时口径与端到端报告不同 |
 
 ## 原始证据
@@ -38,5 +38,6 @@
 - [规则与 context 样例](performance/2026-11-09/business-100k/rules/)：CRules、JavaScript 规则及 JSON 输入样例。
 - [工作负载验证记录](validation/2026-11-09/business-workloads/verification.json)：主测校验、核心回归结果与 HTML 检查记录。
 - [Syntax 1.0 重构验证记录](validation/2026-11-10/syntax-1.0/verification.json)：720 项回归、Roslyn 兼容检查、构建和文档示例验收。
+- [重构后性能复测记录](validation/2026-11-10/performance/verification.json)：前后核心、1,350 万次输出校验、66 个微基准结果、程序集指纹与新 HTML 验收。
 
 所有性能数字应与场景、计时范围和引擎生命周期一起阅读。结构体 context 的收益目前只有讨论和估算，未纳入实测结果。

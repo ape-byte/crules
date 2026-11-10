@@ -53,4 +53,4 @@ dotnet test tests/CRules.Tests -c Release --no-build --no-restore
 
 仅执行兼容回归可追加 `--filter FullyQualifiedName~RoslynCompatibilityTests`。日常测试使用仓库内的固定片段，无需下载官方源码。更新来源的步骤见测试目录说明。
 
-本轮没有重新发布 NativeAOT，也没有重测性能。历史 AOT/性能证据不自动覆盖新的签名、动态绑定、异步或集合构造适配。
+语法验收阶段未重新发布 NativeAOT。随后完成的 JIT 性能复测见 [性能报告](性能测试对比.md)，其覆盖范围不能自动扩大到所有动态绑定、异步和集合构造组合。
