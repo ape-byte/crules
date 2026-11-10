@@ -11,4 +11,5 @@ __pycache__/
 # Local maintenance tools are not part of the distributed repository.
 /tools/
 /artifacts/
+/publish/
 !/docs/data/aot/**/publish.log

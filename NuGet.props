@@ -2,6 +2,7 @@
   <PropertyGroup>
     <VersionPrefix>0.1.0</VersionPrefix>
     <VersionSuffix>preview.1</VersionSuffix>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)publish/packages</PackageOutputPath>
     <Authors>CRules contributors</Authors>
     <Company>ape-byte</Company>
     <PackageProjectUrl>https://github.com/ape-byte/crules</PackageProjectUrl>

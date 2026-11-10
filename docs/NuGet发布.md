@@ -20,11 +20,11 @@
 ```powershell
 dotnet restore CRules.slnx --locked-mode
 dotnet test tests/CRules.Tests -c Release --no-restore
-dotnet pack src/CRules.Abstractions/CRules.Abstractions.csproj -c Release -o artifacts/nuget/0.1.0-preview.1
-dotnet pack src/CRules/CRules.csproj -c Release -o artifacts/nuget/0.1.0-preview.1
+dotnet pack src/CRules.Abstractions/CRules.Abstractions.csproj -c Release -o publish/packages
+dotnet pack src/CRules/CRules.csproj -c Release -o publish/packages
 ```
 
-输出两个 nupkg 和两个 snupkg。`artifacts/` 已忽略。默认版本在 NuGet.props；临时覆盖版本时，对两个包使用相同 `-p:Version=...` 和匹配的输出目录，避免核心包引用不存在的 Abstractions 版本。
+输出两个 nupkg 和两个 snupkg。`publish/` 已忽略；不指定 -o 时也默认输出到项目根目录 publish/packages。默认版本在 NuGet.props；临时覆盖版本时，对两个包使用相同 `-p:Version=...` 和匹配的输出目录，避免核心包引用不存在的 Abstractions 版本。
 
 ## 发布前验证
 
@@ -47,8 +47,8 @@ dotnet add MyApp/MyApp.csproj package CRules --version 0.1.0-preview.1 --source 
 先确定版本、目标源和发布权限。包 ID 查询不到，不代表一定可注册或当前账号有权限。以下只是命令示例，尚未执行；密钥通过环境变量注入，不写入仓库：
 
 ```powershell
-dotnet nuget push artifacts/nuget/0.1.0-preview.1/CRules.Abstractions.0.1.0-preview.1.nupkg --source https://api.nuget.org/v3/index.json --api-key $env:NUGET_API_KEY
-dotnet nuget push artifacts/nuget/0.1.0-preview.1/CRules.0.1.0-preview.1.nupkg --source https://api.nuget.org/v3/index.json --api-key $env:NUGET_API_KEY
+dotnet nuget push publish/packages/CRules.Abstractions.0.1.0-preview.1.nupkg --source https://api.nuget.org/v3/index.json --api-key $env:NUGET_API_KEY
+dotnet nuget push publish/packages/CRules.0.1.0-preview.1.nupkg --source https://api.nuget.org/v3/index.json --api-key $env:NUGET_API_KEY
 ```
 
 先 Abstractions，后核心包。符号包置于相邻目录，按目标源的规则发布。上传后从目标源使用新缓存重新安装并核对依赖，本地 pack 成功不等于远端发布成功。包中的仓库提交也应已推送，确保源码链接可访问。
