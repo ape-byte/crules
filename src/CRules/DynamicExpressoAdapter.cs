@@ -126,7 +126,7 @@ internal sealed class DynamicExpressoAdapter
             if (text[at] is '\"' or '\'' || text[at] == '@' && at + 1 < dot && text[at + 1] == '\"')
             {
                 int end = StatementParser.SkipLiteral(text, at);
-                Array.Fill(masked, ' ', at, end - at); at = end - 1;
+                for (int index = at; index < end; index++) masked[index] = ' '; at = end - 1;
             }
         int depth = 0, start = dot - 1;
         for (; start >= 0; start--)
@@ -169,8 +169,8 @@ internal sealed class DynamicExpressoAdapter
 
     public string DiagnosticMessage(string message)
     {
-        foreach (var (alias, label) in _typeLabels.OrderByDescending(pair => pair.Key.Length))
-            message = message.Replace(alias, label, StringComparison.Ordinal);
+        foreach (var pair in _typeLabels.OrderByDescending(pair => pair.Key.Length))
+            message = message.Replace(pair.Key, pair.Value, StringComparison.Ordinal);
         return message;
     }
 

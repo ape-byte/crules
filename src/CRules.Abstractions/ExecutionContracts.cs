@@ -39,7 +39,7 @@ public class Executable
     }
     public object? Execute(params object?[] arguments)
     {
-        ArgumentNullException.ThrowIfNull(arguments);
+        if (arguments is null) throw new ArgumentNullException(nameof(arguments));
         if (arguments.Length != Parameters.Count) throw new ArgumentException("实参数量与形参签名不一致。", nameof(arguments));
         for (int i = 0; i < arguments.Length; i++)
         {

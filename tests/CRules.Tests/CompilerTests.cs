@@ -143,7 +143,7 @@ public sealed class CompilerTests
         var results = new ConcurrentBag<decimal>();
         var rule = compiler.Compile<Input, decimal>("var x = ctx.Amount; x = x + 1m; return x;").RequireExecutable();
         Parallel.For(0, 10000, i => results.Add(rule.Execute(new(i))));
-        Assert.Equal(Enumerable.Range(1, 10000).Select(i => (decimal)i), results.Order());
+        Assert.Equal(Enumerable.Range(1, 10000).Select(i => (decimal)i), results.OrderBy(value => value));
         Parallel.For(0, 32, _ => Assert.True(compiler.Compile<Input, decimal>("return ctx.Amount;").Success));
     }
 

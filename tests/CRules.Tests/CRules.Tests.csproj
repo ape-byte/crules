@@ -1,18 +1,32 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework />
+    <TargetFrameworks>net6.0;net8.0;net10.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(CRulesTestAssetFramework)' == 'netstandard2.0'">
+    <DefineConstants>$(DefineConstants);CRULES_TEST_NETSTANDARD</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(CRulesTestAssetFramework)' == 'netstandard2.0'">
+    <Reference Include="CRules"><HintPath>../../src/CRules/bin/$(Configuration)/netstandard2.0/CRules.dll</HintPath></Reference>
+    <Reference Include="CRules.Abstractions"><HintPath>../../src/CRules.Abstractions/bin/$(Configuration)/netstandard2.0/CRules.Abstractions.dll</HintPath></Reference>
+    <PackageReference Include="DynamicExpresso.Core" Version="2.19.6" />
+    <PackageReference Include="System.Text.Json" Version="8.0.6" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" Condition="'$(TargetFramework)' != 'net6.0'" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" Condition="'$(TargetFramework)' == 'net6.0'" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" Condition="'$(TargetFramework)' != 'net6.0'" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" Condition="'$(TargetFramework)' == 'net6.0'" />
     <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" Condition="'$(TargetFramework)' != 'net6.0'" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" Condition="'$(TargetFramework)' == 'net6.0'" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,8 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\CRules\CRules.csproj" />
-    <ProjectReference Include="..\..\src\CRules.Abstractions\CRules.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\CRules\CRules.csproj" Condition="'$(CRulesTestAssetFramework)' != 'netstandard2.0'" />
+    <ProjectReference Include="..\..\src\CRules.Abstractions\CRules.Abstractions.csproj" Condition="'$(CRulesTestAssetFramework)' != 'netstandard2.0'" />
   </ItemGroup>
 
 </Project>

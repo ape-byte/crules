@@ -257,7 +257,7 @@ internal sealed class TreeBuilder(string text, CompilerOptions options, Type ret
                 ? _adapter.InferListType(text.Substring(value.Start, value.Length),
                     _scopes.SelectMany(s => s.Values).Select(s => s.Node).Concat(parameters))
                 : _adapter.ResolveType(typeName);
-            if (type == typeof(void) || type.IsByRef || type.IsByRefLike || type.IsPointer || type.ContainsGenericParameters)
+            if (type == typeof(void) || type.IsByRef || RuntimeCompatibility.IsByRefLike(type) || type.IsPointer || type.ContainsGenericParameters)
                 throw new ParseException("不支持的局部变量类型。", 0);
             return type;
         }
@@ -300,7 +300,7 @@ internal sealed class TreeBuilder(string text, CompilerOptions options, Type ret
             if (insertion >= 0 && position >= insertion)
                 position = position < insertion + injected.Length ? insertion : position - injected.Length;
             throw new CompileFailure("CRL3001", _adapter.DiagnosticMessage(error.Message),
-                lambda ? new(slice.Start, slice.Length) : new(slice.Start + Math.Clamp(position, 0, slice.Length), 1),
+                lambda ? new(slice.Start, slice.Length) : new(slice.Start + RuntimeCompatibility.Clamp(position, 0, slice.Length), 1),
                 lambda ? PositionPrecision.Expression : PositionPrecision.Point);
         }
         catch (ArgumentException error)

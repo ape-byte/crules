@@ -25,7 +25,7 @@ public sealed class DataObject
     /// <summary>在上下文构建时解析一次；限制 UTF-8 字节数和 JSON 深度，拒绝重复键。</summary>
     public static DataObject FromJson(string json, int maxBytes = 262144, int maxDepth = 16)
     {
-        ArgumentNullException.ThrowIfNull(json);
+        if (json is null) throw new ArgumentNullException(nameof(json));
         if (maxBytes <= 0) throw new ArgumentOutOfRangeException(nameof(maxBytes));
         if (maxDepth <= 0) throw new ArgumentOutOfRangeException(nameof(maxDepth));
         if (Encoding.UTF8.GetByteCount(json) > maxBytes) throw new ArgumentException("Data 超过字节上限。", nameof(json));
@@ -44,13 +44,13 @@ public sealed class DataObject
     public static DataObject FromDictionary(IReadOnlyDictionary<string, object?> values,
         int maxBytes = 262144, int maxDepth = 16)
     {
-        ArgumentNullException.ThrowIfNull(values);
+        if (values is null) throw new ArgumentNullException(nameof(values));
         return FromJson(JsonSerializer.Serialize(values), maxBytes, maxDepth);
     }
 
     public DataValueState GetState(string key)
     {
-        ArgumentNullException.ThrowIfNull(key);
+        if (key is null) throw new ArgumentNullException(nameof(key));
         return !_root.TryGetProperty(key, out var value) ? DataValueState.Missing
             : value.ValueKind == JsonValueKind.Null ? DataValueState.Null : DataValueState.Value;
     }

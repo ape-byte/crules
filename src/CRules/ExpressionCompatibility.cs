@@ -20,13 +20,13 @@ internal static class ExpressionCompatibility
         for (int at = 0; at < text.Length;)
         {
             if (text[at] is '"' or '\'' || text[at] == '@' && at + 1 < text.Length && text[at + 1] == '"')
-            { int end = StatementParser.SkipLiteral(text, at); normalized.Append(text.AsSpan(at, end - at)); at = end; continue; }
+            { int end = StatementParser.SkipLiteral(text, at); normalized.Append(text, at, end - at); at = end; continue; }
             if (at + 1 < text.Length && (text.AsSpan(at, 2).SequenceEqual("++") || text.AsSpan(at, 2).SequenceEqual("--")))
                 throw new ParseException("Syntax 1.0 不支持 ++/--；请使用局部 +=/-=。", at);
             var match = at == 0 || !char.IsLetterOrDigit(text[at - 1]) && text[at - 1] != '_' ? ScientificFloat.Match(text, at) : Match.Empty;
             if (match.Success && match.Index == at)
             {
-                if (!float.TryParse(match.ValueSpan[..^1], NumberStyles.Float, CultureInfo.InvariantCulture, out float value) || !float.IsFinite(value))
+                if (!float.TryParse(match.Value.Substring(0, match.Length - 1), NumberStyles.Float, CultureInfo.InvariantCulture, out float value) || (float.IsNaN(value) || float.IsInfinity(value)))
                     throw new ParseException("float 字面量超出范围。", at);
                 string alias = "__crules_float_literal_" + at;
                 interpreter.SetVariable(alias, value);
