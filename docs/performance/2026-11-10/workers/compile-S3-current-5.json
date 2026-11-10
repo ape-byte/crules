@@ -1,0 +1,11 @@
+{
+  "Scenario": "S3",
+  "Round": 5,
+  "Count": 20,
+  "ElapsedMs": 1238.0594,
+  "AllocatedBytes": 530160544,
+  "Gen0": 84,
+  "Gen1": 0,
+  "Gen2": 0,
+  "SourceSha256": "AFE24C4D04FB84FDCFAD9B5AA33EAABDDE9BD27F15F7EF2FBE51959EBC41BC12"
+}

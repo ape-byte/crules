@@ -1,0 +1,29 @@
+{
+  "before": {
+    "businessBinarySha256": "e797b67ed1deee9843fcb578112491dce15ff482c62fd7402f5aa4f12e90f3e9",
+    "ilSignatureSha256": "b10be374320dfba1118c62f859e807cb081546b78c577691df87e0c8816ba38a",
+    "methodCount": 272,
+    "bdnBinarySha256": [
+      "b6a1b212cd0b3665496caab2b60db6225e684e20cce09de7aaadc42522f2a8f2",
+      "54cc779e0af336fae357e614bf40a9b8762920782342a79649f6a23365918c9d"
+    ],
+    "observedPaths": [
+      "C:\\Work\\Project\\ClrRule\\.tmp\\perf-baseline-fda9f49\\benchmarks\\CRules.Benchmarks\\bin\\Release\\net10.0\\CRules.Benchmarks.Before-1\\bin\\Release\\net10.0\\CRules.dll",
+      "C:\\Work\\Project\\ClrRule\\.tmp\\perf-baseline-fda9f49\\benchmarks\\CRules.Benchmarks\\bin\\Release\\net10.0\\CRules.Benchmarks-Job-DJEDZR-1\\bin\\Release\\net10.0\\CRules.dll"
+    ]
+  },
+  "current": {
+    "businessBinarySha256": "e8ec336540cb4afc3937c0809c65a3ca84e58867f0b7caba7fe2bfd4bed32f64",
+    "ilSignatureSha256": "e335924e1c5045b13ce920e46b83f4c64e39e2de78a507dd223a8b727f6c93e5",
+    "methodCount": 447,
+    "bdnBinarySha256": [
+      "5b2b21bd77c0d474ee4c379d9e00a245d4ea2ee872c98e4f8d190e33df1e4d72",
+      "b8b2ab1a3b5624230034c9ba42520c6a93c4a4e3f633d19f95db4b461e966e5b"
+    ],
+    "observedPaths": [
+      "C:\\Work\\Project\\ClrRule\\benchmarks\\CRules.Benchmarks\\bin\\Release\\net10.0\\CRules.Benchmarks-Job-DJEDZR-1\\bin\\Release\\net10.0\\CRules.dll",
+      "C:\\Work\\Project\\ClrRule\\benchmarks\\CRules.Benchmarks\\bin\\Release\\net10.0\\CRules.Benchmarks-Job-PCPDBF-1\\bin\\Release\\net10.0\\CRules.dll"
+    ]
+  },
+  "note": "BDN rebuilds may change MVID/PDB path and thus binary SHA-256. Emitted method bodies and signatures must match the corresponding directly built business core; old and current core fingerprints must differ."
+}

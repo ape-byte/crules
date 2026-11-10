@@ -1,0 +1,131 @@
+{
+  "Date": "2026-11-10",
+  "Count": 100000,
+  "Rounds": 0,
+  "Seed": 20261109,
+  "WarmupPerWorker": 2000,
+  "Timer": "Stopwatch wall time, single-thread workload, no overhead subtraction",
+  "Memory": "Fresh process per row; total allocated includes workload; peak working set includes process startup/preparation/warmup",
+  "NumericSemantics": "All computations are safe integers or fixed-point units; exact item-by-item comparison; no decimal string-helper penalty",
+  "Machine": {
+    "OS": "Microsoft Windows 10.0.26200",
+    "Runtime": ".NET 10.0.12",
+    "Architecture": "X64",
+    "LogicalCores": 12
+  },
+  "Scenarios": [
+    {
+      "Id": "S1",
+      "Name": "新建小 context 与简单规则",
+      "Large": false,
+      "Locals": 1,
+      "Conditions": 1,
+      "AverageContextJsonBytes": 263.75,
+      "ExpectedMin": 162445,
+      "ExpectedMax": 192840844,
+      "FlagBuckets": [
+        25078,
+        25016,
+        24888,
+        25018
+      ],
+      "VipCount": 49988,
+      "SourceSha256": "85C62DAD1BBD6639E8A5D91D2429042CC3A611B5B7CC9B7E5236CA5491A785FE",
+      "RuntimeSourceSha256": "2350B63C77D85311733BB351FAA83F5B3E8B7F6D8840DD652ACB83D3C6059A25"
+    },
+    {
+      "Id": "S2",
+      "Name": "新建小 context 与 100 个依赖变量",
+      "Large": false,
+      "Locals": 100,
+      "Conditions": 0,
+      "AverageContextJsonBytes": 263.75,
+      "ExpectedMin": 734704,
+      "ExpectedMax": 21374981,
+      "FlagBuckets": [
+        25078,
+        25016,
+        24888,
+        25018
+      ],
+      "VipCount": 49988,
+      "SourceSha256": "892640773694C86EC23D820AD7F973F6CF1BDD6F8219CD1EF765F166F06793B6",
+      "RuntimeSourceSha256": "16B5B7D23AA61CF2B1F4043F093FBAF79F5B9832EACD74A762B3EFCC7C427555"
+    },
+    {
+      "Id": "S3",
+      "Name": "新建小 context 与 100 变量和 32 条件",
+      "Large": false,
+      "Locals": 100,
+      "Conditions": 32,
+      "AverageContextJsonBytes": 263.75,
+      "ExpectedMin": 732114,
+      "ExpectedMax": 21363328,
+      "FlagBuckets": [
+        25078,
+        25016,
+        24888,
+        25018
+      ],
+      "VipCount": 49988,
+      "SourceSha256": "1C649CD14099A95D5067A6C00C8A5CBC4C76326655C5EA0727B69F3A540215B4",
+      "RuntimeSourceSha256": "AFE24C4D04FB84FDCFAD9B5AA33EAABDDE9BD27F15F7EF2FBE51959EBC41BC12"
+    },
+    {
+      "Id": "S4",
+      "Name": "新建大 context 与简单规则",
+      "Large": true,
+      "Locals": 1,
+      "Conditions": 1,
+      "AverageContextJsonBytes": 11964.5625,
+      "ExpectedMin": 131013,
+      "ExpectedMax": 187779294,
+      "FlagBuckets": [
+        24918,
+        25126,
+        24965,
+        24991
+      ],
+      "VipCount": 50123,
+      "SourceSha256": "85C62DAD1BBD6639E8A5D91D2429042CC3A611B5B7CC9B7E5236CA5491A785FE",
+      "RuntimeSourceSha256": "2350B63C77D85311733BB351FAA83F5B3E8B7F6D8840DD652ACB83D3C6059A25"
+    },
+    {
+      "Id": "S5",
+      "Name": "新建大 context 与 100 变量和 32 条件",
+      "Large": true,
+      "Locals": 100,
+      "Conditions": 32,
+      "AverageContextJsonBytes": 11964.5625,
+      "ExpectedMin": 1992656,
+      "ExpectedMax": 20826165,
+      "FlagBuckets": [
+        24918,
+        25126,
+        24965,
+        24991
+      ],
+      "VipCount": 50123,
+      "SourceSha256": "FB09A45581FE40267180DC9A625F2F6AF35B80BE3A73EE49ECCC16F661974172",
+      "RuntimeSourceSha256": "F036C4D8BA7433E7A0B32ACD988DE461DADAF31D1E44FF8BDC916134E10F69AA"
+    }
+  ],
+  "AssemblyHashes": [
+    {
+      "File": "CRules.Abstractions.dll",
+      "Sha256": "B429B15824C8ADD9B58386D1136F8D2DDD5EAF5BDA5774930563A1F952D86527"
+    },
+    {
+      "File": "CRules.Benchmarks.dll",
+      "Sha256": "F383EC4FD25C2BAADD76B888F91554581F879E58BCC2F6AA7383674179187A49"
+    },
+    {
+      "File": "CRules.dll",
+      "Sha256": "E8EC336540CB4AFC3937C0809C65A3CA84E58867F0B7CABA7FE2BFD4BED32F64"
+    }
+  ],
+  "InputGenerationOnly": true,
+  "MeasurementManifest": "../run-manifest.json",
+  "WarmupMinimumMs": 750,
+  "SourceHashNote": "SourceSha256 hashes repository UTF-8/LF files; RuntimeSourceSha256 retains the original Windows StringBuilder newline source used by both measured compilers."
+}

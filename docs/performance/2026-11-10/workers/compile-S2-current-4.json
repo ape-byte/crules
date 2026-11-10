@@ -1,0 +1,11 @@
+{
+  "Scenario": "S2",
+  "Round": 4,
+  "Count": 20,
+  "ElapsedMs": 903.815,
+  "AllocatedBytes": 388668304,
+  "Gen0": 61,
+  "Gen1": 0,
+  "Gen2": 0,
+  "SourceSha256": "16B5B7D23AA61CF2B1F4043F093FBAF79F5B9832EACD74A762B3EFCC7C427555"
+}

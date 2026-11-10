@@ -1,0 +1,87 @@
+{
+  "date": "2026-11-10",
+  "baselineCoreCommit": "fda9f49af6d683a87600416af0a92c69408ed822",
+  "currentCoreCommit": "99dda85872434d58869972318541ee00c64b8b93",
+  "productionCoreChanged": false,
+  "business": {
+    "records": 141,
+    "computedRecords": 135,
+    "checkedResults": 13500000,
+    "countPerRecord": 100000,
+    "pairedRounds": 5,
+    "jintRounds": 3,
+    "warmupMinimumIterations": 2000,
+    "warmupMinimumMs": 750,
+    "logicalProcessor": 2,
+    "tieredCompilation": false
+  },
+  "compilation": {
+    "records": 50,
+    "totalCompilations": 4600,
+    "shortRuleBdnBeforeMs": 0.7343905598958334,
+    "shortRuleBdnAfterMs": 1.14921875,
+    "shortRuleChangePct": 56.48604608466186
+  },
+  "benchmarkDotNet": {
+    "beforeCases": 31,
+    "currentCases": 35,
+    "baseLaunchCount": 1,
+    "baseIterations": 3,
+    "pureRuleLaunchCount": 3,
+    "pureRuleIterations": 5,
+    "affinityMask": 4,
+    "defaultJit": true,
+    "allStatisticsPresent": true
+  },
+  "coreAssemblyProof": "../../../performance/2026-11-10/core-il-proof.json",
+  "build": {
+    "warnings": 0,
+    "errors": 0
+  },
+  "tests": {
+    "passed": 720,
+    "failed": 0,
+    "skipped": 0
+  },
+  "documentationExamples": 6,
+  "ui": {
+    "counts": {
+      "execution-table": 5,
+      "regression-table": 5,
+      "compilation-table": 5,
+      "micro-table": 23,
+      "api-table": 4,
+      "pure-table": 4,
+      "raw-table": 141
+    },
+    "layouts": [
+      {
+        "width": 1440,
+        "scrollWidth": 1440
+      },
+      {
+        "width": 1024,
+        "scrollWidth": 1024
+      },
+      {
+        "width": 390,
+        "scrollWidth": 390
+      }
+    ],
+    "errors": [],
+    "scenarioSwitch": true,
+    "jintEntrySwitch": true,
+    "rawExpansion": true
+  },
+  "findings": {
+    "hotExecution": "inconclusive due wide paired intervals and variable native controls",
+    "shortRuleCompilation": "observed preparation regression",
+    "nativeAotRetested": false
+  },
+  "artifactSha256": {
+    "measurements.json": "5b0d9aad80a0bdca27d9a583082a998caeab20eff1b1b922d3bae3a7293727cd",
+    "compilation.json": "8e5ff076bab71a31e9f3c57fe094e4a30d8a033af96b886750e720532b871c05",
+    "summary.json": "a8c9cdcc14dc0f5a6106ec4bf51e804f787cd231611af152be8915f7b9d8cb2d",
+    "core-il-proof.json": "e3e9108c9f7e39e54aa073d223051e758a3168c774466d8cf3d07c0a7b546259"
+  }
+}

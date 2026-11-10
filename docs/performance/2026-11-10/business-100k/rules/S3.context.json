@@ -1,0 +1,29 @@
+{
+  "Sequence": 0,
+  "Request": {
+    "InputTokens": 96139,
+    "OutputTokens": 8219,
+    "CacheTokens": 31639,
+    "Flags": 40,
+    "Vip": false
+  },
+  "Pricing": {
+    "InputRate": 28,
+    "OutputRate": 248,
+    "CacheRate": 41
+  },
+  "Metrics": [
+    5298,
+    4569,
+    8222,
+    9390,
+    4682,
+    1878,
+    2505,
+    9830
+  ],
+  "Items": [],
+  "Tags": [],
+  "Data": {},
+  "Payload": ""
+}

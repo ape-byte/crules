@@ -1,0 +1,44 @@
+{
+  "date": "2026-11-10T11:49:36.854975+08:00",
+  "baselineCommit": "fda9f49",
+  "currentCommit": "99dda85",
+  "harness": "Identical source in both builds, except compile-time old/new public API bridge; core sources unchanged.",
+  "count": 100000,
+  "seed": 20261109,
+  "crulesPairedRounds": 5,
+  "jintRounds": 3,
+  "warmupMinimumIterations": 2000,
+  "warmupMinimumMs": 750,
+  "excluded": "Per-request new Jint Engine is measured separately by HostLifecycleBenchmarks, not mixed with reuse throughput.",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "workerJitPolicy": {
+    "DOTNET_TieredCompilation": "0",
+    "affinityMask": 4,
+    "logicalProcessor": 2
+  },
+  "protocolNote": "Preflight samples with default scheduling/tiering were discarded as a whole; fixed-core fully optimized JIT is used for every final business worker. BDN uses default JIT with fixed affinity separately.",
+  "assemblies": {
+    "before": {
+      "CRules.Abstractions.dll": "6e79313ce828d115ba2fb5a1e9f5238e02d65fd25b9149c5bb68bdfc2cf58284",
+      "CRules.Benchmarks.dll": "70ae206f4271de67ff362d4b62b006eddba2ee60d8b1e1ee2bd5ebeddc620ed5",
+      "CRules.dll": "e797b67ed1deee9843fcb578112491dce15ff482c62fd7402f5aa4f12e90f3e9",
+      "DynamicExpresso.Core.dll": "218bcb672553de4ae882ae8005b890cbba3906b398d600e1084273a3d12cba99",
+      "Jint.dll": "4884e36407543b54b5f2cd2020007d972a2b25059cce1b1bf4ce71a343ee84d1"
+    },
+    "current": {
+      "CRules.Abstractions.dll": "b429b15824c8add9b58386d1136f8d2ddd5eaf5bda5774930563a1f952d86527",
+      "CRules.Benchmarks.dll": "471d88c14ee19acb5897d2ed032ac893f1c86b9e9b8a914b70975d914f00c5e0",
+      "CRules.dll": "e8ec336540cb4afc3937c0809c65a3ca84e58867f0b7caba7fe2bfd4bed32f64",
+      "DynamicExpresso.Core.dll": "218bcb672553de4ae882ae8005b890cbba3906b398d600e1084273a3d12cba99",
+      "Jint.dll": "4884e36407543b54b5f2cd2020007d972a2b25059cce1b1bf4ce71a343ee84d1"
+    }
+  },
+  "harnessSourceCommit": "7a333c1f0642e0f17b1af5a3da9f989a9185977c",
+  "timingKernelSources": {
+    "BusinessContext.cs": "fb7bce8fb55fcc3c89892fb1efb06a2af6edbdc6165d25a21f1abb31291c57f4",
+    "BusinessExecutor.cs": "3348b584eba26c2099880f317e8d5961f2c1303469d2e997ce4586a721f44637",
+    "BusinessWorkloads.cs": "770c4ffdb901297739a9fd1cef72a1efcadcc5aca431da7b3c87c013eb75b106",
+    "NativeBusinessEquivalent.cs": "e4a5952cffb9b2648d043357dcd29ef13b6b4e258bb3cc59384ee7e1ddee0bac"
+  },
+  "harnessPhaseNote": "Business measurements preceded addition of BDN provenance logging and pure-rule benchmark classes; timing kernels were unchanged. Each phase records actual binary hashes; core IL/signatures are validated across builds."
+}
