@@ -3,7 +3,7 @@ using System.Reflection;
 namespace CRules;
 
 /// <summary>M0 可信宿主原型配置。尚不提供进程内不可信脚本沙箱。</summary>
-public sealed record RuleCompileOptions
+public sealed record CompilerOptions
 {
     public bool DecimalOnly { get; init; }
     /// <summary>NativeAOT 必须显式选择 Interpreted；默认不会静默退回解释执行。</summary>
@@ -16,7 +16,6 @@ public sealed record RuleCompileOptions
     public int MaxDepth { get; init; } = 32;
     public int MaxLocals { get; init; } = 256;
     public int MaxTreeNodes { get; init; } = 50000;
-    public string PolicyVersion { get; init; } = "trusted-host-m0-v1";
     public IReadOnlyList<Type> ReferencedTypes { get; init; } = [];
     /// <summary>可选的精确成员策略。非空时检查表达式中所有成员及方法。</summary>
     public Func<MemberInfo, bool>? IsMemberAllowed { get; init; }

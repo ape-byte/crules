@@ -1,12 +1,26 @@
 namespace CRules;
 
+internal static class SyntaxNames
+{
+    private static readonly HashSet<string> Reserved = new((
+        "abstract as base bool break byte case catch char checked class const continue decimal default delegate do double else enum event explicit extern false finally fixed float for foreach goto if implicit in int interface internal is lock long namespace new null object operator out override params private protected public readonly ref return sbyte sealed short sizeof stackalloc static string struct switch this throw true try typeof uint ulong unchecked unsafe ushort using virtual void volatile while var dynamic async await yield Math Enumerable MidpointRounding"
+        ).Split(' '), StringComparer.Ordinal);
+    internal static bool IsReserved(string name, IEnumerable<Type> types) =>
+        name.StartsWith("__crules_", StringComparison.Ordinal) || Reserved.Contains(name)
+        || types.Any(type => type.Name.Split('`')[0] == name);
+}
+
 internal readonly record struct Slice(int Start, int Length);
 internal abstract record Statement(SourceSpan Span);
 internal sealed record Block(List<Statement> Statements, SourceSpan Location) : Statement(Location);
 internal sealed record Declaration(string Name, bool ReadOnly, Slice Value, SourceSpan Location) : Statement(Location);
 internal sealed record Assignment(string Name, Slice Value, SourceSpan Location) : Statement(Location);
-internal sealed record Conditional(Slice Condition, Block Then, Statement? Else, SourceSpan Location) : Statement(Location);
+internal sealed record Conditional(Slice Condition, Statement Then, Statement? Else, SourceSpan Location) : Statement(Location);
 internal sealed record Return(Slice Value, SourceSpan Location) : Statement(Location);
+internal sealed record CompoundAssignment(string Name, char Operator, Slice Value, SourceSpan Location) : Statement(Location);
+internal sealed record Break(SourceSpan Location) : Statement(Location);
+internal sealed record SwitchSection(List<Slice> Labels, bool IsDefault, Block Body);
+internal sealed record SwitchStatement(Slice Value, List<SwitchSection> Sections, SourceSpan Location) : Statement(Location);
 internal sealed class CompileFailure(string code, string message, SourceSpan span,
     PositionPrecision precision = PositionPrecision.Point) : Exception(message)
 {
@@ -16,7 +30,7 @@ internal sealed class CompileFailure(string code, string message, SourceSpan spa
 }
 
 /// <summary>只识别语句与表达式边界；表达式语法与类型完全交给 DynamicExpresso。</summary>
-internal sealed class StatementParser(string source, RuleCompileOptions options)
+internal sealed class StatementParser(string source, CompilerOptions options)
 {
     private int _pos;
     private int _count;
@@ -60,18 +74,20 @@ internal sealed class StatementParser(string source, RuleCompileOptions options)
         if (keyword == "if")
         {
             Expect('('); var condition = ExpressionUntil(')');
-            var then = ReadBlock(true);
+            var then = ReadBranch();
             Statement? other = null;
             Skip();
             if (AtWord("else"))
             {
                 _pos += 4; Skip();
-                other = AtWord("if") ? ReadStatement() : ReadBlock(true);
+                other = ReadBranch();
             }
             return new Conditional(condition, then, other, new(start, _pos - start));
         }
         if (keyword == "return")
             return new Return(ExpressionUntil(';'), new(start, _pos - start));
+        if (keyword == "break") { Expect(';'); return new Break(new(start, _pos - start)); }
+        if (keyword == "switch") return ReadSwitch(start);
         if (keyword is "var" or "const")
         {
             var name = Identifier(); Expect('=');
@@ -79,10 +95,60 @@ internal sealed class StatementParser(string source, RuleCompileOptions options)
             return new Declaration(name, keyword == "const", expr, new(start, _pos - start));
         }
         if (keyword is "for" or "foreach" or "while" or "do" or "try" or "catch" or "finally"
-            or "throw" or "async" or "await" or "using" or "switch" or "goto" or "yield")
+            or "throw" or "async" or "await" or "using" or "goto" or "yield")
             Fail("CRL2001", $"不支持语句 {keyword}。", start);
+        Skip();
+        if (_pos + 1 < Text.Length && "+-*/%".Contains(Text[_pos]) && Text[_pos + 1] == '=')
+        {
+            char op = Text[_pos]; _pos += 2;
+            return new CompoundAssignment(keyword, op, ExpressionUntil(';'), new(start, _pos - start));
+        }
         Expect('=');
         return new Assignment(keyword, ExpressionUntil(';'), new(start, _pos - start));
+    }
+
+    private Statement ReadBranch()
+    {
+        Skip();
+        if (_pos >= Text.Length) Fail("CRL1001", "缺少分支语句。", _pos);
+        if (Text[_pos] == '{') return ReadBlock(true);
+        if (++_depth > options.MaxDepth) Fail("CRL4001", "分支嵌套超过限额。", _pos);
+        var statement = ReadStatement(); _depth--;
+        if (statement is Declaration) Fail("CRL2001", "分支中的变量声明需要代码块。", statement.Span.Start);
+        return statement;
+    }
+
+    private SwitchStatement ReadSwitch(int start)
+    {
+        if (++_depth > options.MaxDepth) Fail("CRL4001", "switch 嵌套超过限额。", start);
+        Expect('('); var value = ExpressionUntil(')'); Expect('{');
+        List<SwitchSection> sections = [];
+        while (true)
+        {
+            Skip();
+            if (_pos >= Text.Length) Fail("CRL1001", "switch 缺少右花括号。", start);
+            if (Text[_pos] == '}') { _pos++; break; }
+            int sectionStart = _pos;
+            List<Slice> labels = []; bool isDefault = false;
+            do
+            {
+                if (++_count > options.MaxStatements) Fail("CRL4001", "switch 标签超过限额。", _pos);
+                if (AtWord("case")) { _pos += 4; labels.Add(ExpressionUntil(':')); }
+                else if (AtWord("default"))
+                {
+                    if (isDefault || sections.Any(s => s.IsDefault)) Fail("CRL2010", "重复的 default。", _pos);
+                    _pos += 7; Expect(':'); isDefault = true;
+                }
+                else Fail("CRL2010", "switch 需要 case 或 default 标签。", _pos);
+                Skip();
+            } while (AtWord("case") || AtWord("default"));
+            List<Statement> body = [];
+            while (_pos < Text.Length && Text[_pos] != '}' && !AtWord("case") && !AtWord("default"))
+            { body.Add(ReadStatement()); Skip(); }
+            sections.Add(new(labels, isDefault, new(body, new(sectionStart, _pos - sectionStart))));
+        }
+        _depth--;
+        return new(value, sections, new(start, _pos - start));
     }
 
     private Slice ExpressionUntil(char terminator)

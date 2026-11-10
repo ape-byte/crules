@@ -27,31 +27,30 @@ public sealed class PublicApiTests
     [Fact]
     public void Lambda_name_collision_is_a_documented_rejection()
     {
-        var result = new RuleCompiler().Compile<Input, decimal>(new("collision", "1",
-            "var total = 2m; return ctx.Items.Where(total => total > 1m).Sum();"));
+        var result = new RuleCompiler().Compile<Input, decimal>("var total = 2m; return ctx.Items.Where(total => total > 1m).Sum();");
         Assert.Equal("CRL3001", Assert.Single(result.Diagnostics).Code);
         Assert.Equal(PositionPrecision.Expression, result.Diagnostics[0].Precision);
     }
     [Fact]
     public void Scalar_hot_execution_allocates_zero_per_call()
     {
-        var rule = new RuleCompiler().Compile<Input, decimal>(new("alloc", "1", "var x=ctx.Amount*0.8m;return x;")).RequireRule();
-        var input = new Input(); decimal checksum=0m;
-        for(int i=0;i<10000;i++) checksum+=rule.Execute(input);
-        long start=GC.GetAllocatedBytesForCurrentThread();
-        for(int i=0;i<10000;i++) checksum+=rule.Execute(input);
-        long allocated=GC.GetAllocatedBytesForCurrentThread()-start;
-        Assert.Equal(0,allocated);Assert.Equal(1600000m,checksum);
+        var rule = new RuleCompiler().Compile<Input, decimal>("var x=ctx.Amount*0.8m;return x;").RequireExecutable();
+        var input = new Input(); decimal checksum = 0m;
+        for (int i = 0; i < 10000; i++) checksum += rule.Execute(input);
+        long start = GC.GetAllocatedBytesForCurrentThread();
+        for (int i = 0; i < 10000; i++) checksum += rule.Execute(input);
+        long allocated = GC.GetAllocatedBytesForCurrentThread() - start;
+        Assert.Equal(0, allocated); Assert.Equal(1600000m, checksum);
     }
 
     [Fact]
     public void Strict_mode_does_not_claim_nested_lambdas_have_reflection_free_binding()
     {
-        const string text="return ctx.Items.Where(x => x > ctx.Amount).Sum();";
-        var strict=new RuleCompiler().Compile<Input,decimal>(new("lambda","1",text));
-        Assert.Equal("CRL4003",Assert.Single(strict.Diagnostics).Code);
-        var experiment=new RuleCompiler(new(){AllowRuntimeLambdaBinding=true})
-            .Compile<Input,decimal>(new("lambda","1",text)).RequireRule();
-        Assert.Equal(5m,experiment.Execute(new(2m,Values:[1m,5m])));
+        const string text = "return ctx.Items.Where(x => x > ctx.Amount).Sum();";
+        var strict = new RuleCompiler().Compile<Input, decimal>(text);
+        Assert.Equal("CRL4003", Assert.Single(strict.Diagnostics).Code);
+        var experiment = new RuleCompiler(new() { AllowRuntimeLambdaBinding = true })
+            .Compile<Input, decimal>(text).RequireExecutable();
+        Assert.Equal(5m, experiment.Execute(new(2m, Values: [1m, 5m])));
     }
 }

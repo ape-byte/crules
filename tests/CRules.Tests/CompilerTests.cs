@@ -12,8 +12,8 @@ public sealed record Input(decimal Amount = 100m, bool Vip = true, decimal[]? Va
 
 public sealed class CompilerTests
 {
-    private static RuleCompilation<Input, T> Compile<T>(string text, RuleCompileOptions? options = null)
-        => new RuleCompiler(options).Compile<Input, T>(new("test", "1", text));
+    private static Compilation<Executable<Func<Input, T>>> Compile<T>(string text, CompilerOptions? options = null)
+        => new RuleCompiler(options).Compile<Input, T>(text);
 
     [Fact]
     public void Locals_branches_blocks_and_early_returns_are_one_typed_delegate()
@@ -22,7 +22,7 @@ public sealed class CompilerTests
             var total = ctx.Amount * 0.8m;
             if (ctx.Vip) { total = total * 0.9m; }
             if (total < 1m) { return 1m; } else { return total; }
-            """).RequireRule();
+            """).RequireExecutable();
         Assert.Equal(72m, rule.Execute(new()));
         Assert.Equal(80m, rule.Execute(new(Vip: false)));
         Assert.Equal(1m, rule.Execute(new(0)));
@@ -35,7 +35,7 @@ public sealed class CompilerTests
             var threshold = 100m;
             threshold = 2m;
             return ctx.Items.Where(x => x > threshold).Select(x => x * threshold).Sum();
-            """, new() { AllowRuntimeLambdaBinding = true }).RequireRule();
+            """, new() { AllowRuntimeLambdaBinding = true }).RequireExecutable();
         Assert.Equal(14m, rule.Execute(new(Values: [1m, 3m, 4m])));
     }
 
@@ -46,7 +46,7 @@ public sealed class CompilerTests
     [InlineData("return Math.Round(-1.005m, 2, MidpointRounding.AwayFromZero);", "-1.01")]
     public void Decimal_conversion_and_rounding_use_upstream_type_system(string source, string expected)
         => Assert.Equal(decimal.Parse(expected, System.Globalization.CultureInfo.InvariantCulture),
-            Compile<decimal>(source, new() { DecimalOnly = true }).RequireRule().Execute(new()));
+            Compile<decimal>(source, new() { DecimalOnly = true }).RequireExecutable().Execute(new()));
 
     [Theory]
     [InlineData("var x = 1m; const y = x; y = 2m; return y;", "CRL2004")]
@@ -65,14 +65,14 @@ public sealed class CompilerTests
     {
         var result = Compile<decimal>(text);
         Assert.False(result.Success);
-        Assert.Null(result.Rule);
+        Assert.Null(result.Executable);
         Assert.Equal(code, Assert.Single(result.Diagnostics).Code);
     }
 
     [Fact]
     public void Const_is_runtime_readonly_not_compiletime_evaluation()
     {
-        var rule = Compile<decimal>("const value = ctx.Amount; return value;").RequireRule();
+        var rule = Compile<decimal>("const value = ctx.Amount; return value;").RequireExecutable();
         Assert.Equal(3m, rule.Execute(new(3m)));
         Assert.Equal(9m, rule.Execute(new(9m)));
     }
@@ -96,7 +96,7 @@ public sealed class CompilerTests
     [InlineData("return decimal.MaxValue * ctx.Amount;")]
     public void Execution_never_silently_converts_arithmetic_errors_to_zero(string source)
     {
-        var rule = Compile<decimal>(source).RequireRule();
+        var rule = Compile<decimal>(source).RequireExecutable();
         Assert.ThrowsAny<ArithmeticException>(() => rule.Execute(new()));
     }
 
@@ -115,14 +115,14 @@ public sealed class CompilerTests
     [InlineData("return \"/* ; { // }\";", "/* ; { // }")]
     [InlineData("return \"a\\\"b; //\";", "a\"b; //")]
     public void Literal_delimiters_do_not_break_statement_boundaries(string source, string expected)
-        => Assert.Equal(expected, Compile<string>(source).RequireRule().Execute(new()));
+        => Assert.Equal(expected, Compile<string>(source).RequireExecutable().Execute(new()));
 
     [Theory]
     [InlineData("return 1; /*")]
     [InlineData("return \"unterminated;")]
     [InlineData("return (1 + 2;")]
     [InlineData("return 1")]
-    [InlineData("if (true) return 1;")]
+    [InlineData("if (true) return 1")]
     public void Malformed_boundaries_are_rejected(string text) => Assert.False(Compile<decimal>(text).Success);
 
     [Fact]
@@ -133,7 +133,7 @@ public sealed class CompilerTests
     public void More_than_sixteen_locals_do_not_require_fragment_func_delegates()
     {
         var declarations = string.Join("\n", Enumerable.Range(0, 100).Select(i => $"var v{i} = {i}m;"));
-        Assert.Equal(99m, Compile<decimal>(declarations + "return v99;").RequireRule().Execute(new()));
+        Assert.Equal(99m, Compile<decimal>(declarations + "return v99;").RequireExecutable().Execute(new()));
     }
 
     [Fact]
@@ -141,10 +141,10 @@ public sealed class CompilerTests
     {
         var compiler = new RuleCompiler();
         var results = new ConcurrentBag<decimal>();
-        var rule = compiler.Compile<Input, decimal>(new("parallel", "1", "var x = ctx.Amount; x = x + 1m; return x;")).RequireRule();
+        var rule = compiler.Compile<Input, decimal>("var x = ctx.Amount; x = x + 1m; return x;").RequireExecutable();
         Parallel.For(0, 10000, i => results.Add(rule.Execute(new(i))));
         Assert.Equal(Enumerable.Range(1, 10000).Select(i => (decimal)i), results.Order());
-        Parallel.For(0, 32, _ => Assert.True(compiler.Compile<Input, decimal>(new("parallel", "1", "return ctx.Amount;")).Success));
+        Parallel.For(0, 32, _ => Assert.True(compiler.Compile<Input, decimal>("return ctx.Amount;").Success));
     }
 
     [Fact]
@@ -163,19 +163,11 @@ public sealed class CompilerTests
         Assert.Equal("CRL4001", Compile<decimal>("{ { return 1; } }", new() { MaxDepth = 2 }).Diagnostics[0].Code);
     }
 
-    [Fact]
-    public void Source_policy_and_context_affect_fingerprint()
-    {
-        var a = Compile<decimal>("return 1;").RequireRule();
-        var b = Compile<decimal>("return 1;", new() { PolicyVersion = "v2" }).RequireRule();
-        Assert.NotEqual(a.Fingerprint, b.Fingerprint);
-        Assert.Equal(a.Fingerprint, Compile<decimal>("return 1;").RequireRule().Fingerprint);
-    }
 
     [Fact]
     public void Compile_does_not_execute_context_getters()
     {
-        var result = new RuleCompiler().Compile<ThrowingContext, decimal>(new("getter", "1", "return ctx.Amount;"));
+        var result = new RuleCompiler().Compile<ThrowingContext, decimal>("return ctx.Amount;");
         Assert.True(result.Success);
     }
 

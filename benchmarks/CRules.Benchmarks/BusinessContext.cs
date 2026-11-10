@@ -5,7 +5,7 @@ public sealed record BusinessPricing(long InputRate, long OutputRate, long Cache
 public sealed record BusinessItem(long Quantity, long UnitPrice, long Discount, long Category, long Stock, long Weight, long Zone, long Tax);
 
 public sealed record BusinessContext(long Sequence, BusinessRequest Request, BusinessPricing Pricing,
-    long[] Metrics, BusinessItem[] Items, string[] Tags, Dictionary<string, long> Metadata, string Payload);
+    long[] Metrics, BusinessItem[] Items, string[] Tags, Dictionary<string, long> Data, string Payload);
 
 public sealed record BusinessScenario(string Id, string Name, bool Large, int Locals, int Conditions);
 

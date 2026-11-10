@@ -22,7 +22,7 @@ public class RoutingBenchmarks : IDisposable
     [GlobalSetup]
     public void Setup()
     {
-        _compiled = new RuleCompiler().Compile<RoutingInput, int>(new("route", "1", ClrSource)).RequireRule().Execute;
+        _compiled = new RuleCompiler().Compile<RoutingInput, int>(ClrSource).RequireExecutable().Execute;
         _engine.Execute(Engine.PrepareScript(JsSource + "\nconst input={tokens:750,premium:true};"));
         _function = _engine.GetValue("decide"); _arguments = [_engine.Evaluate("input")];
         if (NativeDirect() != CRulesHot() || NativeDirect() != JintHot()) throw new InvalidOperationException("路由结果不一致。");
@@ -63,22 +63,22 @@ public class AccountingBenchmarks : IDisposable
     [GlobalSetup]
     public void Setup()
     {
-        _compiled = new RuleCompiler(new() { DecimalOnly = true }).Compile<AccountingInput, decimal>(new("money", "1", ClrSource)).RequireRule().Execute;
+        _compiled = new RuleCompiler(new() { DecimalOnly = true }).Compile<AccountingInput, decimal>(ClrSource).RequireExecutable().Execute;
         // decimal 结果以字符串穿过 JS 边界；互操作成本包含在此组中。
-        _engine.SetValue("mul", (Func<string,string,string>)((a,b) => S(D(a)*D(b))));
-        _engine.SetValue("add", (Func<string,string,string>)((a,b) => S(D(a)+D(b))));
-        _engine.SetValue("div", (Func<string,string,string>)((a,b) => S(D(a)/D(b))));
-        _engine.SetValue("round", (Func<string,string>)(a => S(Math.Round(D(a),6,MidpointRounding.ToEven))));
+        _engine.SetValue("mul", (Func<string, string, string>)((a, b) => S(D(a) * D(b))));
+        _engine.SetValue("add", (Func<string, string, string>)((a, b) => S(D(a) + D(b))));
+        _engine.SetValue("div", (Func<string, string, string>)((a, b) => S(D(a) / D(b))));
+        _engine.SetValue("round", (Func<string, string>)(a => S(Math.Round(D(a), 6, MidpointRounding.ToEven))));
         _engine.Execute(Engine.PrepareScript(JsSource));
-        _function=_engine.GetValue("decide"); _arguments=[_engine.Evaluate("input")];
-        if (NativeDirect()!=CRulesHot() || NativeDirect()!=JintDecimalHelpers()) throw new InvalidOperationException("会计结果不一致。");
+        _function = _engine.GetValue("decide"); _arguments = [_engine.Evaluate("input")];
+        if (NativeDirect() != CRulesHot() || NativeDirect() != JintDecimalHelpers()) throw new InvalidOperationException("会计结果不一致。");
     }
     [MethodImpl(MethodImplOptions.NoInlining)]
-    public static decimal Native(AccountingInput ctx) => Math.Round(((decimal)ctx.InputTokens*ctx.InputPrice+(decimal)ctx.OutputTokens*ctx.OutputPrice)/1000000m*ctx.Factor,6,MidpointRounding.ToEven);
+    public static decimal Native(AccountingInput ctx) => Math.Round(((decimal)ctx.InputTokens * ctx.InputPrice + (decimal)ctx.OutputTokens * ctx.OutputPrice) / 1000000m * ctx.Factor, 6, MidpointRounding.ToEven);
     [Benchmark(Baseline = true)] public decimal NativeDirect() => Native(_input);
     [Benchmark] public decimal NativeDelegate() => _nativeDelegate(_input);
     [Benchmark] public decimal CRulesHot() => _compiled(_input);
-    [Benchmark] public decimal JintDecimalHelpers() => D(_engine.Call(_function,_arguments).AsString());
+    [Benchmark] public decimal JintDecimalHelpers() => D(_engine.Call(_function, _arguments).AsString());
     public void Dispose() { _engine.Dispose(); GC.SuppressFinalize(this); }
 }
 
@@ -90,21 +90,20 @@ public class CollectionBenchmarks : IDisposable
     [Params(10, 100, 1000)] public int Count { get; set; }
     private CollectionInput _input = null!;
     private readonly Engine _engine = new();
-    private Func<CollectionInput,long> _compiled = null!;
+    private Func<CollectionInput, long> _compiled = null!;
     private JsValue _function = null!;
     private JsValue[] _arguments = null!;
     [GlobalSetup]
     public void Setup()
     {
-        _input=new(Enumerable.Range(0,Count).Select(i=>(long)i).ToArray(),Count/2);
-        _compiled=new RuleCompiler(new(){AllowRuntimeLambdaBinding=true}).Compile<CollectionInput,long>(new("linq","1",
-            "var t = ctx.Threshold; return ctx.Items.Where(x => x > t).Sum();")).RequireRule().Execute;
-        _engine.Execute(Engine.PrepareScript($"function decide(ctx){{return ctx.items.filter(x=>x>ctx.threshold).reduce((a,b)=>a+b,0);}} const input={{items:[{string.Join(',',_input.Items)}],threshold:{_input.Threshold}}};"));
-        _function=_engine.GetValue("decide");_arguments=[_engine.Evaluate("input")];
-        if (NativeLinq()!=CRulesHot() || NativeLinq()!=JintHot()) throw new InvalidOperationException("集合结果不一致。");
+        _input = new(Enumerable.Range(0, Count).Select(i => (long)i).ToArray(), Count / 2);
+        _compiled = new RuleCompiler(new() { AllowRuntimeLambdaBinding = true }).Compile<CollectionInput, long>("var t = ctx.Threshold; return ctx.Items.Where(x => x > t).Sum();").RequireExecutable().Execute;
+        _engine.Execute(Engine.PrepareScript($"function decide(ctx){{return ctx.items.filter(x=>x>ctx.threshold).reduce((a,b)=>a+b,0);}} const input={{items:[{string.Join(',', _input.Items)}],threshold:{_input.Threshold}}};"));
+        _function = _engine.GetValue("decide"); _arguments = [_engine.Evaluate("input")];
+        if (NativeLinq() != CRulesHot() || NativeLinq() != JintHot()) throw new InvalidOperationException("集合结果不一致。");
     }
-    [Benchmark(Baseline = true)] public long NativeLinq() { var t=_input.Threshold;return _input.Items.Where(x=>x>t).Sum(); }
+    [Benchmark(Baseline = true)] public long NativeLinq() { var t = _input.Threshold; return _input.Items.Where(x => x > t).Sum(); }
     [Benchmark] public long CRulesHot() => _compiled(_input);
-    [Benchmark] public long JintHot() => (long)_engine.Call(_function,_arguments).AsNumber();
+    [Benchmark] public long JintHot() => (long)_engine.Call(_function, _arguments).AsNumber();
     public void Dispose() { _engine.Dispose(); GC.SuppressFinalize(this); }
 }

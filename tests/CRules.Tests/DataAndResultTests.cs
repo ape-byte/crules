@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace CRules.Tests;
 
-public sealed record MetadataInput(RuleMetadata Metadata, bool Vip = true);
+public sealed record DataInput(DataObject Data, bool Vip = true);
 public sealed class Decision
 {
     public string Action { get; init; } = "";
@@ -11,32 +11,37 @@ public sealed class Decision
     public long Rank;
 }
 
-public sealed class MetadataAndResultTests
+public sealed class DataAndResultTests
 {
-    private static RuleCompilation<MetadataInput, T> Compile<T>(string source, RuleExecutionMode mode = RuleExecutionMode.JitCompiled,
+    private static Compilation<Executable<Func<DataInput, T>>> Compile<T>(string source, RuleExecutionMode mode = RuleExecutionMode.JitCompiled,
         Func<MemberInfo, bool>? allowed = null)
-        => new RuleCompiler(new() { DecimalOnly = true, ExecutionMode = mode,
-            ReferencedTypes = [typeof(Decision)], IsMemberAllowed = allowed })
-            .Compile<MetadataInput, T>(new("metadata-result", "1", source));
+        => new RuleCompiler(new()
+        {
+            DecimalOnly = true,
+            ExecutionMode = mode,
+            ReferencedTypes = [typeof(Decision)],
+            IsMemberAllowed = allowed
+        })
+            .Compile<DataInput, T>(source);
 
     [Theory]
     [InlineData(RuleExecutionMode.JitCompiled)]
     [InlineData(RuleExecutionMode.Interpreted)]
-    public void Typed_metadata_and_both_return_initializers_work_in_separate_branches(RuleExecutionMode mode)
+    public void Typed_data_and_both_return_initializers_work_in_separate_branches(RuleExecutionMode mode)
     {
         var rule = Compile<Decision>("""
-            var rate = ctx.Metadata.RequireDecimal("rate");
+            var rate = ctx.Data.RequireDecimal("rate");
             if (ctx.Vip) {
                 return new() { Action = "vip", Amount = rate * 0.9m, Rank = 1 };
             } else {
                 return new Decision() { Action = "regular", Amount = rate, Rank = 2 };
             }
-            """, mode).RequireRule();
-        var metadata = RuleMetadata.FromJson("""{"rate":10} """);
-        Assert.Equal(9m, rule.Execute(new(metadata)).Amount);
-        var regular = rule.Execute(new(metadata, false));
+            """, mode).RequireExecutable();
+        var data = DataObject.FromJson("""{"rate":10} """);
+        Assert.Equal(9m, rule.Execute(new(data)).Amount);
+        var regular = rule.Execute(new(data, false));
         Assert.Equal(("regular", 10m, 2L), (regular.Action, regular.Amount, regular.Rank));
-        Assert.NotSame(regular, rule.Execute(new(metadata, false)));
+        Assert.NotSame(regular, rule.Execute(new(data, false)));
     }
 
     [Theory]
@@ -46,17 +51,16 @@ public sealed class MetadataAndResultTests
     [InlineData("return new Decision { Amount = 2m };")]
     [InlineData("var result = new Decision() { Amount = 2m }; return result;")]
     public void Object_creation_forms_preserve_result(string source)
-        => Assert.Equal(2m, Compile<Decision>(source).RequireRule().Execute(new(RuleMetadata.Empty)).Amount);
+        => Assert.Equal(2m, Compile<Decision>(source).RequireExecutable().Execute(new(DataObject.Empty)).Amount);
 
     [Fact]
     public void Target_new_arguments_and_initializers_execute_once_in_order()
     {
         CounterDecision.Calls.Clear();
         var compiler = new RuleCompiler(new() { ReferencedTypes = [typeof(CounterDecision)] });
-        var rule = compiler.Compile<MetadataInput, CounterDecision>(new("order", "1",
-            "return new(7m) { First = CounterDecision.Next(), Second = CounterDecision.Next() }; ")).RequireRule();
+        var rule = compiler.Compile<DataInput, CounterDecision>("return new(7m) { First = CounterDecision.Next(), Second = CounterDecision.Next() }; ").RequireExecutable();
         Assert.Empty(CounterDecision.Calls); // 编译不能调用构造、setter 或业务方法。
-        var value = rule.Execute(new(RuleMetadata.Empty));
+        var value = rule.Execute(new(DataObject.Empty));
         Assert.Equal(new[] { "ctor", "next", "first", "next", "second" }, CounterDecision.Calls);
         Assert.Equal(7m, value.Amount);
     }
@@ -110,7 +114,7 @@ public sealed class MetadataAndResultTests
     public void Duplicate_and_readonly_initializers_are_structured_failures(string source)
     {
         var result = new RuleCompiler(new() { ReferencedTypes = [typeof(ReadOnlyDecision)] })
-            .Compile<MetadataInput, ReadOnlyDecision>(new("invalid-init", "1", source));
+            .Compile<DataInput, ReadOnlyDecision>(source);
         Assert.Equal("CRL3001", Assert.Single(result.Diagnostics).Code);
     }
 
@@ -118,77 +122,77 @@ public sealed class MetadataAndResultTests
     public void Nested_explicit_initializer_strings_and_implicit_member_conversion()
     {
         var compiler = new RuleCompiler(new() { ReferencedTypes = [typeof(Envelope), typeof(Decision)] });
-        var rule = compiler.Compile<MetadataInput, Envelope>(new("nested", "1", """
+        var rule = compiler.Compile<DataInput, Envelope>("""
             return new() { Child = new Decision() { Action = "a,b}new()", Amount = 1, Rank = 2 } };
-            """)).RequireRule();
-        Assert.Equal("a,b}new()", rule.Execute(new(RuleMetadata.Empty)).Child!.Action);
-        Assert.Equal(1m, rule.Execute(new(RuleMetadata.Empty)).Child!.Amount);
+            """).RequireExecutable();
+        Assert.Equal("a,b}new()", rule.Execute(new(DataObject.Empty)).Child!.Action);
+        Assert.Equal(1m, rule.Execute(new(DataObject.Empty)).Child!.Amount);
     }
 
     [Fact]
     public void Constructed_generic_result_uses_a_collision_free_target_type_alias()
     {
         var compiler = new RuleCompiler();
-        var rule = compiler.Compile<MetadataInput, GenericDecision<decimal>>(new("generic", "1",
-            "return new() { Value = 3m }; ")).RequireRule();
-        Assert.Equal(3m, rule.Execute(new(RuleMetadata.Empty)).Value);
+        var rule = compiler.Compile<DataInput, GenericDecision<decimal>>("return new() { Value = 3m }; ").RequireExecutable();
+        Assert.Equal(3m, rule.Execute(new(DataObject.Empty)).Value);
     }
 
     [Fact]
     public void Explicit_result_can_return_an_interface_and_nullable_member_values()
     {
         var compiler = new RuleCompiler(new() { ReferencedTypes = [typeof(DisposableDecision)] });
-        var rule = compiler.Compile<MetadataInput, IDisposable>(new("interface", "1",
-            "return new DisposableDecision() { Amount = null }; ")).RequireRule();
-        using var value = (DisposableDecision)rule.Execute(new(RuleMetadata.Empty));
+        var rule = compiler.Compile<DataInput, IDisposable>("return new DisposableDecision() { Amount = null }; ").RequireExecutable();
+        using var value = (DisposableDecision)rule.Execute(new(DataObject.Empty));
         Assert.Null(value.Amount);
     }
 
     [Fact]
     public void Collection_add_is_audited_even_inside_a_result_property()
     {
-        var compiler = new RuleCompiler(new() { ReferencedTypes = [typeof(CollectionDecision), typeof(List<>)],
-            IsMemberAllowed = member => member.Name != "Add" });
-        var result = compiler.Compile<MetadataInput, CollectionDecision>(new("collection", "1",
-            "return new() { Values = new List<decimal>() { 1m, 2m } };"));
+        var compiler = new RuleCompiler(new()
+        {
+            ReferencedTypes = [typeof(CollectionDecision), typeof(List<>)],
+            IsMemberAllowed = member => member.Name != "Add"
+        });
+        var result = compiler.Compile<DataInput, CollectionDecision>("return new() { Values = new List<decimal>() { 1m, 2m } };");
         Assert.Equal("CRL4002", Assert.Single(result.Diagnostics).Code);
     }
 
     [Fact]
     public void Missing_null_and_wrong_type_are_distinct_and_defaults_are_explicit()
     {
-        var metadata = RuleMetadata.FromJson("""{"nil":null,"secret":"not-a-number"}""");
-        Assert.Equal(MetadataValueState.Missing, metadata.GetState("missing"));
-        Assert.Equal(MetadataValueState.Null, metadata.GetState("nil"));
-        Assert.False(metadata.Contains("missing"));
-        Assert.True(metadata.Contains("nil"));
-        Assert.True(metadata.IsNull("nil"));
-        Assert.Null(metadata.GetDecimal("missing"));
-        Assert.Null(metadata.GetDecimal("nil"));
-        Assert.Equal(MetadataValueState.Missing, Assert.Throws<MetadataReadException>(() => metadata.RequireDecimal("missing")).State);
-        var error = Assert.Throws<MetadataReadException>(() => metadata.GetDecimal("secret"));
-        Assert.Equal(MetadataValueState.Value, error.State);
+        var data = DataObject.FromJson("""{"nil":null,"secret":"not-a-number"}""");
+        Assert.Equal(DataValueState.Missing, data.GetState("missing"));
+        Assert.Equal(DataValueState.Null, data.GetState("nil"));
+        Assert.False(data.Contains("missing"));
+        Assert.True(data.Contains("nil"));
+        Assert.True(data.IsNull("nil"));
+        Assert.Null(data.GetDecimal("missing"));
+        Assert.Null(data.GetDecimal("nil"));
+        Assert.Equal(DataValueState.Missing, Assert.Throws<DataReadException>(() => data.RequireDecimal("missing")).State);
+        var error = Assert.Throws<DataReadException>(() => data.GetDecimal("secret"));
+        Assert.Equal(DataValueState.Value, error.State);
         Assert.DoesNotContain("not-a-number", error.Message);
-        var rule = Compile<decimal>("return ctx.Metadata.GetDecimal(\"rate\") ?? 1m;").RequireRule();
-        Assert.Equal(1m, rule.Execute(new(metadata)));
-        Assert.Throws<MetadataReadException>(() => rule.Execute(new(RuleMetadata.FromJson("""{"rate":"1"}"""))));
+        var rule = Compile<decimal>("return ctx.Data.GetDecimal(\"rate\") ?? 1m;").RequireExecutable();
+        Assert.Equal(1m, rule.Execute(new(data)));
+        Assert.Throws<DataReadException>(() => rule.Execute(new(DataObject.FromJson("""{"rate":"1"}"""))));
     }
 
     [Fact]
     public void All_typed_reads_nested_objects_case_and_literal_keys()
     {
-        var metadata = RuleMetadata.FromJson("""{"name":"vip","on":true,"count":9223372036854775807,"rate":0.1234567890123456789012345678,"child":{"x":2},"a.b":"literal"}""");
-        Assert.Equal("vip", metadata.RequireString("name"));
-        Assert.True(metadata.RequireBoolean("on"));
-        Assert.Equal(long.MaxValue, metadata.RequireInt64("count"));
-        Assert.Equal(0.1234567890123456789012345678m, metadata.RequireDecimal("rate"));
-        Assert.Equal(2, metadata.RequireObject("child").RequireInt64("x"));
-        Assert.Equal("literal", metadata.GetString("a.b"));
-        Assert.Null(metadata.GetString("Name"));
-        Assert.Null(metadata.GetObject("missing"));
-        Assert.Throws<MetadataReadException>(() => metadata.GetBoolean("count"));
-        Assert.Throws<MetadataReadException>(() => metadata.GetString("on"));
-        Assert.Throws<MetadataReadException>(() => metadata.GetObject("name"));
+        var data = DataObject.FromJson("""{"name":"vip","on":true,"count":9223372036854775807,"rate":0.1234567890123456789012345678,"child":{"x":2},"a.b":"literal"}""");
+        Assert.Equal("vip", data.RequireString("name"));
+        Assert.True(data.RequireBoolean("on"));
+        Assert.Equal(long.MaxValue, data.RequireInt64("count"));
+        Assert.Equal(0.1234567890123456789012345678m, data.RequireDecimal("rate"));
+        Assert.Equal(2, data.RequireObject("child").RequireInt64("x"));
+        Assert.Equal("literal", data.GetString("a.b"));
+        Assert.Null(data.GetString("Name"));
+        Assert.Null(data.GetObject("missing"));
+        Assert.Throws<DataReadException>(() => data.GetBoolean("count"));
+        Assert.Throws<DataReadException>(() => data.GetString("on"));
+        Assert.Throws<DataReadException>(() => data.GetObject("name"));
     }
 
     [Theory]
@@ -197,29 +201,29 @@ public sealed class MetadataAndResultTests
     [InlineData("\"1\"")]
     [InlineData("true")]
     public void Int64_never_truncates_coerces_or_overflows(string json)
-        => Assert.Throws<MetadataReadException>(() => RuleMetadata.FromJson("{\"n\":" + json + "}").GetInt64("n"));
+        => Assert.Throws<DataReadException>(() => DataObject.FromJson("{\"n\":" + json + "}").GetInt64("n"));
 
     [Fact]
     public void Decimal_overflow_and_input_limits_are_explicit()
     {
-        Assert.Throws<MetadataReadException>(() => RuleMetadata.FromJson("{\"n\":1e100}").GetDecimal("n"));
-        Assert.Throws<ArgumentException>(() => RuleMetadata.FromJson("[]"));
-        Assert.Throws<ArgumentException>(() => RuleMetadata.FromJson("{\"x\":1,\"x\":2}"));
-        Assert.Throws<ArgumentException>(() => RuleMetadata.FromJson("{\"s\":\"中\"}", maxBytes: 10));
-        Assert.ThrowsAny<JsonException>(() => RuleMetadata.FromJson("{\"a\":{\"b\":1}}", maxDepth: 1));
+        Assert.Throws<DataReadException>(() => DataObject.FromJson("{\"n\":1e100}").GetDecimal("n"));
+        Assert.Throws<ArgumentException>(() => DataObject.FromJson("[]"));
+        Assert.Throws<ArgumentException>(() => DataObject.FromJson("{\"x\":1,\"x\":2}"));
+        Assert.Throws<ArgumentException>(() => DataObject.FromJson("{\"s\":\"中\"}", maxBytes: 10));
+        Assert.ThrowsAny<JsonException>(() => DataObject.FromJson("{\"a\":{\"b\":1}}", maxDepth: 1));
     }
 
     [Fact]
     public async Task Snapshot_survives_document_disposal_dictionary_mutation_and_concurrent_execution()
     {
-        RuleMetadata metadata;
-        using (var doc = JsonDocument.Parse("{\"rate\":2}")) metadata = RuleMetadata.FromJson(doc.RootElement);
+        DataObject data;
+        using (var doc = JsonDocument.Parse("{\"rate\":2}")) data = DataObject.FromJson(doc.RootElement);
         Dictionary<string, object?> values = new() { ["rate"] = 3m };
-        var copied = RuleMetadata.FromDictionary(values);
+        var copied = DataObject.FromDictionary(values);
         values["rate"] = 99m;
         Assert.Equal(3m, copied.RequireDecimal("rate"));
-        var rule = Compile<decimal>("return ctx.Metadata.RequireDecimal(\"rate\") * 2m;").RequireRule();
-        var results = await Task.WhenAll(Enumerable.Range(0, 1000).Select(i => Task.Run(() => rule.Execute(new(i % 2 == 0 ? metadata : copied)))));
+        var rule = Compile<decimal>("return ctx.Data.RequireDecimal(\"rate\") * 2m;").RequireExecutable();
+        var results = await Task.WhenAll(Enumerable.Range(0, 1000).Select(i => Task.Run(() => rule.Execute(new(i % 2 == 0 ? data : copied)))));
         for (int i = 0; i < results.Length; i++) Assert.Equal(i % 2 == 0 ? 4m : 6m, results[i]);
     }
 
@@ -227,14 +231,14 @@ public sealed class MetadataAndResultTests
     public void Nested_branch_returns_are_valid_and_unknown_negative_conditions_need_a_guard()
     {
         var rule = Compile<decimal>("""
-            var region = ctx.Metadata.GetString("region");
+            var region = ctx.Data.GetString("region");
             if (ctx.Vip) {
                 if (region != null && region != "restricted") { return 0.8m; }
                 else { return 0.9m; }
             } else { return 1m; }
-            """).RequireRule();
-        Assert.Equal(0.9m, rule.Execute(new(RuleMetadata.Empty)));
-        Assert.Equal(1m, rule.Execute(new(RuleMetadata.Empty, false)));
+            """).RequireExecutable();
+        Assert.Equal(0.9m, rule.Execute(new(DataObject.Empty)));
+        Assert.Equal(1m, rule.Execute(new(DataObject.Empty, false)));
     }
 }
 

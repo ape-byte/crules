@@ -21,7 +21,7 @@ public sealed class BusinessExecutor : IDisposable
         _scenario = scenario; _mode = mode;
         string script = BusinessRules.Javascript(scenario);
         if (mode == "CRules")
-            _clr = new RuleCompiler().Compile<BusinessContext, long>(new(scenario.Id, "business-v1", BusinessRules.Clr(scenario))).RequireRule().Execute;
+            _clr = new RuleCompiler().Compile<BusinessContext, long>(BusinessRules.Clr(scenario)).RequireExecutable().Execute;
         else if (mode is "JintClr" or "JintJson" or "JintSingleton")
         {
             _engine = new Engine();

@@ -9,12 +9,14 @@ namespace CRules;
 internal sealed class DynamicExpressoAdapter
 {
     private readonly Interpreter _interpreter;
+    private readonly CompilerOptions _options;
 
     public const string ResultTypeAlias = "__crules_result_type";
     public string ResultConstructionName { get; }
 
-    public DynamicExpressoAdapter(RuleCompileOptions options, Type resultType)
+    public DynamicExpressoAdapter(CompilerOptions options, Type resultType)
     {
+        _options = options;
         _interpreter = new Interpreter(InterpreterOptions.Default | InterpreterOptions.LambdaExpressions)
             .EnableAssignment(AssignmentOperators.None)
             .Reference(typeof(Math)).Reference(typeof(MidpointRounding)).Reference(typeof(Enumerable));
@@ -36,9 +38,30 @@ internal sealed class DynamicExpressoAdapter
 
     public Expression Parse(string text, Type? expected, IEnumerable<ParameterExpression> symbols)
     {
+        Expression? switchExpression;
+        try
+        {
+            switchExpression = SwitchSupport.Parse(text, expected, (value, target) => Parse(value, target, symbols),
+                tree => new ExpressionAudit(_options, new(0, text.Length)).Visit(tree));
+        }
+        catch (CompileFailure failure) { throw new ParseException(failure.Message, failure.Span.Start); }
+        if (switchExpression is not null) return switchExpression;
         var parameters = symbols.Select(p => new Parameter(p)).ToArray();
+        var array = ArraySupport.Parse(text, (value, target) => Parse(value, target, symbols),
+            name => (_interpreter.Parse($"typeof({name})").Expression as ConstantExpression)?.Value as Type,
+            (value, target) => _interpreter.Parse("__crules_choose ? __crules_source : __crules_target",
+                new Parameter(Expression.Parameter(typeof(bool), "__crules_choose")),
+                new Parameter(Expression.Parameter(value.Type, "__crules_source")),
+                new Parameter(Expression.Parameter(target, "__crules_target"))).Expression);
+        if (array is not null)
+        {
+            if (expected is null || expected == array.Type) return array;
+            var slot = Expression.Parameter(array.Type, "__crules_array");
+            var converted = _interpreter.Parse(slot.Name!, expected, new Parameter(slot)).Expression;
+            return Expression.Block([slot], Expression.Assign(slot, array), converted);
+        }
         // 只适配初始化器结构；构造重载、成员值的表达式与隐式转换仍交由上游。
-        var initializer = ParseInitializer(text, parameters);
+        var initializer = ValueCreation(text) ?? ParseInitializer(text, parameters);
         if (initializer is not null)
         {
             if (expected is null || initializer.Type == expected) return initializer;
@@ -47,9 +70,7 @@ internal sealed class DynamicExpressoAdapter
             var converted = _interpreter.Parse(binding, expected, parameters.Append(new Parameter(value)).ToArray()).Expression;
             return Expression.Block([value], Expression.Assign(value, initializer), converted);
         }
-        return expected is null
-            ? _interpreter.Parse(text, parameters).Expression
-            : _interpreter.Parse(text, expected, parameters).Expression;
+        return ExpressionCompatibility.Parse(_interpreter, text, expected, parameters);
     }
 
     private Expression? ParseInitializer(string text, Parameter[] parameters)
@@ -61,9 +82,22 @@ internal sealed class DynamicExpressoAdapter
         int close = FindClosingBrace(text, open);
         if (close < 0 || !string.IsNullOrWhiteSpace(text[(close + 1)..])) return null;
         string constructorText = text[..open].TrimEnd();
+        if (constructorText.EndsWith(']')) return null;
         if (!constructorText.EndsWith(')')) constructorText += "()";
-        var creation = _interpreter.Parse(constructorText, parameters).Expression as NewExpression;
+        var creation = ValueCreation(constructorText) ?? _interpreter.Parse(constructorText, parameters).Expression as NewExpression;
         if (creation is null) return null; // 数组等其他 new 形式由上游处理。
+        if (creation.Type.IsGenericType && creation.Type.GetGenericTypeDefinition() == typeof(List<>))
+        {
+            var elementType = creation.Type.GetGenericArguments()[0];
+            var values = ArraySupport.Items(text[(open + 1)..close]).Select(value =>
+            {
+                // List<T> 的单实参加花括号形式与普通元素初始化语义相同。
+                if (value.StartsWith('{') && value.EndsWith('}')) value = value[1..^1].Trim();
+                return Expression.ElementInit(creation.Type.GetMethod("Add")!, Parse(value, elementType,
+                    parameters.Select(p => p.Expression).OfType<ParameterExpression>()));
+            });
+            return Expression.ListInit(creation, values);
+        }
         List<MemberBinding> bindings = [];
         HashSet<string> names = new(StringComparer.Ordinal);
         int at = open + 1;
@@ -108,6 +142,18 @@ internal sealed class DynamicExpressoAdapter
             at = end + 1;
         }
         return Expression.MemberInit(creation, bindings);
+    }
+
+    private NewExpression? ValueCreation(string text)
+    {
+        if (!text.StartsWith("new", StringComparison.Ordinal) || text.Length < 6 || !char.IsWhiteSpace(text[3]) || !text.TrimEnd().EndsWith("()", StringComparison.Ordinal)) return null;
+        string typeName = text[3..text.LastIndexOf('(')].Trim();
+        try
+        {
+            var type = (_interpreter.Parse($"typeof({typeName})").Expression as ConstantExpression)?.Value as Type;
+            return type?.IsValueType == true ? Expression.New(type) : null;
+        }
+        catch (ParseException) { return null; }
     }
 
     private static int FindBoundary(string text, int start, char delimiter)

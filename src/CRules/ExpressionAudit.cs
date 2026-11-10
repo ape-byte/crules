@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace CRules;
 
-internal sealed class ExpressionAudit(RuleCompileOptions options, SourceSpan span, bool allowRootLambda = false) : ExpressionVisitor
+internal sealed class ExpressionAudit(CompilerOptions options, SourceSpan span, bool allowRootLambda = false) : DynamicExpressionVisitor
 {
     private int _nodes;
     private int _lambdaDepth;
@@ -13,7 +13,7 @@ internal sealed class ExpressionAudit(RuleCompileOptions options, SourceSpan spa
         if ((!allowRootLambda || _lambdaDepth > 0) && !options.AllowRuntimeLambdaBinding)
             throw new CompileFailure("CRL4003", "严格模式暂不接受嵌套 Lambda：标准 Compile 存在运行时委托绑定；仅可显式启用实验选项。", span, PositionPrecision.Expression);
         _lambdaDepth++;
-        var result=base.VisitLambda(node);
+        var result = base.VisitLambda(node);
         _lambdaDepth--;
         return result;
     }
@@ -21,11 +21,17 @@ internal sealed class ExpressionAudit(RuleCompileOptions options, SourceSpan spa
     {
         if (node is null) return null;
         if (++_nodes > options.MaxTreeNodes) Reject("表达式树节点超过限额。");
-        if (node.NodeType is ExpressionType.Dynamic or ExpressionType.Invoke)
-            Reject("强类型热路径不支持动态绑定或任意委托调用。");
+        if (node is InvocationExpression invocation)
+        {
+            if (!DynamicCalls.IsCallSite(invocation) || options.IsMemberAllowed is not null)
+                Reject("不允许任意委托调用，或动态访问无法通过静态成员策略验证。");
+            if (options.DecimalOnly && invocation.Expression is MemberExpression { Expression: ConstantExpression { Value: System.Runtime.CompilerServices.CallSite { Binder: BinaryOperationBinder binary } } }
+                && binary.Operation is ExpressionType.Add or ExpressionType.Subtract or ExpressionType.Multiply or ExpressionType.Divide or ExpressionType.Modulo)
+                Reject("DecimalOnly 动态算术需要先显式转换为 decimal。");
+        }
         if (node.NodeType == ExpressionType.Extension) Reject("未识别的上游扩展节点。");
-        if (typeof(IDynamicMetaObjectProvider).IsAssignableFrom(node.Type))
-            Reject("动态 Metadata 需要先投影为强类型上下文，不能进入编译委托。");
+        if (node.NodeType == ExpressionType.Dynamic && options.IsMemberAllowed is not null)
+            Reject("动态成员无法通过静态成员策略验证，请使用有类型输入。");
         if (options.DecimalOnly && node.Type is { } type && (type == typeof(double) || type == typeof(float)
             || type == typeof(double?) || type == typeof(float?)))
             Reject("会计策略禁止 float/double，请使用 decimal 和 m 后缀。");
