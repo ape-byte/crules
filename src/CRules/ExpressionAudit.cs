@@ -56,6 +56,7 @@ internal sealed class ExpressionAudit(CompilerOptions options, SourceSpan span, 
     { Check(node.AddMethod); return base.VisitElementInit(node); }
     protected override Expression VisitBinary(BinaryExpression node)
     {
+        if (node.NodeType == ExpressionType.Assign && node.Left is IndexExpression { Indexer.SetMethod: { } setter }) Check(setter);
         if (options.DecimalOnly && node.NodeType is (ExpressionType.Add or ExpressionType.Subtract
             or ExpressionType.Multiply or ExpressionType.Divide or ExpressionType.Modulo
             or ExpressionType.AddChecked or ExpressionType.SubtractChecked or ExpressionType.MultiplyChecked)

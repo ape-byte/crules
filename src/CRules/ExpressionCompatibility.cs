@@ -75,8 +75,46 @@ internal static class ExpressionCompatibility
             throw new ParseException(error.Message, offset);
         }
     }
-    private static Expression Bind(Interpreter interpreter, string text, Type? expected, Parameter[] parameters) =>
-        expected is null ? interpreter.Parse(text, parameters).Expression : interpreter.Parse(text, expected, parameters).Expression;
+    private static Expression Bind(Interpreter interpreter, string text, Type? expected, Parameter[] parameters)
+    {
+        var value = interpreter.Parse(text, parameters).Expression;
+        return expected is null ? value : ConvertImplicit(interpreter, value, expected);
+    }
+
+    internal static Expression ConvertImplicit(Interpreter interpreter, Expression value, Type target)
+    {
+        if (value.Type == target) return value;
+        if (value.Type == typeof(object) && (value is DynamicExpression
+            || value is InvocationExpression invocation && DynamicCalls.IsCallSite(invocation)))
+            return Expression.Convert(value, target);
+        // 上游 Parse(text, expected) 会插入显式转换，甚至允许 null -> 非可空值类型。
+        // 声明、赋值和返回需要隐式转换，不能把错误推迟到 Execute。
+        if (value is ConstantExpression { Value: null })
+        {
+            if (!target.IsValueType || Nullable.GetUnderlyingType(target) is not null) return Expression.Constant(null, target);
+            throw new ParseException($"null 不能赋给非可空类型 {target.Name}。", 0);
+        }
+        if (Numeric(value.Type) && (Numeric(target) || (Nullable.GetUnderlyingType(target) ?? target).IsEnum))
+        {
+            if (!NumericConversions.Implicit(value.Type, target, (value as ConstantExpression)?.Value, value is ConstantExpression))
+                throw new ParseException($"不能从 {value.Type.Name} 隐式转换为 {target.Name}。", 0);
+            return Expression.Convert(value, target);
+        }
+        var source = Expression.Parameter(value.Type, "__crules_conversion_source");
+        var fallback = Expression.Parameter(target, "__crules_conversion_target");
+        var choose = Expression.Parameter(typeof(bool), "__crules_conversion_choose");
+        var binding = interpreter.Parse("__crules_conversion_choose ? __crules_conversion_source : __crules_conversion_target",
+            new Parameter(choose), new Parameter(source), new Parameter(fallback)).Expression;
+        if (binding.Type != target || binding is not ConditionalExpression conditional)
+            throw new ParseException($"不能从 {value.Type.Name} 隐式转换为 {target.Name}。", 0);
+        return new Replace(source, value).Visit(conditional.IfTrue);
+    }
+
+    private static bool Numeric(Type type)
+    {
+        type = Nullable.GetUnderlyingType(type) ?? type;
+        return !type.IsEnum && (type == typeof(char) || Type.GetTypeCode(type) is >= TypeCode.SByte and <= TypeCode.Decimal);
+    }
     internal static bool CharPromotesTo(Type type) => type == typeof(ushort) || type == typeof(int) || type == typeof(uint)
         || type == typeof(long) || type == typeof(ulong) || type == typeof(float) || type == typeof(double) || type == typeof(decimal);
     private static bool InsideLiteral(string text, int at)

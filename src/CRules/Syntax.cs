@@ -13,8 +13,10 @@ internal static class SyntaxNames
 internal readonly record struct Slice(int Start, int Length);
 internal abstract record Statement(SourceSpan Span);
 internal sealed record Block(List<Statement> Statements, SourceSpan Location) : Statement(Location);
-internal sealed record Declaration(string Name, bool ReadOnly, Slice Value, SourceSpan Location) : Statement(Location);
+internal sealed record Declaration(string Name, bool ReadOnly, Slice? TypeName, Slice Value, SourceSpan Location) : Statement(Location);
 internal sealed record Assignment(string Name, Slice Value, SourceSpan Location) : Statement(Location);
+internal sealed record IndexAssignment(Slice Target, char? Operator, Slice Value, SourceSpan Location) : Statement(Location);
+internal sealed record CallStatement(Slice Value, SourceSpan Location) : Statement(Location);
 internal sealed record Conditional(Slice Condition, Statement Then, Statement? Else, SourceSpan Location) : Statement(Location);
 internal sealed record Return(Slice Value, SourceSpan Location) : Statement(Location);
 internal sealed record CompoundAssignment(string Name, char Operator, Slice Value, SourceSpan Location) : Statement(Location);
@@ -92,19 +94,80 @@ internal sealed class StatementParser(string source, CompilerOptions options)
         {
             var name = Identifier(); Expect('=');
             var expr = ExpressionUntil(';');
-            return new Declaration(name, keyword == "const", expr, new(start, _pos - start));
+            return new Declaration(name, keyword == "const", null, expr, new(start, _pos - start));
         }
         if (keyword is "for" or "foreach" or "while" or "do" or "try" or "catch" or "finally"
             or "throw" or "async" or "await" or "using" or "goto" or "yield")
             Fail("CRL2001", $"不支持语句 {keyword}。", start);
         Skip();
+        if (_pos < Text.Length && (char.IsLetter(Text[_pos]) || Text[_pos] is '_' or '<' or '.' or '?' or '['))
+        {
+            int suffixStart = _pos;
+            ReadTypeSuffix(0);
+            int typeEnd = _pos;
+            if (_pos < Text.Length && (char.IsLetter(Text[_pos]) || Text[_pos] == '_'))
+            {
+                var name = Identifier(); Expect('=');
+                return new Declaration(name, false, new(start, typeEnd - start), ExpressionUntil(';'), new(start, _pos - start));
+            }
+            _pos = suffixStart;
+        }
         if (_pos + 1 < Text.Length && "+-*/%".Contains(Text[_pos]) && Text[_pos + 1] == '=')
         {
             char op = Text[_pos]; _pos += 2;
             return new CompoundAssignment(keyword, op, ExpressionUntil(';'), new(start, _pos - start));
         }
+        if (Peek(_pos) is '.' or '[' or '(')
+        {
+            _pos = start;
+            var expression = ExpressionUntil(';');
+            string value = Text.Substring(expression.Start, expression.Length);
+            int equals = DynamicExpressoAdapter.FindBoundary(value, 0, '=');
+            if (equals >= 0)
+            {
+                string target = value[..equals].TrimEnd();
+                char? op = target.Length > 0 && "+-*/%".Contains(target[^1]) ? target[^1] : null;
+                if (op is not null) target = target[..^1].TrimEnd();
+                if (!target.EndsWith(']')) Fail("CRL1001", "仅支持局部变量或字典索引赋值。", start);
+                int valueStart = equals + 1;
+                while (valueStart < value.Length && char.IsWhiteSpace(value[valueStart])) valueStart++;
+                return new IndexAssignment(new(start, target.Length), op, new(start + valueStart, value.Length - valueStart), new(start, _pos - start));
+            }
+            return new CallStatement(expression, new(start, _pos - start));
+        }
         Expect('=');
         return new Assignment(keyword, ExpressionUntil(';'), new(start, _pos - start));
+    }
+
+    private void ReadTypeSuffix(int depth)
+    {
+        if (depth >= options.MaxDepth) Fail("CRL4001", "类型嵌套超过限额。", _pos);
+        while (true)
+        {
+            Skip();
+            if (Peek(_pos) == '.') { _pos++; Identifier(); }
+            else if (Peek(_pos) == '<')
+            {
+                _pos++;
+                while (true)
+                {
+                    Identifier(); ReadTypeSuffix(depth + 1); Skip();
+                    if (Peek(_pos) != ',') break;
+                    _pos++;
+                }
+                Expect('>');
+            }
+            else if (Peek(_pos) == '?') _pos++;
+            else if (Peek(_pos) == '[')
+            {
+                int next = _pos + 1;
+                while (next < Text.Length && char.IsWhiteSpace(Text[next])) next++;
+                if (Peek(next) != ']') break;
+                if (++depth >= options.MaxDepth) Fail("CRL4001", "类型嵌套超过限额。", _pos);
+                _pos++; Expect(']');
+            }
+            else break;
+        }
     }
 
     private Statement ReadBranch()

@@ -6,7 +6,8 @@ internal sealed class TreeBuilder(string text, CompilerOptions options, Type ret
 {
     private sealed record Symbol(ParameterExpression Node, bool ReadOnly);
     private readonly LabelTarget _exit = Expression.Label(returnType, "exit");
-    private readonly DynamicExpressoAdapter _adapter = new(options, returnType);
+    private DynamicExpressoAdapter? _expressionAdapter;
+    private DynamicExpressoAdapter _adapter => _expressionAdapter ??= new(options, returnType) { OutArgument = ResolveOutArgument };
     private readonly Stack<Dictionary<string, Symbol>> _scopes = new();
     private int _locals;
     private readonly Stack<LabelTarget> _breakTargets = new();
@@ -80,17 +81,31 @@ internal sealed class TreeBuilder(string text, CompilerOptions options, Type ret
                 if (SyntaxNames.IsReserved(d.Name, options.ReferencedTypes)
                     || parameters.Any(p => p.Name == d.Name) || Find(d.Name) is not null)
                     throw new CompileFailure("CRL2002", $"名称已占用或保留：{d.Name}。", d.Span);
-                var value = Parse(d.Value);
-                if (value.Type == typeof(void) || value is ConstantExpression { Value: null, Type: var t } && t == typeof(object))
+                var declaredType = d.TypeName is Slice typeName ? ResolveLocalType(typeName, d.Value) : null;
+                var value = Parse(d.Value, declaredType, allowTargetNew: declaredType is not null);
+                if (value.Type == typeof(void) || declaredType is null && value is ConstantExpression { Value: null, Type: var t } && t == typeof(object))
                     throw new CompileFailure("CRL2003", "变量需要可推断的非 void 类型。", d.Span);
                 if (++_locals > options.MaxLocals) throw new CompileFailure("CRL4001", "局部变量超过限额。", d.Span);
-                var node = Expression.Variable(value.Type, d.Name);
+                var node = Expression.Variable(declaredType ?? value.Type, d.Name);
                 _scopes.Peek().Add(d.Name, new(node, d.ReadOnly));
                 return Expression.Assign(node, value);
             case Assignment a:
                 var symbol = Find(a.Name) ?? throw new CompileFailure("CRL2003", $"未声明变量 {a.Name}。", a.Span);
                 if (symbol.ReadOnly) throw new CompileFailure("CRL2004", $"const 不能再次赋值：{a.Name}。", a.Span);
                 return Expression.Assign(symbol.Node, Parse(a.Value, symbol.Node.Type));
+            case IndexAssignment a:
+                if (Parse(a.Target) is not IndexExpression { Object: { } receiver, Indexer.SetMethod: { IsPublic: true } } index
+                    || DictionarySupport.Contract(receiver.Type) is null)
+                    throw new CompileFailure("CRL2003", "索引赋值需要可写的泛型字典。", a.Span);
+                var assignment = a.Operator is null ? Expression.Assign(index, Parse(a.Value, index.Type, allowTargetNew: true))
+                    : CompileIndexCompound(index, a);
+                new ExpressionAudit(options, a.Span).Visit(assignment);
+                return assignment;
+            case CallStatement call:
+                var invocation = Parse(call.Value);
+                if (invocation is not MethodCallExpression)
+                    throw new CompileFailure("CRL2001", "独立表达式语句必须是方法调用。", call.Span);
+                return Expression.Block(invocation, Expression.Empty());
             case CompoundAssignment a:
                 var local = Find(a.Name) ?? throw new CompileFailure("CRL2003", "复合赋值只能修改已声明局部变量。", a.Span);
                 if (local.ReadOnly) throw new CompileFailure("CRL2004", $"const 不能再次赋值：{a.Name}。", a.Span);
@@ -115,7 +130,7 @@ internal sealed class TreeBuilder(string text, CompilerOptions options, Type ret
                     new ExpressionAudit(options, a.Span).Visit(operation);
                     return Expression.Assign(local.Node, operation);
                 }
-                catch (ParseException error) { throw new CompileFailure("CRL3001", error.Message, a.Span, PositionPrecision.Statement); }
+                catch (ParseException error) { throw new CompileFailure("CRL3001", _adapter.DiagnosticMessage(error.Message), a.Span, PositionPrecision.Statement); }
             case Break b:
                 if (_breakTargets.Count == 0) throw new CompileFailure("CRL2010", "break 只能位于 switch 内。", b.Span);
                 return Expression.Break(_breakTargets.Peek());
@@ -137,6 +152,30 @@ internal sealed class TreeBuilder(string text, CompilerOptions options, Type ret
         BinaryExpression { NodeType: ExpressionType.OrElse, Method: null } binary when BooleanConstant(binary.Left) is bool left && BooleanConstant(binary.Right) is bool right => left || right,
         _ => null
     };
+    private Expression CompileIndexCompound(IndexExpression index, IndexAssignment statement)
+    {
+        var receiver = Expression.Variable(index.Object!.Type, "__crules_index_receiver");
+        var keys = index.Arguments.Select((a, i) => Expression.Variable(a.Type, "__crules_index_key_" + i)).ToArray();
+        var target = Expression.MakeIndex(receiver, index.Indexer, keys);
+        var left = Expression.Variable(index.Type, "__crules_index_left");
+        var rhs = Parse(statement.Value);
+        var right = Expression.Variable(rhs.Type, "__crules_index_right");
+        Expression operation;
+        try { operation = _adapter.Parse($"{left.Name} {statement.Operator} {right.Name}", null, [left, right]); }
+        catch (ParseException error) { throw new CompileFailure("CRL3001", error.Message, statement.Span, PositionPrecision.Statement); }
+        if (operation.Type != index.Type)
+        {
+            if (!NumericConversions.Implicit(rhs.Type, index.Type, (rhs as ConstantExpression)?.Value, rhs is ConstantExpression))
+                throw new CompileFailure("CRL3001", "复合赋值右值不能隐式转换为字典值类型。", statement.Span);
+            operation = Expression.Convert(operation, index.Type);
+        }
+        List<Expression> expressions = [Expression.Assign(receiver, index.Object)];
+        expressions.AddRange(keys.Select((key, i) => Expression.Assign(key, index.Arguments[i])));
+        expressions.Add(Expression.Assign(left, target));
+        expressions.Add(Expression.Assign(right, rhs));
+        expressions.Add(Expression.Assign(target, operation));
+        return Expression.Block(new[] { receiver, left, right }.Concat(keys), expressions);
+    }
     private Expression CompileSwitch(SwitchStatement statement)
     {
         var value = Parse(statement.Value);
@@ -184,20 +223,63 @@ internal sealed class TreeBuilder(string text, CompilerOptions options, Type ret
         foreach (var scope in _scopes) if (scope.TryGetValue(name, out var symbol)) return symbol;
         return null;
     }
+    private ParameterExpression ResolveOutArgument(string name, Type type, bool declare)
+    {
+        if (name == "_" && (declare || Find(name) is null))
+        {
+            name = "__crules_discard_" + _locals;
+            if (++_locals > options.MaxLocals) throw new ParseException("局部变量超过限额。", 0);
+            var discard = Expression.Variable(type, name);
+            _scopes.Peek().Add(name, new(discard, false));
+            return discard;
+        }
+        if (declare)
+        {
+            if (string.IsNullOrEmpty(name) || !(char.IsLetter(name[0]) || name[0] == '_') || name.Any(c => !char.IsLetterOrDigit(c) && c != '_')
+                || SyntaxNames.IsReserved(name, options.ReferencedTypes) || Find(name) is not null || parameters.Any(p => p.Name == name))
+                throw new ParseException("out var 名称无效或已占用。", 0);
+            if (++_locals > options.MaxLocals) throw new ParseException("局部变量超过限额。", 0);
+            var node = Expression.Variable(type, name);
+            _scopes.Peek().Add(name, new(node, false));
+            return node;
+        }
+        var local = Find(name);
+        if (local is null || local.ReadOnly || local.Node.Type != type)
+            throw new ParseException("out 参数需要类型完全匹配的可写局部变量；不能修改形参。", 0);
+        return local.Node;
+    }
+    private Type ResolveLocalType(Slice name, Slice value)
+    {
+        try
+        {
+            string typeName = text.Substring(name.Start, name.Length).Trim();
+            var type = typeName == "List"
+                ? _adapter.InferListType(text.Substring(value.Start, value.Length),
+                    _scopes.SelectMany(s => s.Values).Select(s => s.Node).Concat(parameters))
+                : _adapter.ResolveType(typeName);
+            if (type == typeof(void) || type.IsByRef || type.IsByRefLike || type.IsPointer || type.ContainsGenericParameters)
+                throw new ParseException("不支持的局部变量类型。", 0);
+            return type;
+        }
+        catch (Exception error) when (error is ParseException or ArgumentException)
+        { throw new CompileFailure("CRL3001", _adapter.DiagnosticMessage(error.Message), new(name.Start, name.Length), PositionPrecision.Expression); }
+    }
     private Expression Parse(Slice slice, Type? expected = null, bool allowTargetNew = false)
     {
         string expression = text.Substring(slice.Start, slice.Length);
         int insertion = -1;
-        string injected = _adapter.ResultConstructionName;
+        string injected = "";
         if (allowTargetNew && expression.StartsWith("new", StringComparison.Ordinal))
         {
             int at = 3;
             while (at < expression.Length && char.IsWhiteSpace(expression[at])) at++;
             if (at < expression.Length && expression[at] == '(')
             {
-                if (returnType.IsInterface || returnType.IsAbstract || returnType == typeof(object))
+                var target = expected!;
+                if (target.IsInterface || target.IsAbstract || target == typeof(object))
                     throw new CompileFailure("CRL2008", "new() 需要明确、可构造的具体结果类型。", new(slice.Start, slice.Length), PositionPrecision.Expression);
                 insertion = at;
+                injected = _adapter.ConstructionName(target);
                 injected = (at == 3 ? " " : "") + injected;
                 expression = expression.Insert(at, injected);
             }
@@ -212,18 +294,18 @@ internal sealed class TreeBuilder(string text, CompilerOptions options, Type ret
         }
         catch (ParseException error)
         {
-            // 嵌套 Lambda 的 Position 可能是子解析器局部值，诚实降级为整个片段。
-            bool lambda = expression.Contains("=>", StringComparison.Ordinal);
+            // 嵌套 Lambda 和 out 重写的位置可能来自子表达式，诚实降级为整个片段。
+            bool lambda = expression.Contains("=>", StringComparison.Ordinal) || expression.Contains("out", StringComparison.Ordinal);
             int position = error.Position;
             if (insertion >= 0 && position >= insertion)
                 position = position < insertion + injected.Length ? insertion : position - injected.Length;
-            throw new CompileFailure("CRL3001", error.Message.Replace(DynamicExpressoAdapter.ResultTypeAlias, returnType.Name, StringComparison.Ordinal),
+            throw new CompileFailure("CRL3001", _adapter.DiagnosticMessage(error.Message),
                 lambda ? new(slice.Start, slice.Length) : new(slice.Start + Math.Clamp(position, 0, slice.Length), 1),
                 lambda ? PositionPrecision.Expression : PositionPrecision.Point);
         }
         catch (ArgumentException error)
         {
-            throw new CompileFailure("CRL3001", error.Message.Replace(DynamicExpressoAdapter.ResultTypeAlias, returnType.Name, StringComparison.Ordinal),
+            throw new CompileFailure("CRL3001", _adapter.DiagnosticMessage(error.Message),
                 new(slice.Start, slice.Length), PositionPrecision.Expression);
         }
     }

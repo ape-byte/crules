@@ -12,12 +12,12 @@ public sealed class RoslynCompatibilityTests
 {
     private static T[] Read<T>(string file) => JsonSerializer.Deserialize<T[]>(
         File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Roslyn", file)), new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
-    private static readonly ImportedCase[] Cases = [.. Read<ImportedCase>("cases.json"), .. Read<ImportedCase>("curated.json")];
+    private static readonly ImportedCase[] Cases = [.. Read<ImportedCase>("cases.json"), .. Read<ImportedCase>("curated.json"), .. Read<ImportedCase>("dictionary.json")];
     private static readonly Lazy<PortableExecutableReference[]> NativeReferences = new(() =>
         ((string)AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")!).Split(Path.PathSeparator).Append(typeof(RoslynCompatibilityTests).Assembly.Location).Distinct().Select(path => MetadataReference.CreateFromFile(path)).ToArray());
     private static readonly Lazy<Assembly> Native = new(() =>
     {
-        string source = "using System; using System.Collections.Generic; using CRules.Tests; public static class Oracle {\n" + string.Join("\n", Cases.Select(c =>
+        string source = "using System; using System.Collections.Generic; using System.Linq; using CRules.Tests; public static class Oracle {\n" + string.Join("\n", Cases.Select(c =>
             $"public static {c.ReturnType} {c.Id}({string.Join(",", c.Parameters.Select(p => p.Type + " " + p.Name))}) {{ {c.Code} }}")) + "\n}";
         using var image = new MemoryStream();
         var result = CompileNative(source).Emit(image);
@@ -34,7 +34,7 @@ public sealed class RoslynCompatibilityTests
         var spec = Cases.Single(c => c.Id == id);
         var method = Native.Value.GetType("Oracle")!.GetMethod(id)!;
         var nativeParameters = method.GetParameters();
-        var compiled = new RuleCompiler(new() { ExecutionMode = mode, ReferencedTypes = [typeof(List<>), typeof(MemberInitializerTest), typeof(MemberInitializerValue)] }).Compile(new CompileOptions
+        var compiled = new RuleCompiler(new() { ExecutionMode = mode, ReferencedTypes = [typeof(List<>), typeof(Dictionary<,>), typeof(StringComparer), typeof(MemberInitializerTest), typeof(MemberInitializerValue), typeof(DictionaryEvaluationProbe)] }).Compile(new CompileOptions
         {
             Code = spec.Code,
             ReturnType = method.ReturnType,
@@ -55,7 +55,13 @@ public sealed class RoslynCompatibilityTests
 
     private static void EqualValue(object? expected, object? actual)
     {
-        if (expected is IEnumerable left && expected is not string)
+        if (expected is IDictionary dictionary)
+        {
+            var actualDictionary = Assert.IsAssignableFrom<IDictionary>(actual);
+            Assert.Equal(dictionary.Keys.Cast<object>(), actualDictionary.Keys.Cast<object>());
+            foreach (var key in dictionary.Keys) EqualValue(dictionary[key], actualDictionary[key]);
+        }
+        else if (expected is IEnumerable left && expected is not string)
         {
             var expectedItems = left.Cast<object?>().ToArray();
             var actualItems = Assert.IsAssignableFrom<IEnumerable>(actual).Cast<object?>().ToArray();
@@ -124,6 +130,31 @@ public sealed class RoslynCompatibilityTests
     public sealed record ImportedCase(string Id, string File, string Test, string Method, string Code, string ReturnType, ImportedParameter[] Parameters, string? InputProfile = null);
     public sealed record ImportedParameter(string Name, string Type);
     public sealed record NegativeCase(string Id, string File, string Test, string Code, string InputType, string ReturnType);
+
+    public static IEnumerable<object[]> DictionaryNegativeCases() => Read<string>("dictionary-negative.json")
+        .SelectMany(code => Enum.GetValues<RuleExecutionMode>().Select(mode => new object[] { code, mode }));
+
+    [Theory]
+    [MemberData(nameof(DictionaryNegativeCases))]
+    public void Dictionary_negative_semantics_are_rejected_by_both_compilers(string code, RuleExecutionMode mode)
+    {
+        var native = CompileNative($"using System.Collections.Generic; public static class C {{ public static Dictionary<string, decimal> M() {{ {code} }} }}");
+        Assert.Contains(native.GetDiagnostics(), d => d.Severity == DiagnosticSeverity.Error);
+        var result = new RuleCompiler(new() { ExecutionMode = mode }).Compile<Func<Dictionary<string, decimal>>>(code, []);
+        Assert.False(result.Success);
+        Assert.NotEmpty(result.Diagnostics);
+    }
+}
+
+public sealed class DictionaryEvaluationProbe
+{
+    public string Log { get; private set; } = "";
+    private decimal _value;
+    public int Capacity { get { Log += "capacity;"; return 2; } }
+    public string Key() { Log += "key;"; return "a"; }
+    public decimal Value() { Log += "value;"; return ++_value; }
+    private readonly Dictionary<string, decimal> _data = new() { ["a"] = 5m };
+    public Dictionary<string, decimal> Data { get { Log += "receiver;"; return _data; } }
 }
 
 public sealed class MemberInitializerTest

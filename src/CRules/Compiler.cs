@@ -1,4 +1,5 @@
 using System.Dynamic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 
@@ -56,20 +57,25 @@ public sealed class RuleCompiler : IRuleCompiler
         bool Invalid(Type t) => t == typeof(void) || t.IsByRef || t.IsPointer || t.IsByRefLike || t.ContainsGenericParameters;
         if (Invalid(spec.ReturnType) || typeof(Delegate).IsAssignableFrom(spec.ReturnType) || typeof(Expression).IsAssignableFrom(spec.ReturnType) ||
             typeof(System.Collections.IEnumerable).IsAssignableFrom(spec.ReturnType) && spec.ReturnType != typeof(string)
-            && !spec.ReturnType.IsArray && !(spec.ReturnType.IsGenericType && spec.ReturnType.GetGenericTypeDefinition() == typeof(List<>)))
+            && !spec.ReturnType.IsArray && !(spec.ReturnType.IsGenericType && (spec.ReturnType.GetGenericTypeDefinition() == typeof(List<>)
+                || DictionarySupport.ReturnType(spec.ReturnType))))
             throw new CompileFailure("CRL2007", "不支持的返回类型。", new(0, 0));
+        foreach (var p in spec.Parameters) { ArgumentNullException.ThrowIfNull(p); ArgumentNullException.ThrowIfNull(p.Type); }
+        var visible = VisibleTypes.Collect(_options.ReferencedTypes.Concat(spec.Parameters.Select(p => p.Type)).Append(spec.ReturnType)
+            .Concat([typeof(Math), typeof(MidpointRounding), typeof(Enumerable)]));
+        var effective = _options with { ReferencedTypes = visible };
         HashSet<string> names = new(StringComparer.Ordinal);
         foreach (var p in spec.Parameters)
         {
             ArgumentNullException.ThrowIfNull(p);
             ArgumentNullException.ThrowIfNull(p.Type);
             if (string.IsNullOrEmpty(p.Name) || !(char.IsLetter(p.Name[0]) || p.Name[0] == '_') || p.Name.Any(c => !(char.IsLetterOrDigit(c) || c == '_')) ||
-                SyntaxNames.IsReserved(p.Name, _options.ReferencedTypes) || !names.Add(p.Name) || Invalid(p.Type))
+                SyntaxNames.IsReserved(p.Name, visible) || !names.Add(p.Name) || Invalid(p.Type))
                 throw new CompileFailure("CRL2002", "形参名称或类型无效、重复或占用保留名称。", new(0, 0));
         }
         var syntax = new StatementParser(spec.Code, _options);
         var parameters = spec.Parameters.Select(p => Expression.Parameter(p.Type, p.Name)).ToArray();
-        var tree = new TreeBuilder(syntax.Text, _options, spec.ReturnType, parameters).Build(syntax.Parse());
+        var tree = new TreeBuilder(syntax.Text, effective, spec.ReturnType, parameters).Build(syntax.Parse());
         new ExpressionAudit(_options, new(0, spec.Code.Length), true).Visit(tree);
         if (_options.DecimalOnly)
         {
@@ -98,10 +104,28 @@ public sealed class RuleCompiler : IRuleCompiler
         Expression body = call.Type == typeof(object) ? call : Expression.Convert(call, typeof(object));
         return Expression.Lambda<Func<object?[], object?>>(body, args).Compile(_options.ExecutionMode == RuleExecutionMode.Interpreted);
     }
+    [DynamicDependency(DynamicallyAccessedMemberTypes.PublicProperties, typeof(Task<>))]
+    [DynamicDependency(DynamicallyAccessedMemberTypes.PublicMethods, typeof(ValueTask<>))]
     private Func<object?, ValueTask<object?>> Awaiter(Type type)
     {
         if (type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(Task<>) || type.GetGenericTypeDefinition() == typeof(ValueTask<>)))
         {
+            if (_options.ExecutionMode == RuleExecutionMode.Interpreted)
+            {
+                // 不在 AOT 中通过 MakeGenericMethod 实例化新的 AwaitTask<T> 状态机。
+                var asTask = type.GetGenericTypeDefinition() == typeof(ValueTask<>) ? type.GetMethod("AsTask", Type.EmptyTypes) : null;
+                var taskType = asTask?.ReturnType ?? type;
+                var result = taskType.GetProperty("Result") ?? throw new InvalidOperationException("任务结果元数据未保留。");
+                return async value =>
+                {
+                    Task task;
+                    try { task = asTask is null ? (Task)value! : (Task)asTask.Invoke(value, null)!; }
+                    catch (System.Reflection.TargetInvocationException error) when (error.InnerException is not null)
+                    { System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(error.InnerException).Throw(); throw; }
+                    await task.ConfigureAwait(false);
+                    return result.GetValue(task);
+                };
+            }
             var value = Expression.Parameter(typeof(object));
             var method = typeof(RuleCompiler).GetMethod(type.GetGenericTypeDefinition() == typeof(Task<>) ? nameof(AwaitTask) : nameof(AwaitValueTask))!.MakeGenericMethod(type.GetGenericArguments());
             return Expression.Lambda<Func<object?, ValueTask<object?>>>(Expression.Call(method, Expression.Convert(value, type)), value).Compile(_options.ExecutionMode == RuleExecutionMode.Interpreted);

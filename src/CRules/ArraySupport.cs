@@ -84,16 +84,5 @@ internal static class ArraySupport
         return values;
     }
     private static int Boundary(string text, int start, char delimiter)
-    {
-        int depth = 0;
-        for (int i = start; i < text.Length; i++)
-        {
-            if (text[i] is '"' or '\'' || text[i] == '@' && i + 1 < text.Length && text[i + 1] == '"')
-            { i = StatementParser.SkipLiteral(text, i) - 1; continue; }
-            if (depth == 0 && text[i] == delimiter) return i;
-            if (text[i] is '(' or '[' or '{') depth++;
-            else if (text[i] is ')' or ']' or '}') { if (depth == 0) return -1; depth--; }
-        }
-        return -1;
-    }
+        => DynamicExpressoAdapter.FindBoundary(text, start, delimiter);
 }

@@ -16,6 +16,7 @@ public sealed record CompilerOptions
     public int MaxDepth { get; init; } = 32;
     public int MaxLocals { get; init; } = 256;
     public int MaxTreeNodes { get; init; } = 50000;
+    /// <summary>补充规则可见的类型。输入、返回类型及其泛型实参/数组元素类型自动注册，无需重复添加。</summary>
     public IReadOnlyList<Type> ReferencedTypes { get; init; } = [];
     /// <summary>可选的精确成员策略。非空时检查表达式中所有成员及方法。</summary>
     public Func<MemberInfo, bool>? IsMemberAllowed { get; init; }

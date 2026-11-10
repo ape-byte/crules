@@ -1,0 +1,14 @@
+[
+  "return new Dictionary<string, decimal>() { {\"a\"} };",
+  "return new Dictionary<string, decimal>() { {\"a\", 1m, 2m} };",
+  "return new Dictionary<string, decimal>() { {\"a\", \"bad\"} };",
+  "return new Dictionary<string, decimal>() { [1m] = 2m };",
+  "return new Dictionary<string, decimal>() { [\"a\"] = \"bad\" };",
+  "return new Dictionary<string, decimal>() { {\"a\", 1m}, [\"b\"] = 2m };",
+  "Dictionary<string, decimal> d = new(); d[\"a\"] = \"bad\"; return d;",
+  "Dictionary<string, decimal> d = new(); d.Add(\"a\", \"bad\"); return d;",
+  "Dictionary<string, decimal> d = new(); int value = 0; d.TryGetValue(\"a\", out value); return d;",
+  "Dictionary<string, decimal> d = new(); if(false && d.TryGetValue(\"a\", out var value)) return d; d[\"a\"] = value; return d;",
+  "Dictionary<string, decimal> d = new(); d[\"a\"] += \"bad\"; return d;",
+  "Dictionary<string, decimal> d = new(); d[\"a\"] = null; return d;"
+]
