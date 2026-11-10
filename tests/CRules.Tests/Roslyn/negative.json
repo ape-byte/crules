@@ -1,0 +1,114 @@
+[
+  {
+    "id": "N0",
+    "file": "SemanticSwitchTests.cs",
+    "test": "CS0152_DuplicateCaseLabel",
+    "code": "switch(ctx){case 1:return 1;case 1:return 2;default:return 3;}",
+    "inputType": "int",
+    "returnType": "int"
+  },
+  {
+    "id": "N1",
+    "file": "SemanticSwitchTests.cs",
+    "test": "CS0152_DuplicateDefaultLabel",
+    "code": "switch(ctx){default:return 1;default:return 2;}",
+    "inputType": "int",
+    "returnType": "int"
+  },
+  {
+    "id": "N2",
+    "file": "SemanticSwitchTests.cs",
+    "test": "CS0150_NonConstantSwitchCase",
+    "code": "switch(ctx){case ctx:return 1;default:return 2;}",
+    "inputType": "int",
+    "returnType": "int"
+  },
+  {
+    "id": "N3",
+    "file": "SemanticSwitchTests.cs",
+    "test": "CS0037_NullCaseLabel_NonNullableSwitchExpression",
+    "code": "switch(ctx){case null:return 1;default:return 2;}",
+    "inputType": "int",
+    "returnType": "int"
+  },
+  {
+    "id": "N4",
+    "file": "SemanticSwitchTests.cs",
+    "test": "CS0163_SwitchFallThroughError",
+    "code": "switch(ctx){case 1:var x=1;default:return 2;}return 3;",
+    "inputType": "int",
+    "returnType": "int"
+  },
+  {
+    "id": "N5",
+    "file": "SemanticSwitchTests.cs",
+    "test": "CS8070_SwitchFallOut_DefaultLabel",
+    "code": "switch(ctx){default:var x=1;}return 3;",
+    "inputType": "int",
+    "returnType": "int"
+  },
+  {
+    "id": "N6",
+    "file": "FlowDiagnosticTests.cs",
+    "test": "BreakWithoutTarget",
+    "code": "break;return 1;",
+    "inputType": "int",
+    "returnType": "int"
+  },
+  {
+    "id": "N7",
+    "file": "FlowTests.cs",
+    "test": "ReturnStatement",
+    "code": "if(ctx>0) return 1;",
+    "inputType": "int",
+    "returnType": "int"
+  },
+  {
+    "id": "N8",
+    "file": "SemanticSwitchTests.cs",
+    "test": "CS0266_CaseLabelWithNoImplicitConversionToSwitchGoverningType",
+    "code": "switch(ctx){case 256:return 1;default:return 2;}",
+    "inputType": "byte",
+    "returnType": "int"
+  },
+  {
+    "id": "N9",
+    "file": "SemanticSwitchTests.cs",
+    "test": "CS0266_CaseLabelWithNoImplicitConversionToSwitchGoverningType",
+    "code": "switch(ctx){case 1.5:return 1;default:return 2;}",
+    "inputType": "int",
+    "returnType": "int"
+  },
+  {
+    "id": "N10",
+    "file": "CodeGenOperators.cs",
+    "test": "TestCompoundAssignmentOperators",
+    "code": "var x=1;x+=1.5;return x;",
+    "inputType": "int",
+    "returnType": "int"
+  },
+  {
+    "id": "N11",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "ObjectInitializerTest_ClassType",
+    "code": "return new MemberInitializerTest(){x=1,x=2};",
+    "inputType": "int",
+    "returnType": "MemberInitializerTest"
+  },
+  {
+    "id": "N12",
+    "file": "CodeGenOperators.cs",
+    "test": "TestCompoundAssignmentOperators",
+    "code": "var x=(byte)1;var y=2;x+=y;return x;",
+    "inputType": "int",
+    "returnType": "int"
+  },
+  {
+    "id": "N13",
+    "file": "CodeGenOperators.cs",
+    "test": "TestCompoundAssignmentOperators",
+    "code": "var x=(char)65;x+=1;return x;",
+    "inputType": "int",
+    "returnType": "int"
+  }
+]

@@ -5,6 +5,8 @@ BenchmarkDotNet.Artifacts/
 .tmp/
 .vs/
 *.log
+__pycache__/
+*.pyc
 
 # Local integration adapters require a separate business repository.
 src/CRules.TokenHub/

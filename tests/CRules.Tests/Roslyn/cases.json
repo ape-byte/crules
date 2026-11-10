@@ -1,0 +1,3575 @@
+[
+  {
+    "id": "R0",
+    "file": "CodeGenImplicitlyTypeArraysTests.cs",
+    "test": "Test_001_Simple",
+    "method": "collection:a",
+    "line": 22,
+    "code": "return new [] {1, 2, 3};",
+    "returnType": "int[]",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R1",
+    "file": "CodeGenImplicitlyTypeArraysTests.cs",
+    "test": "Test_002_IntTypeBest",
+    "method": "collection:a",
+    "line": 47,
+    "code": "return new [] {1, (byte)2, (short)3};",
+    "returnType": "int[]",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R2",
+    "file": "CodeGenImplicitlyTypeArraysTests.cs",
+    "test": "Test_003_DoubleTypeBest",
+    "method": "collection:a",
+    "line": 74,
+    "code": "return new [] {(sbyte)1, (byte)2, (short)3, (ushort)4, 5, 6u, 7l, 8ul, (char)9, 10.0f, 11.0d};",
+    "returnType": "double[]",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R3",
+    "file": "CodeGenImplicitlyTypeArraysTests.cs",
+    "test": "Test_005_ObjectTypeBest",
+    "method": "collection:aa",
+    "line": 156,
+    "code": "return new int[] {1};",
+    "returnType": "int[]",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R4",
+    "file": "CodeGenImplicitlyTypeArraysTests.cs",
+    "test": "Test_006_ArrayTypeBest",
+    "method": "collection:oa",
+    "line": 198,
+    "code": "return new object[] {null};",
+    "returnType": "object[]",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R5",
+    "file": "CodeGenImplicitlyTypeArraysTests.cs",
+    "test": "Test_006_ArrayTypeBest",
+    "method": "collection:sa",
+    "line": 198,
+    "code": "return new string[] {null};",
+    "returnType": "string[]",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R6",
+    "file": "CodeGenImplicitlyTypeArraysTests.cs",
+    "test": "Test_007A",
+    "method": "collection:ia",
+    "line": 229,
+    "code": "return new int[] {1, 2, 3};",
+    "returnType": "int[]",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R7",
+    "file": "CodeGenImplicitlyTypeArraysTests.cs",
+    "test": "Test_007A",
+    "method": "collection:la",
+    "line": 229,
+    "code": "return new List<int> {1, 2, 3};",
+    "returnType": "List<int>",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R8",
+    "file": "CodeGenImplicitlyTypeArraysTests.cs",
+    "test": "Test_007B",
+    "method": "collection:array",
+    "line": 259,
+    "code": "return new int[] {1, 2, 3};",
+    "returnType": "int[]",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R9",
+    "file": "CodeGenImplicitlyTypeArraysTests.cs",
+    "test": "Test_008_DelegateType",
+    "method": "M2",
+    "line": 288,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R10",
+    "file": "CodeGenImplicitlyTypeArraysTests.cs",
+    "test": "Test_009_Null",
+    "method": "collection:a",
+    "line": 334,
+    "code": "return new [] {\"aa\", \"bb\", null};",
+    "returnType": "string[]",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R11",
+    "file": "CodeGenImplicitlyTypeArraysTests.cs",
+    "test": "Test_014_LambdaExpression",
+    "method": "M",
+    "line": 559,
+    "code": "return i;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "i",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R12",
+    "file": "CodeGenImplicitlyTypeArraysTests.cs",
+    "test": "Test_016_ArrayCreationExpression",
+    "method": "collection:a",
+    "line": 623,
+    "code": "return new [] {new int[1] , new int[3] {11, 12, 13}, new int[] {21, 22, 23}};",
+    "returnType": "int[][]",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R13",
+    "file": "CodeGenImplicitlyTypeArraysTests.cs",
+    "test": "Test_018_MemberAccessExpression",
+    "method": "M",
+    "line": 677,
+    "code": "return 1;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "s",
+        "type": "string"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R14",
+    "file": "CodeGenImplicitlyTypeArraysTests.cs",
+    "test": "Test_018_MemberAccessExpression",
+    "method": "M2",
+    "line": 677,
+    "code": "return 2;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "s",
+        "type": "string"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R15",
+    "file": "CodeGenImplicitlyTypeArraysTests.cs",
+    "test": "Test_019_JaggedArray",
+    "method": "collection:a3",
+    "line": 718,
+    "code": "return new [] { new [] {new [] {1}}, \n                                         new [] {new int[] {2}}, \n                                         new int[][] {new int[] {3}}, \n                                         new int[][] {new [] {4}} };",
+    "returnType": "int[][][]",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R16",
+    "file": "CodeGenImplicitlyTypeArraysTests.cs",
+    "test": "Test_023_Query",
+    "method": "collection:ta",
+    "line": 845,
+    "code": "return new int[] {1, 2, 3, 4, 5};",
+    "returnType": "int[]",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R17",
+    "file": "CodeGenOperators.cs",
+    "test": "CS0184WRN_IsAlwaysFalse",
+    "method": "Main",
+    "line": 586,
+    "code": "var i = (int)(0);\nvar b = (bool)(i is string);\nreturn 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R18",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_Implicit_b_To_a_nullable",
+    "method": "Nullable_a_Implicit_b_to_a0_null_a",
+    "line": 1046,
+    "code": "var b = (char)(ch);\nvar a = (int?)(null);\nvar z = (int)(a ?? b);\nreturn z;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "ch",
+        "type": "char"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R19",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_Implicit_b_To_a_nullable",
+    "method": "Nullable_a_Implicit_b_to_a0_constant_non_null_a",
+    "line": 1046,
+    "code": "var b = (char)(ch);\nvar a = (int?)(10);\nvar z = (int)(a ?? b);\nreturn z;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "ch",
+        "type": "char"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R20",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_Implicit_b_To_a_nullable",
+    "method": "Nullable_a_Implicit_b_to_a0_not_null_a",
+    "line": 1046,
+    "code": "var b = (char)(ch);\nvar a = (int?)(i);\nvar z = (int)(a ?? b);\nreturn z;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "ch",
+        "type": "char"
+      },
+      {
+        "name": "i",
+        "type": "int?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R21",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_Nullable_a_Implicit_b_to_a0",
+    "method": "Nullable_a_Implicit_b_to_a0_null_a",
+    "line": 1154,
+    "code": "var b = (char)(ch);\nvar a = (int?)(null);\nvar z = (int)(a ?? b);\nreturn z;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "ch",
+        "type": "char"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R22",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_Nullable_a_Implicit_b_to_a0",
+    "method": "Nullable_a_Implicit_b_to_a0_constant_non_null_a",
+    "line": 1154,
+    "code": "var b = (char)(ch);\nvar a = (int?)(10);\nvar z = (int)(a ?? b);\nreturn z;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "ch",
+        "type": "char"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R23",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_Nullable_a_Implicit_b_to_a0",
+    "method": "Nullable_a_Implicit_b_to_a0_not_null_a",
+    "line": 1154,
+    "code": "var b = (char)(ch);\nvar a = (int?)(i);\nvar z = (int)(a ?? b);\nreturn z;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "ch",
+        "type": "char"
+      },
+      {
+        "name": "i",
+        "type": "int?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R24",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_Nullable_a_Implicit_b_to_a0",
+    "method": "Nullable_a_Implicit_b_to_a_null_a",
+    "line": 1154,
+    "code": "var b = (char?)(ch);\nvar a = (int?)(null);\nvar z = (int?)(a ?? b);\nreturn z;",
+    "returnType": "int?",
+    "parameters": [
+      {
+        "name": "ch",
+        "type": "char?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R25",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_Nullable_a_Implicit_b_to_a0",
+    "method": "Nullable_a_Implicit_b_to_a_constant_non_null_a",
+    "line": 1154,
+    "code": "var b = (char?)(ch);\nvar a = (int?)(10);\nvar z = (int?)(a ?? b);\nreturn z;",
+    "returnType": "int?",
+    "parameters": [
+      {
+        "name": "ch",
+        "type": "char?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R26",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_Nullable_a_Implicit_b_to_a0",
+    "method": "Nullable_a_Implicit_b_to_a_not_null_a",
+    "line": 1154,
+    "code": "var b = (char?)(ch);\nvar a = (int?)(i);\nvar z = (int?)(a ?? b);\nreturn z;",
+    "returnType": "int?",
+    "parameters": [
+      {
+        "name": "ch",
+        "type": "char"
+      },
+      {
+        "name": "i",
+        "type": "int?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R27",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_Nullable_a_ImplicitReference_a_to_b",
+    "method": "ImplicitReference_a_to_b_null_a_nullable",
+    "line": 1246,
+    "code": "var b = (int?)(c);\nvar a = (char?)(null);\nvar z = (int?)(a ?? b);\nreturn z;",
+    "returnType": "int?",
+    "parameters": [
+      {
+        "name": "c",
+        "type": "int?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R28",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_Nullable_a_ImplicitReference_a_to_b",
+    "method": "ImplicitReference_a_to_b_constant_nonnull_a_nullable",
+    "line": 1246,
+    "code": "var b = (int?)(c);\nvar a = (char?)('a');\nvar z = (int?)(a ?? b);\nreturn z;",
+    "returnType": "int?",
+    "parameters": [
+      {
+        "name": "c",
+        "type": "int?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R29",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_Nullable_a_ImplicitReference_a_to_b",
+    "method": "ImplicitReference_a_to_b_not_null_a_nullable",
+    "line": 1246,
+    "code": "var b = (int?)(c);\nvar a = (char?)(d);\nvar z = (int?)(a ?? b);\nreturn z;",
+    "returnType": "int?",
+    "parameters": [
+      {
+        "name": "c",
+        "type": "int?"
+      },
+      {
+        "name": "d",
+        "type": "char?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R30",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_Nullable_a_ImplicitReference_a_to_b",
+    "method": "Null_Literal_a",
+    "line": 1246,
+    "code": "var b = (char?)(ch);\nvar z = (char?)(null ?? b);\nreturn z;",
+    "returnType": "char?",
+    "parameters": [
+      {
+        "name": "ch",
+        "type": "char?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R31",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_NoDuplicateCallsToGoo",
+    "method": "Goo",
+    "line": 1539,
+    "code": "return new object();",
+    "returnType": "object",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R32",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_NoDuplicateCallsToGoo",
+    "method": "Bar",
+    "line": 1539,
+    "code": "return new object();",
+    "returnType": "object",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R33",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_InterfaceRegression2",
+    "method": "f",
+    "line": 1800,
+    "code": "return 42;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R34",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_InterfaceRegression2",
+    "method": "f",
+    "line": 1800,
+    "code": "return 1;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R35",
+    "file": "CodeGenOperators.cs",
+    "test": "TestXor",
+    "method": "t",
+    "line": 2971,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R36",
+    "file": "CodeGenOperators.cs",
+    "test": "TestXor",
+    "method": "f",
+    "line": 2971,
+    "code": "return false;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R37",
+    "file": "CodeGenOperators.cs",
+    "test": "TestXorInIf",
+    "method": "t",
+    "line": 3051,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R38",
+    "file": "CodeGenOperators.cs",
+    "test": "TestXorInIf",
+    "method": "f",
+    "line": 3051,
+    "code": "return false;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R39",
+    "file": "CodeGenOperators.cs",
+    "test": "UserDefinedOperatorAfterUserDefinedConversion",
+    "method": "ToString",
+    "line": 3165,
+    "code": "return \"C2\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R40",
+    "file": "CodeGenOperators.cs",
+    "test": "NonShortCircuitBoolean",
+    "method": "P",
+    "line": 3362,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R41",
+    "file": "CodeGenOperators.cs",
+    "test": "LiftedBitwiseOr",
+    "method": "XX",
+    "line": 3799,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R42",
+    "file": "CodeGenOperators.cs",
+    "test": "LiftedBitwiseOr",
+    "method": "YY",
+    "line": 3799,
+    "code": "return true;",
+    "returnType": "bool?",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R43",
+    "file": "CodeGenOperators.cs",
+    "test": "TestTernary_InterfaceRegression1a",
+    "method": "C",
+    "line": 4144,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R44",
+    "file": "CodeGenOperators.cs",
+    "test": "TestTernary_InterfaceRegression1b",
+    "method": "C",
+    "line": 4195,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R45",
+    "file": "CodeGenOperators.cs",
+    "test": "TestTernary_InterfaceRegression2",
+    "method": "f",
+    "line": 4303,
+    "code": "return 42;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R46",
+    "file": "CodeGenOperators.cs",
+    "test": "TestTernary_InterfaceRegression2",
+    "method": "f",
+    "line": 4303,
+    "code": "return 1;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R47",
+    "file": "CodeGenOperators.cs",
+    "test": "TestTernary_InterfaceRegression2",
+    "method": "C",
+    "line": 4303,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R48",
+    "file": "CodeGenOperators.cs",
+    "test": "TestTernary_FuncVariance",
+    "method": "C",
+    "line": 4344,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R49",
+    "file": "CodeGenOperators.cs",
+    "test": "TestTernary_FuncVariance01",
+    "method": "C",
+    "line": 4404,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R50",
+    "file": "CodeGenOperators.cs",
+    "test": "TestTernary_InterfaceVariance",
+    "method": "C",
+    "line": 4469,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R51",
+    "file": "CodeGenOperators.cs",
+    "test": "TestTernary_InterfaceVarianceA",
+    "method": "C",
+    "line": 4536,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R52",
+    "file": "CodeGenOperators.cs",
+    "test": "TestTernary_InterfaceVariance01",
+    "method": "C",
+    "line": 4603,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R53",
+    "file": "CodeGenOperators.cs",
+    "test": "TestTernary_ToBase",
+    "method": "C",
+    "line": 4675,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R54",
+    "file": "CodeGenOperators.cs",
+    "test": "TestTernary_Null",
+    "method": "C",
+    "line": 4733,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R55",
+    "file": "CodeGenOperators.cs",
+    "test": "TestBinary_Implicit",
+    "method": "C",
+    "line": 4791,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R56",
+    "file": "CodeGenOperators.cs",
+    "test": "NullCoalesce",
+    "method": "Main",
+    "line": 4984,
+    "code": "return x ?? y;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int?"
+      },
+      {
+        "name": "y",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R57",
+    "file": "CodeGenOperators.cs",
+    "test": "NullCoalesce_Local",
+    "method": "Main",
+    "line": 5088,
+    "code": "var y = 3;\nvar z = x ?? y;\nreturn y + z;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R58",
+    "file": "CodeGenOperators.cs",
+    "test": "TestCompoundOnAFieldOfGeneric",
+    "method": "Goo",
+    "line": 5168,
+    "code": "return 1;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R59",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_NullableWithDefault_Optimization",
+    "method": "CoalesceInt32",
+    "line": 5791,
+    "code": "return x ?? 0;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R60",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_NullableWithNonDefault",
+    "method": "CoalesceWithNonDefault1",
+    "line": 5929,
+    "code": "return x ?? 2;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R61",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_NullableWithNonDefault",
+    "method": "CoalesceWithNonDefault2",
+    "line": 5929,
+    "code": "return x ?? y;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int?"
+      },
+      {
+        "name": "y",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R62",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_NullableWithNonDefault",
+    "method": "CoalesceWithNonDefault3",
+    "line": 5929,
+    "code": "return x ?? y;",
+    "returnType": "int?",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int?"
+      },
+      {
+        "name": "y",
+        "type": "int?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R63",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_NullableWithNonDefault",
+    "method": "CoalesceWithNonDefault4",
+    "line": 5929,
+    "code": "return x ?? default(int?);",
+    "returnType": "int?",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R64",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_NonNullableWithDefault_NoOptimization",
+    "method": "CoalesceNonNullableWithDefault",
+    "line": 6032,
+    "code": "return x ?? default(string);",
+    "returnType": "string",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "string"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R65",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_NullableDefault_MissingGetValueOrDefault",
+    "method": "Coalesce",
+    "line": 6067,
+    "code": "return x ?? 0;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R66",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_NullableDefault_MissingGetValueOrDefaultAndGetValueOrDefaultWithADefaultValueParameter",
+    "method": "Coalesce",
+    "line": 6099,
+    "code": "return x ?? 0;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R67",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_NullableNonDefaultConstant_MissingGetValueOrDefaultWithDefaultValue",
+    "method": "Coalesce",
+    "line": 6123,
+    "code": "return x ?? 1;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R68",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_NullableNonDefaultConstant_MissingGetValueOrDefaultAndGetValueOrDefaultWithADefaultValueParameter",
+    "method": "Coalesce",
+    "line": 6162,
+    "code": "return x ?? 1;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R69",
+    "file": "CodeGenTests.cs",
+    "test": "TestReturn",
+    "method": "M",
+    "line": 1569,
+    "code": "var x = (int)(3);\nreturn x;",
+    "returnType": "double",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R70",
+    "file": "CodeGenTests.cs",
+    "test": "TestConst",
+    "method": "M",
+    "line": 1649,
+    "code": "return 42;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R71",
+    "file": "CodeGenTests.cs",
+    "test": "TestArg",
+    "method": "M",
+    "line": 1678,
+    "code": "return x;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R72",
+    "file": "CodeGenTests.cs",
+    "test": "TestArgs",
+    "method": "M",
+    "line": 1707,
+    "code": "return y;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int"
+      },
+      {
+        "name": "y",
+        "type": "int"
+      },
+      {
+        "name": "z",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R73",
+    "file": "CodeGenTests.cs",
+    "test": "MethodParameterAccess",
+    "method": "Boo",
+    "line": 2002,
+    "code": "return y;",
+    "returnType": "string",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int"
+      },
+      {
+        "name": "y",
+        "type": "string"
+      },
+      {
+        "name": "z",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R74",
+    "file": "CodeGenTests.cs",
+    "test": "CallBaseMethods_VirtualSimple",
+    "method": "M",
+    "line": 2489,
+    "code": "return \"A.M()\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R75",
+    "file": "CodeGenTests.cs",
+    "test": "CallBaseMethods_VirtualSimple",
+    "method": "M",
+    "line": 2489,
+    "code": "return \"B.M()\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R76",
+    "file": "CodeGenTests.cs",
+    "test": "CallBaseMethods_VirtualSimple",
+    "method": "M",
+    "line": 2489,
+    "code": "return \"D.M()\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R77",
+    "file": "CodeGenTests.cs",
+    "test": "CallBaseMethods_Virtual_WithPrivate",
+    "method": "M",
+    "line": 2651,
+    "code": "return \"A.M()\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R78",
+    "file": "CodeGenTests.cs",
+    "test": "CallBaseMethods_Virtual_WithPrivate",
+    "method": "M",
+    "line": 2651,
+    "code": "return \"B.M()\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R79",
+    "file": "CodeGenTests.cs",
+    "test": "CallBaseMethods_Virtual_WithPrivate",
+    "method": "M",
+    "line": 2651,
+    "code": "return \"C.M()\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R80",
+    "file": "CodeGenTests.cs",
+    "test": "CallBaseMethods_Virtual_WithPrivate",
+    "method": "M",
+    "line": 2651,
+    "code": "return \"D.M()\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R81",
+    "file": "CodeGenTests.cs",
+    "test": "CallBaseMethods_NonVirtual_WithPrivate",
+    "method": "M",
+    "line": 2822,
+    "code": "return \"A.M()\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R82",
+    "file": "CodeGenTests.cs",
+    "test": "CallBaseMethods_NonVirtual_WithPrivate",
+    "method": "M",
+    "line": 2822,
+    "code": "return \"B.M()\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R83",
+    "file": "CodeGenTests.cs",
+    "test": "CallBaseMethods_NonVirtual_WithPrivate",
+    "method": "M",
+    "line": 2822,
+    "code": "return \"C.M()\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R84",
+    "file": "CodeGenTests.cs",
+    "test": "CallBaseMethods_NonVirtual_WithPrivate",
+    "method": "M",
+    "line": 2822,
+    "code": "return \"D.M()\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R85",
+    "file": "CodeGenTests.cs",
+    "test": "BinderTemps",
+    "method": "Goo",
+    "line": 4059,
+    "code": "return 8;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int"
+      },
+      {
+        "name": "y",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R86",
+    "file": "CodeGenTests.cs",
+    "test": "BinderTemps",
+    "method": "GetInt",
+    "line": 4059,
+    "code": "return i;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "i",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R87",
+    "file": "CodeGenTests.cs",
+    "test": "BinderTempsNestedScopes",
+    "method": "Goo",
+    "line": 4171,
+    "code": "return 8;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int"
+      },
+      {
+        "name": "y",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R88",
+    "file": "CodeGenTests.cs",
+    "test": "BinderTempsNestedScopes",
+    "method": "GetInt",
+    "line": 4171,
+    "code": "return i;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "i",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R89",
+    "file": "CodeGenTests.cs",
+    "test": "ByrefTemp1",
+    "method": "C",
+    "line": 6301,
+    "code": "return 1;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R90",
+    "file": "CodeGenTests.cs",
+    "test": "ByrefTemp1",
+    "method": "E",
+    "line": 6301,
+    "code": "return 1;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R91",
+    "file": "CodeGenTests.cs",
+    "test": "Temporaries",
+    "method": "bar",
+    "line": 7042,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R92",
+    "file": "CodeGenTests.cs",
+    "test": "TemporariesA",
+    "method": "bar",
+    "line": 7099,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R93",
+    "file": "CodeGenTests.cs",
+    "test": "EmitCallToOverriddenToStringOnStruct",
+    "method": "ToString",
+    "line": 7344,
+    "code": "return \"123\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R94",
+    "file": "CodeGenTests.cs",
+    "test": "OverloadsInvoke",
+    "method": "Goo",
+    "line": 7553,
+    "code": "return (ushort) (p1 + p2);",
+    "returnType": "uint",
+    "parameters": [
+      {
+        "name": "p1",
+        "type": "short"
+      },
+      {
+        "name": "p2",
+        "type": "ushort"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R95",
+    "file": "CodeGenTests.cs",
+    "test": "OverloadsInvoke",
+    "method": "Goo",
+    "line": 7553,
+    "code": "return (uint) p1;",
+    "returnType": "uint",
+    "parameters": [
+      {
+        "name": "p1",
+        "type": "short"
+      },
+      {
+        "name": "p2",
+        "type": "string"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R96",
+    "file": "CodeGenTests.cs",
+    "test": "FloatDoubleInfinity",
+    "method": "Main",
+    "line": 9831,
+    "code": "var d1 = (double)(double.MaxValue);\nvar d2 = (double)(double.PositiveInfinity);\nvar d3 = (double)(double.NegativeInfinity);\nvar ret = (int)(0);\nif ((double)(d1 + (d1 * 1.0e-15f)) != d2)\n        {\n            ret = 1;\n        }\nif ((double)(d1 - (-d1 * 1.0e-15f)) != d2)\n        {\n            ret = ret + 10;\n        }\nif ((double)(d1 * (1.0f + 1.0e-15f)) != d1) // note (1.0f + 1.0e-15f) == 1.0f\n        {\n            ret = ret + 100;\n        }\nif ((double)(d1 / (1.0f - 1.0e-15f)) != d1) // note (1.0f - 1.0e-15f) == 1.0f\n        {\n            ret = ret + 1000;\n        }\nif ((double)(-d1 + (-(d1 * 1.0e-15f))) != d3)\n        {\n            ret = ret + 10000;\n        }\nif ((double)((-d1 - (d1 * 1.0e-15f))) != d3)\n        {\n            ret = ret + 100000;\n        }\nif ((double)(-d1 * (1.0f + 1.0e-15f)) != -d1) // note (1.0f + 1.0e-15f) == 1.0f\n        {\n            ret = ret + 1000000;\n        }\nif ((double)(-d1 / (1.0f - 1.0e-15f)) != -d1) // note (1.0f - 1.0e-15f) == 1.0f\n        {\n            ret = ret + 10000000;\n        }\nreturn ret;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R97",
+    "file": "CodeGenTests.cs",
+    "test": "DoubleDivByNegativeZero",
+    "method": "Main",
+    "line": 10179,
+    "code": "var ret = (int)(0);\nvar d1 = (double)(2.0);\nvar d2 = (double)(-0.0);\nvar d3 = (double)(d1 / d2);\nif (d3 == double.NegativeInfinity)\n        {\n        }\n        else\n        {\n            ret = ret + 1;\n        }\nd1 = -2.0;\nd3 = d1 / d2;\nif (d3 != double.PositiveInfinity)\n        {\n            ret = ret + 1;\n        }\nd1 = double.PositiveInfinity;\nd3 = d1 / d2;\nif (d3 != double.NegativeInfinity)\n        {\n            ret = ret + 1;\n        }\nd1 = double.NegativeInfinity;\nd3 = d1 / d2;\nif (d3 != double.PositiveInfinity)\n        {\n            ret = ret + 1;\n        }\nreturn ret;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R98",
+    "file": "CodeGenTests.cs",
+    "test": "CallBaseMethodExplicitlyWithCall",
+    "method": "intI",
+    "line": 10267,
+    "code": "return 1;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R99",
+    "file": "CodeGenTests.cs",
+    "test": "CallBaseMethodExplicitlyWithCall",
+    "method": "intI",
+    "line": 10267,
+    "code": "return 2;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R100",
+    "file": "CodeGenTests.cs",
+    "test": "LoadMaxConstantForToString",
+    "method": "Main",
+    "line": 10340,
+    "code": "var RetVal = (int)(0);\nvar i = (int)(int.MaxValue);\nvar s = (string)(i.ToString());\nif (!s.Equals(Int32.MaxValue.ToString()))\n        {\n            RetVal = 1;\n        }\nreturn RetVal;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R101",
+    "file": "CodeGenTests.cs",
+    "test": "DecimalConversion01",
+    "method": "Goo",
+    "line": 11091,
+    "code": "var i = (int)(10);\nreturn (int)(decimal)(int)i;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R102",
+    "file": "CodeGenTests.cs",
+    "test": "DecimalConversion01",
+    "method": "Bar",
+    "line": 11091,
+    "code": "return (int)decimal.One;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R103",
+    "file": "CodeGenTests.cs",
+    "test": "OverloadResolutionWithParams",
+    "method": "Goo",
+    "line": 12121,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "i",
+        "type": "object"
+      },
+      {
+        "name": "j",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R104",
+    "file": "CodeGenTests.cs",
+    "test": "OverloadResolutionWithParams",
+    "method": "Bar",
+    "line": 12121,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "s",
+        "type": "string"
+      },
+      {
+        "name": "i",
+        "type": "int"
+      },
+      {
+        "name": "o",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R105",
+    "file": "CodeGenTests.cs",
+    "test": "MultipleUseOfObjectInstance",
+    "method": "M1",
+    "line": 12150,
+    "code": "return 10;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R106",
+    "file": "CodeGenTests.cs",
+    "test": "MultipleUseOfObjectInstance",
+    "method": "M2",
+    "line": 12150,
+    "code": "return 20;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R107",
+    "file": "CodeGenTests.cs",
+    "test": "Bug17007",
+    "method": "Test2",
+    "line": 13252,
+    "code": "return y;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int"
+      },
+      {
+        "name": "y",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R108",
+    "file": "CodeGenTests.cs",
+    "test": "NopAfterCall",
+    "method": "NonVoid",
+    "line": 13614,
+    "code": "return 1;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R109",
+    "file": "CodeGenTests.cs",
+    "test": "TypeParameterInterfaceVersusNonInterface1",
+    "method": "ToString",
+    "line": 13829,
+    "code": "return \"C\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R110",
+    "file": "CodeGenTests.cs",
+    "test": "TypeParameterInterfaceVersusNonInterface1",
+    "method": "ToString",
+    "line": 13829,
+    "code": "return \"D\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R111",
+    "file": "CodeGenTests.cs",
+    "test": "TypeParameterInterfaceVersusNonInterface1",
+    "method": "ToString",
+    "line": 13829,
+    "code": "return \"IGoo\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R112",
+    "file": "CodeGenTests.cs",
+    "test": "TypeParameterInterfaceVersusNonInterface2",
+    "method": "ToString",
+    "line": 13886,
+    "code": "return \"C\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R113",
+    "file": "CodeGenTests.cs",
+    "test": "TypeParameterInterfaceVersusNonInterface2",
+    "method": "ToString",
+    "line": 13886,
+    "code": "return \"D\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R114",
+    "file": "CodeGenTests.cs",
+    "test": "TypeParameterInterfaceVersusNonInterface2",
+    "method": "ToString",
+    "line": 13886,
+    "code": "return \"IGoo\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R115",
+    "file": "CodeGenTests.cs",
+    "test": "NegativeZeroIsNotAZero1",
+    "method": "IsZero",
+    "line": 14122,
+    "code": "return x == 0 && 1 / x > 0;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "double"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R116",
+    "file": "CodeGenTests.cs",
+    "test": "NegativeZeroIsNotAZero1",
+    "method": "IsZero",
+    "line": 14122,
+    "code": "return x == 0 && 1 / x > 0;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "float"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R117",
+    "file": "CodeGenTests.cs",
+    "test": "UnusedFieldLoad_35",
+    "method": "GetIntA",
+    "line": 15795,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R118",
+    "file": "CodeGenTests.cs",
+    "test": "UnusedFieldLoad_35",
+    "method": "GetIntB",
+    "line": 15795,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R119",
+    "file": "CodeGenTests.cs",
+    "test": "UnusedFieldLoad_36",
+    "method": "GetIntA",
+    "line": 15850,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R120",
+    "file": "CodeGenTests.cs",
+    "test": "UnusedFieldLoad_36",
+    "method": "GetIntB",
+    "line": 15850,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R121",
+    "file": "CodeGenTests.cs",
+    "test": "UnusedPassByCopy_35",
+    "method": "GetIntA",
+    "line": 17047,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R122",
+    "file": "CodeGenTests.cs",
+    "test": "UnusedPassByCopy_35",
+    "method": "GetIntB",
+    "line": 17047,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R123",
+    "file": "CodeGenTests.cs",
+    "test": "UnusedPassByCopy_36",
+    "method": "GetIntA",
+    "line": 17102,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R124",
+    "file": "CodeGenTests.cs",
+    "test": "UnusedPassByCopy_36",
+    "method": "GetIntB",
+    "line": 17102,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R125",
+    "file": "CodeGenTests.cs",
+    "test": "Regress530041",
+    "method": "SomeExpression",
+    "line": 26207,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R126",
+    "file": "CodeGenTests.cs",
+    "test": "Regress530041_1",
+    "method": "SomeExpression",
+    "line": 26240,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R127",
+    "file": "CodeGenTests.cs",
+    "test": "TernaryConsequenceUsesLocal",
+    "method": "goo",
+    "line": 26749,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R128",
+    "file": "CodeGenTests.cs",
+    "test": "CoalesceUsesLocal",
+    "method": "goo",
+    "line": 26795,
+    "code": "return \"hi\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R129",
+    "file": "CodeGenTests.cs",
+    "test": "TernaryUsesLocal",
+    "method": "GetString",
+    "line": 26841,
+    "code": "return \"hello\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R130",
+    "file": "CodeGenTests.cs",
+    "test": "LogicalOpUsesLocal",
+    "method": "GetString",
+    "line": 26892,
+    "code": "return \"hello\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R131",
+    "file": "CodeGenTests.cs",
+    "test": "FieldInitializerDynamic",
+    "method": "Test",
+    "line": 27080,
+    "code": "return obj;",
+    "returnType": "object",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R132",
+    "file": "CodeGenTests.cs",
+    "test": "FieldInitializerDynamic",
+    "method": "Test",
+    "line": 27080,
+    "code": "return obj;",
+    "returnType": "object",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "string"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R133",
+    "file": "CodeGenTests.cs",
+    "test": "FieldInitializerDynamicInstance",
+    "method": "Test",
+    "line": 27219,
+    "code": "return obj;",
+    "returnType": "object",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R134",
+    "file": "CodeGenTests.cs",
+    "test": "FieldInitializerDynamicBothStaticInstance_01",
+    "method": "Test",
+    "line": 27247,
+    "code": "return obj;",
+    "returnType": "object",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "long"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R135",
+    "file": "CodeGenTests.cs",
+    "test": "FieldInitializerDynamicBothStaticInstance_01",
+    "method": "Test",
+    "line": 27247,
+    "code": "return obj;",
+    "returnType": "object",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R136",
+    "file": "CodeGenTests.cs",
+    "test": "FieldInitializerDynamicBothStaticInstance_02",
+    "method": "Test",
+    "line": 27288,
+    "code": "return obj;",
+    "returnType": "object",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "long"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R137",
+    "file": "CodeGenTests.cs",
+    "test": "FieldInitializerDynamicBothStaticInstance_02",
+    "method": "Test",
+    "line": 27288,
+    "code": "return obj;",
+    "returnType": "object",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R138",
+    "file": "CodeGenTests.cs",
+    "test": "FieldInitializerDynamicBothStaticInstance_02",
+    "method": "Test",
+    "line": 27288,
+    "code": "return obj;",
+    "returnType": "object",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "byte"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R139",
+    "file": "CodeGenTests.cs",
+    "test": "CtorInitializerInstance",
+    "method": "Test",
+    "line": 27334,
+    "code": "return obj;",
+    "returnType": "object",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R140",
+    "file": "CodeGenTests.cs",
+    "test": "StaticCtorInstance",
+    "method": "Test",
+    "line": 27384,
+    "code": "return obj;",
+    "returnType": "object",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R141",
+    "file": "CodeGenTests.cs",
+    "test": "StaticFieldInstance",
+    "method": "Test",
+    "line": 27417,
+    "code": "return obj;",
+    "returnType": "object",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R142",
+    "file": "CodeGenTests.cs",
+    "test": "CallingInstanceDynamicallyFromStaticContext",
+    "method": "InstanceMethod",
+    "line": 27445,
+    "code": "return x;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R143",
+    "file": "CodeGenTests.cs",
+    "test": "CallingInstanceDynamicallyFromStaticContextWithTypeName",
+    "method": "InstanceMethod",
+    "line": 27519,
+    "code": "return x;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R144",
+    "file": "CodeGenTests.cs",
+    "test": "BinaryMulOptimizationsAndSideeffects",
+    "method": "Goo1",
+    "line": 27598,
+    "code": "return 42;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R145",
+    "file": "CodeGenTests.cs",
+    "test": "BinaryMulOptimizationsAndSideeffects",
+    "method": "Goo2",
+    "line": 27598,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R146",
+    "file": "CodeGenTests.cs",
+    "test": "ArrayElementCompoundAssignment_Covariant_NonConstantIndex",
+    "method": "Index",
+    "line": 28439,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "arg",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R147",
+    "file": "CodeGenTests.cs",
+    "test": "BoxingReceiver",
+    "method": "GetInt",
+    "line": 28835,
+    "code": "return 1;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R148",
+    "file": "FlowDiagnosticTests.cs",
+    "test": "TestBug12350",
+    "method": "X",
+    "line": 17,
+    "code": "return 1;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R149",
+    "file": "FlowDiagnosticTests.cs",
+    "test": "CascadedDiagnostics01",
+    "method": "goo",
+    "line": 844,
+    "code": "return 1;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "i",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R150",
+    "file": "FlowDiagnosticTests.cs",
+    "test": "InitializerAndConstructorWithOutParameter",
+    "method": "Goo",
+    "line": 2174,
+    "code": "return 12;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R151",
+    "file": "FlowTests.cs",
+    "test": "CondAccess_NullCoalescing_04",
+    "method": "MB",
+    "line": 2142,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R152",
+    "file": "FlowTests.cs",
+    "test": "CondAccess_NullCoalescing_05",
+    "method": "MA",
+    "line": 2177,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R153",
+    "file": "FlowTests.cs",
+    "test": "CondAccess_NullCoalescing_06",
+    "method": "M",
+    "line": 2215,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R154",
+    "file": "FlowTests.cs",
+    "test": "CondAccess_NullCoalescing_07",
+    "method": "M",
+    "line": 2249,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R155",
+    "file": "FlowTests.cs",
+    "test": "CondAccess_NullCoalescing_08",
+    "method": "M",
+    "line": 2275,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R156",
+    "file": "FlowTests.cs",
+    "test": "CondAccess_NullCoalescing_10",
+    "method": "M",
+    "line": 2355,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R157",
+    "file": "FlowTests.cs",
+    "test": "NullCoalescing_ConditionalLeft",
+    "method": "M",
+    "line": 2448,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R158",
+    "file": "FlowTests.cs",
+    "test": "NullCoalescing_CondAccess_Throw",
+    "method": "M",
+    "line": 2494,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R159",
+    "file": "FlowTests.cs",
+    "test": "IfConditional_ComplexCondition_ConstantConsequence",
+    "method": "M0",
+    "line": 2881,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R160",
+    "file": "FlowTests.cs",
+    "test": "EqualsCondAccess_05",
+    "method": "Equals",
+    "line": 3508,
+    "code": "return false;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R161",
+    "file": "FlowTests.cs",
+    "test": "EqualsCondAccess_05",
+    "method": "GetHashCode",
+    "line": 3508,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R162",
+    "file": "FlowTests.cs",
+    "test": "EqualsCondAccess_07",
+    "method": "Equals",
+    "line": 3582,
+    "code": "return false;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R163",
+    "file": "FlowTests.cs",
+    "test": "EqualsCondAccess_07",
+    "method": "GetHashCode",
+    "line": 3582,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R164",
+    "file": "FlowTests.cs",
+    "test": "EqualsCondAccess_08",
+    "method": "Equals",
+    "line": 3646,
+    "code": "return false;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R165",
+    "file": "FlowTests.cs",
+    "test": "EqualsCondAccess_08",
+    "method": "GetHashCode",
+    "line": 3646,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R166",
+    "file": "FlowTests.cs",
+    "test": "EqualsCondAccess_09",
+    "method": "Equals",
+    "line": 3710,
+    "code": "return false;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R167",
+    "file": "FlowTests.cs",
+    "test": "EqualsCondAccess_09",
+    "method": "GetHashCode",
+    "line": 3710,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R168",
+    "file": "FlowTests.cs",
+    "test": "EqualsCondAccess_11",
+    "method": "Equals",
+    "line": 3836,
+    "code": "return false;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R169",
+    "file": "FlowTests.cs",
+    "test": "EqualsCondAccess_11",
+    "method": "GetHashCode",
+    "line": 3836,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R170",
+    "file": "FlowTests.cs",
+    "test": "EqualsCondAccess_12",
+    "method": "M0",
+    "line": 3904,
+    "code": "return null;",
+    "returnType": "int?",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R171",
+    "file": "FlowTests.cs",
+    "test": "EqualsCondAccess_13",
+    "method": "M0",
+    "line": 3955,
+    "code": "return null;",
+    "returnType": "long?",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R172",
+    "file": "FlowTests.cs",
+    "test": "EqualsCondAccess_14",
+    "method": "M0",
+    "line": 3980,
+    "code": "return null;",
+    "returnType": "long?",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R173",
+    "file": "FlowTests.cs",
+    "test": "EqualsCondAccess_18",
+    "method": "Equals",
+    "line": 4092,
+    "code": "return false;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R174",
+    "file": "FlowTests.cs",
+    "test": "EqualsCondAccess_18",
+    "method": "GetHashCode",
+    "line": 4092,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R175",
+    "file": "FlowTests.cs",
+    "test": "EqualsCondAccess_19",
+    "method": "M0",
+    "line": 4168,
+    "code": "return 1;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R176",
+    "file": "FlowTests.cs",
+    "test": "EqualsCondAccess_BadUserDefinedConversion",
+    "method": "Equals",
+    "line": 4268,
+    "code": "return false;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R177",
+    "file": "FlowTests.cs",
+    "test": "EqualsCondAccess_BadUserDefinedConversion",
+    "method": "GetHashCode",
+    "line": 4268,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R178",
+    "file": "FlowTests.cs",
+    "test": "IsBool",
+    "method": "M0",
+    "line": 4365,
+    "code": "return false;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R179",
+    "file": "FlowTests.cs",
+    "test": "IsBoolConstant_01",
+    "method": "M0",
+    "line": 4397,
+    "code": "return false;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R180",
+    "file": "FlowTests.cs",
+    "test": "IsBoolConstant_02",
+    "method": "M0",
+    "line": 4437,
+    "code": "return false;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R181",
+    "file": "FlowTests.cs",
+    "test": "IsBoolConstant_03",
+    "method": "M0",
+    "line": 4463,
+    "code": "return false;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R182",
+    "file": "FlowTests.cs",
+    "test": "IsCondAccess_06",
+    "method": "M0",
+    "line": 4977,
+    "code": "return 1;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R183",
+    "file": "FlowTests.cs",
+    "test": "IsCondAccess_07",
+    "method": "M0",
+    "line": 5003,
+    "code": "return false;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R184",
+    "file": "FlowTests.cs",
+    "test": "IsCondAccess_08",
+    "method": "M0",
+    "line": 5039,
+    "code": "return false;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R185",
+    "file": "FlowTests.cs",
+    "test": "IsCondAccess_09",
+    "method": "M0",
+    "line": 5075,
+    "code": "return false;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "obj",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R186",
+    "file": "FlowTests.cs",
+    "test": "UseDef_ExceptionFilters2",
+    "method": "F",
+    "line": 5187,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R187",
+    "file": "ImplicitObjectCreationTests.cs",
+    "test": "PatternVar_02",
+    "method": "GetBool",
+    "line": 8630,
+    "code": "return x;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "bool"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R188",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "ObjectInitializerTest_TypeParameterType_InterfaceConstraint",
+    "method": "Main",
+    "line": 159,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R189",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "ObjectInitializerTest_NullableType",
+    "method": "Main",
+    "line": 213,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R190",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "ObjectInitializerTest_AssignmentOrderingIsPreserved",
+    "method": "Bar",
+    "line": 393,
+    "code": "return i;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "i",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R191",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "ObjectInitializerTest_NestedCollectionInitializerExpression",
+    "method": "collection:x",
+    "line": 622,
+    "code": "return new List<int>();",
+    "returnType": "List<int>",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R192",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "ObjectInitializerTest_NestedCollectionInitializerExpression",
+    "method": "collection:x",
+    "line": 622,
+    "code": "return new List<int>();",
+    "returnType": "List<int>",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R193",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "ObjectInitializerTest_NestedCollectionInitializer_InitializerValue",
+    "method": "collection:x",
+    "line": 710,
+    "code": "return new List<int>();",
+    "returnType": "List<int>",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R194",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "ObjectInitializerTest_NestedCollectionInitializer_InitializerValue",
+    "method": "collection:x",
+    "line": 710,
+    "code": "return new List<int>();",
+    "returnType": "List<int>",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R195",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "NestedIndexerInitializerArray",
+    "method": "collection:a",
+    "line": 2103,
+    "code": "return new int[2];",
+    "returnType": "int[]",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R196",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "NestedIndexerInitializerJaggedArrayNestedInitializer",
+    "method": "collection:a",
+    "line": 2243,
+    "code": "return new int[1][] { new int[2] };",
+    "returnType": "int[][]",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R197",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "CollectionInitializerTest_GenericList",
+    "method": "collection:list",
+    "line": 2366,
+    "code": "return new List<int>() { 1, 2, 3, 4, 5 };",
+    "returnType": "List<int>",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R198",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "CollectionInitializerTest_GenericList_WithComplexElementInitializer",
+    "method": "collection:list",
+    "line": 2424,
+    "code": "return new List<long>() { 1, 2, { 4L }, { 9 }, 3L };",
+    "returnType": "List<long>",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R199",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "CollectionInitializerTest_TypeParameter",
+    "method": "collection:list",
+    "line": 2487,
+    "code": "return new List<int>();",
+    "returnType": "List<int>",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R200",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "CollectionInitializerTest_InitializerTypeImplementsIEnumerable_ClassType",
+    "method": "collection:list",
+    "line": 2594,
+    "code": "return new List<object>();",
+    "returnType": "List<object>",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R201",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "CollectionInitializerTest_InitializerTypeImplementsIEnumerable_MultipleAddOverloads",
+    "method": "collection:list",
+    "line": 2764,
+    "code": "return new List<object>();",
+    "returnType": "List<object>",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R202",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "CollectionInitializerTest_InitializerTypeImplementsIEnumerable_AddOverload_OptionalArgument",
+    "method": "collection:list",
+    "line": 2854,
+    "code": "return new List<object>();",
+    "returnType": "List<object>",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R203",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "CollectionInitializerTest_InitializerTypeImplementsIEnumerable_AddOverload_ParamsArrayArgument",
+    "method": "collection:implicitTypedArr",
+    "line": 2940,
+    "code": "return new[] { 7.7, 8.8 };",
+    "returnType": "double[]",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R204",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "CollectionInitializerTest_InitializerTypeImplementsIEnumerable_AddOverload_ParamsArrayArgument",
+    "method": "collection:list",
+    "line": 2940,
+    "code": "return new List<object>();",
+    "returnType": "List<object>",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R205",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "CollectionInitializerTest_NestedCollectionInitializerExpression",
+    "method": "collection:listOfList",
+    "line": 3076,
+    "code": "return new List<List<int>>() { new List<int> { 1, 2, 3, 4, 5 }, new List<int> { 6, 7, 8, 9, 10 } };",
+    "returnType": "List<List<int>>",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R206",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "CollectionInitializerTest_NestedObjectAndCollectionInitializer",
+    "method": "collection:list",
+    "line": 3163,
+    "code": "return new List<int>();",
+    "returnType": "List<int>",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R207",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "CollectionInitializerTest_CtorAddsToCollection",
+    "method": "collection:list",
+    "line": 3250,
+    "code": "return new List<object>();",
+    "returnType": "List<object>",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R208",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "CollectionInitializerTest_NestedObjectAndCollectionInitializer_02",
+    "method": "collection:phoneNumbers",
+    "line": 3321,
+    "code": "return new List<string>();",
+    "returnType": "List<string>",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R209",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "PointerIndexing_01",
+    "method": "collection:array",
+    "line": 3510,
+    "code": "return new[] { 0 };",
+    "returnType": "int[]",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R210",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "PointerIndexing_02",
+    "method": "collection:array",
+    "line": 3537,
+    "code": "return new[] { 0, 0 };",
+    "returnType": "int[]",
+    "parameters": [],
+    "adaptation": "提取独立集合创建表达式作为返回值；元素、类型、顺序保持原样，Console/LINQ 校验由差分断言替代"
+  },
+  {
+    "id": "R211",
+    "file": "PatternMatchingTests2.cs",
+    "test": "SwitchExpression_08",
+    "method": "M",
+    "line": 647,
+    "code": "return i;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "i",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R212",
+    "file": "PatternMatchingTests2.cs",
+    "test": "SwitchExpression_09",
+    "method": "M",
+    "line": 670,
+    "code": "return i;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "i",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R213",
+    "file": "PatternMatchingTests2.cs",
+    "test": "SwitchExpression_10",
+    "method": "M",
+    "line": 693,
+    "code": "return i;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "i",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R214",
+    "file": "PatternMatchingTests2.cs",
+    "test": "OvereagerSubsumption",
+    "method": "Main",
+    "line": 1132,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R215",
+    "file": "PatternMatchingTests2.cs",
+    "test": "UnderscoreDeclaredAndDiscardPattern_01",
+    "method": "Main",
+    "line": 1163,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R216",
+    "file": "PatternMatchingTests2.cs",
+    "test": "UnderscoreDeclaredAndDiscardPattern_02",
+    "method": "Main",
+    "line": 1216,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R217",
+    "file": "PatternMatchingTests2.cs",
+    "test": "UnderscoreDeclaredAndDiscardPattern_03",
+    "method": "Main",
+    "line": 1235,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R218",
+    "file": "PatternMatchingTests2.cs",
+    "test": "UnderscoreDeclaredAndDiscardPattern_03",
+    "method": "_",
+    "line": 1235,
+    "code": "return true;",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "q",
+        "type": "object"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R219",
+    "file": "PatternMatchingTests2.cs",
+    "test": "UnderscoreDeclaredAndDiscardPattern_04",
+    "method": "Main",
+    "line": 1259,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R220",
+    "file": "PatternMatchingTests2.cs",
+    "test": "EscapingUnderscoreDeclaredAndDiscardPattern_04",
+    "method": "Main",
+    "line": 1278,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R221",
+    "file": "PatternMatchingTests2.cs",
+    "test": "ErroneousSwitchArmDefiniteAssignment",
+    "method": "Main",
+    "line": 1300,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R222",
+    "file": "PatternMatchingTests2.cs",
+    "test": "ErroneousIsPatternDefiniteAssignment",
+    "method": "Main",
+    "line": 1323,
+    "code": "return 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R223",
+    "file": "PatternMatchingTests2.cs",
+    "test": "SpeculateWithNameConflict01",
+    "method": "GetHashCode",
+    "line": 1998,
+    "code": "return 1;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R224",
+    "file": "PatternMatchingTests2.cs",
+    "test": "SpeculateWithNameConflict02",
+    "method": "GetHashCode",
+    "line": 2041,
+    "code": "return 1;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R225",
+    "file": "PatternMatchingTests3.cs",
+    "test": "TargetTypedSwitch_Assignment_04",
+    "method": "ToString",
+    "line": 996,
+    "code": "return \"Source\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R226",
+    "file": "PatternMatchingTests3.cs",
+    "test": "TargetTypedSwitch_Assignment_04",
+    "method": "ToString",
+    "line": 996,
+    "code": "return \"Target\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R227",
+    "file": "PatternMatchingTests3.cs",
+    "test": "TargetTypedSwitch_Assignment_04",
+    "method": "ToString",
+    "line": 996,
+    "code": "return \"TargetSubtype\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R228",
+    "file": "PatternMatchingTests3.cs",
+    "test": "TargetTypedSwitch_Assignment_05",
+    "method": "ToString",
+    "line": 1042,
+    "code": "return \"Source\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R229",
+    "file": "PatternMatchingTests3.cs",
+    "test": "TargetTypedSwitch_Assignment_05",
+    "method": "ToString",
+    "line": 1042,
+    "code": "return \"Target\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R230",
+    "file": "PatternMatchingTests3.cs",
+    "test": "TargetTypedSwitch_Assignment_05",
+    "method": "ToString",
+    "line": 1042,
+    "code": "return \"Ultimate\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R231",
+    "file": "PatternMatchingTests3.cs",
+    "test": "TargetTypedSwitch_Assignment_06",
+    "method": "ToString",
+    "line": 1095,
+    "code": "return \"Source\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R232",
+    "file": "PatternMatchingTests3.cs",
+    "test": "TargetTypedSwitch_Assignment_06",
+    "method": "ToString",
+    "line": 1095,
+    "code": "return \"Target\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R233",
+    "file": "PatternMatchingTests3.cs",
+    "test": "TargetTypedSwitch_Assignment_06",
+    "method": "ToString",
+    "line": 1095,
+    "code": "return \"Ultimate\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R234",
+    "file": "PatternMatchingTests3.cs",
+    "test": "TargetTypedSwitch_Assignment_07",
+    "method": "ToString",
+    "line": 1148,
+    "code": "return \"Source\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R235",
+    "file": "PatternMatchingTests3.cs",
+    "test": "TargetTypedSwitch_Assignment_07",
+    "method": "ToString",
+    "line": 1148,
+    "code": "return \"Target\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R236",
+    "file": "PatternMatchingTests3.cs",
+    "test": "TargetTypedSwitch_Assignment_07",
+    "method": "ToString",
+    "line": 1148,
+    "code": "return \"Ultimate\";",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R237",
+    "file": "PatternMatchingTests3.cs",
+    "test": "TargetTypedSwitch_NaturalTypeWithUntypedArm_01",
+    "method": "GetBool",
+    "line": 1246,
+    "code": "return name switch\n        {\n            \"a\" => true,\n            \"b\" => false,\n            _ => null,\n        };",
+    "returnType": "bool?",
+    "parameters": [
+      {
+        "name": "name",
+        "type": "string"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R238",
+    "file": "PatternMatchingTests3.cs",
+    "test": "TargetTypedSwitch_NaturalTypeWithUntypedArm_02",
+    "method": "GetBool",
+    "line": 1267,
+    "code": "return name switch\r\n{\r\n    \"a\" => true,\r\n    \"b\" => false,\r\n    _ => null,\r\n};",
+    "returnType": "bool?",
+    "parameters": [
+      {
+        "name": "name",
+        "type": "string"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R239",
+    "file": "PatternMatchingTests3.cs",
+    "test": "TargetTypedSwitch_NaturalTypeWithUntypedArm_03",
+    "method": "GetBool",
+    "line": 1285,
+    "code": "return name switch\n        {\n            \"a\" => true,\n            _ => name switch\n                {\n                    \"b\" => false,\n                    _ => null,\n                },\n        };",
+    "returnType": "bool?",
+    "parameters": [
+      {
+        "name": "name",
+        "type": "string"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R240",
+    "file": "SemanticSwitchTests.cs",
+    "test": "CS0166_SwitchBlockDiagnosticsAreReported",
+    "method": "F",
+    "line": 1011,
+    "code": "return null;",
+    "returnType": "object",
+    "parameters": [
+      {
+        "name": "i",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R241",
+    "file": "SemanticSwitchTests.cs",
+    "test": "CS8070_SwitchFallOut_DefaultLabel",
+    "method": "Main",
+    "line": 2240,
+    "code": "return 1;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R242",
+    "file": "SemanticSwitchTests.cs",
+    "test": "CS0163_SwitchFallThroughError",
+    "method": "Main",
+    "line": 2435,
+    "code": "return 1;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R243",
+    "file": "SemanticSwitchTests.cs",
+    "test": "TraditionalSwitchIsIncomplete_01",
+    "method": "Main",
+    "line": 2692,
+    "code": "var test = (bool?)(null);\nswitch (test)\n        {\n            case true:\n                return 1;\n            case false:\n                return 0;\n            case null:\n                return -1;\n        }",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "args",
+        "type": "string[]"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R244",
+    "file": "SemanticSwitchTests.cs",
+    "test": "VerifyIL_8ElementsTuple_SideEffects_DefaultLabel",
+    "method": "M",
+    "line": 3454,
+    "code": "return x;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R245",
+    "file": "SemanticSwitchTests.cs",
+    "test": "VerifyIL_9ElementsTuple_SideEffects_DefaultLabel",
+    "method": "M",
+    "line": 3577,
+    "code": "return x;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R246",
+    "file": "SwitchTests.cs",
+    "test": "SwitchWith_NoMatchingCaseLabel_And_NoDefaultLabel",
+    "method": "M",
+    "line": 281,
+    "code": "var i = (int)(5);\nswitch (i)\n    {\n      case 1:\n      case 2:\n      case 3:\n        return 1;\n      case 1001:\n      case 1002:\n      case 1003:\n        return 2;\n    }\nreturn 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R247",
+    "file": "SwitchTests.cs",
+    "test": "DegenerateSwitch002",
+    "method": "M",
+    "line": 463,
+    "code": "switch (i)\n    {\n      case 1:\n      case 5:\n      case 6:\n      case 3:\n      case 4:\n      case 2:\n        return 1;\n    }\nreturn 0;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "i",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R248",
+    "file": "SwitchTests.cs",
+    "test": "DegenerateSwitch003",
+    "method": "M",
+    "line": 512,
+    "code": "switch (i)\n    {\n      case -2:\n      case -1:\n      case 0:\n      case 2:\n      case 1:\n      case 4:\n      case 3:\n        return 1;\n    }\nreturn 0;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "i",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R249",
+    "file": "SwitchTests.cs",
+    "test": "DegenerateSwitch006",
+    "method": "M",
+    "line": 661,
+    "code": "switch (i)\n    {\n      case 1:\n      case 5:\n      case 6:\n      case 3:\n      case 4:\n      case 2:\n        return 1;\n      case 31:\n      case 35:\n      case 36:\n      case 33:\n      case 34:\n      case 32:\n        return 4;\n      case 41:\n      case 45:\n      case 46:\n      case 43:\n      case 44:\n      case 42:\n        return 5;\n    }\nreturn 0;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "i",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R250",
+    "file": "SwitchTests.cs",
+    "test": "NotDegenerateSwitch006",
+    "method": "M",
+    "line": 738,
+    "code": "switch (i)\n    {\n      case 1:\n      case 5:\n      case 6:\n      case 3:\n      case 4:\n      case 2:\n        return 1;\n      case 11:\n      case 15:\n      case 16:\n      case 13:\n      case 14:\n      case 12:\n        return 2;\n      case 21:\n      case 25:\n      case 26:\n      case 23:\n      case 24:\n      case 22:\n        return 3;\n      case 31:\n      case 35:\n      case 36:\n      case 33:\n      case 34:\n      case 32:\n        return 4;\n      case 41:\n      case 45:\n      case 46:\n      case 43:\n      case 44:\n      case 42:\n        return 5;\n    }\nreturn 0;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "i",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R251",
+    "file": "SwitchTests.cs",
+    "test": "DegenerateSwitch007",
+    "method": "M",
+    "line": 867,
+    "code": "switch (i)\n    {\n      case 0:\n      case 1:\n      case 2:\n      case 3:\n      case 4:\n      case 5:\n      case 6:\n        return 1;\n\n      default:\n        return 0;\n\n      case null:\n        return 2;\n    }",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "i",
+        "type": "int?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R252",
+    "file": "SwitchTests.cs",
+    "test": "ByteTypeSwitchArgumentExpression",
+    "method": "DoByte",
+    "line": 1024,
+    "code": "var ret = (int)(2);\nvar b = (byte)(2);\nswitch (b) {\n        case 1:\n        case 2:\nret -= 1;            break;\n        case 3:\n            break;\n        default:\n            break;\n        }\nswitch (b) {\n        case 1:\n        case 3:\n            break;\n        default:\nret -= 1;            break;\n        }\nreturn(ret);",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R253",
+    "file": "SwitchTests.cs",
+    "test": "LongTypeSwitchArgumentExpression",
+    "method": "DoLong",
+    "line": 1110,
+    "code": "var ret = (int)(2);\nswitch (b) {\n        case 1:\nret += 1;            break;            \n        case 2:\nret -= 1;            break;\n        case 3:\n            break;\n        case 4:\n            ret += 7;\n            break;\n        default:\n            ret+=2;\n            break;\n        }\nreturn ret;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "b",
+        "type": "long"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R254",
+    "file": "SwitchTests.cs",
+    "test": "LongTypeSwitchArgumentExpressionOverflow",
+    "method": "DoLong",
+    "line": 1205,
+    "code": "switch (b)\n        {\n            case long.MaxValue:\n                return \"max\";\n            case 1L:\n                return \"one\";\n            case long.MinValue:\n                return \"min\";\n            default:\n                return \"default\";\n        }",
+    "returnType": "string",
+    "parameters": [
+      {
+        "name": "b",
+        "type": "long"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R255",
+    "file": "SwitchTests.cs",
+    "test": "ULongTypeSwitchArgumentExpression",
+    "method": "DoULong",
+    "line": 1271,
+    "code": "var ret = (int)(2);\nswitch (b)\n        {\n            case 0:\nret += 1;                break;\n            case 1:\nret -= 1;                break;\n            case 2:\n                break;\n            case 3:\n                ret += 7;\n                break;\n            default:\n                ret += 40;\n                break;\n        }\nreturn ret;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "b",
+        "type": "ulong"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R256",
+    "file": "SwitchTests.cs",
+    "test": "SwitchSectionWithReturnStatement_02",
+    "method": "M",
+    "line": 1739,
+    "code": "var i = (int)(5);\nswitch (i)\n    {\n      case 1:\n        return 1;\n    }\nreturn 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R257",
+    "file": "SwitchTests.cs",
+    "test": "CaseLabelWithTypeCastToGoverningType",
+    "method": "M",
+    "line": 1782,
+    "code": "var i = (int)(5);\nswitch (i)\n    {\n      case (int) 5.0f:\n        return 0;\n      default:\n        return 1;\n    }",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R258",
+    "file": "SwitchTests.cs",
+    "test": "Switch_TestSwitchBuckets_01",
+    "method": "M",
+    "line": 2072,
+    "code": "var i = (int)(0);\nswitch (i)\n    {\n      case 10:\n      case 2000:\n      case 12:\n        return 1;\n      case 2001:\n      case 14:\n        return 2;\n      case 1000:\n      case 2010:\n      case 2008:\n        return 3;\n      case 2005:\n      case 2009:\n        return 2;\n    }\nreturn 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R259",
+    "file": "SwitchTests.cs",
+    "test": "Switch_TestSwitchBuckets_02",
+    "method": "M",
+    "line": 2160,
+    "code": "var i = (int)(0);\nswitch (i)\n    {\n      case 10:\n      case 2000:\n      case 12:\n        return 1;\n      case 2001:\n      case 14:\n        return 2;\n      case 1000:\n      case 2010:\n      case 2008:\n        return 3;\n      case 2009:\n        return 2;\n    }\nreturn 0;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R260",
+    "file": "SwitchTests.cs",
+    "test": "SwitchOnNullableInt64WithInt32Label",
+    "method": "F",
+    "line": 2562,
+    "code": "switch (x)\n        {\n            case 1:\n                return true;\n            default:\n                return false;\n        }",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "x",
+        "type": "long?"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R261",
+    "file": "SwitchTests.cs",
+    "test": "StringTypeSwitchArgumentExpression",
+    "method": "M",
+    "line": 2709,
+    "code": "var s = (string)(\"hello\");\nswitch (s)\n    {\n      default:\n        return 1;\n      case null:\n        return 1;\n      case \"hello\":\n        return 0;\n    }",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R262",
+    "file": "SwitchTests.cs",
+    "test": "StringSwitch_HashTableSwitch_01",
+    "method": "M",
+    "line": 2838,
+    "code": "var test = input_test;\nvar value = (string)(\"\");\nif (test != null && test.IndexOf(\"C#\") != -1)\n            test = test.Remove(0, 2);\nswitch (test)\n        {\n            case null:\n                value = null;\n                break;\n            case \"\":\n                break;\n            case \"_\":\n                value = \"_\";\n                break;\n            case \"W\":\n                value = \"W\";\n                break;\n            case \"B\":\n                value = \"B\";\n                break;\n            case \"C\":\n                value = \"C\";\n                break;\n            case \"<\":\n                value = \"<\";\n                break;\n            case \"T\":\n                value = \"T\";\n                break;\n            case \"M\":\n                value = \"M\";\n                break;\n        }\nreturn (value == test);",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "input_test",
+        "type": "string"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R263",
+    "file": "SwitchTests.cs",
+    "test": "StringSwitch_HashTableSwitch_02",
+    "method": "Switcheroo",
+    "line": 3149,
+    "code": "var test = input_test;\nvar value = (string)(\"\");\nif (test.IndexOf(\"C#\") != -1)\n            test = test.Remove(0, 2);\nswitch (test)\n        {\n            case \"N?_2hBEJa_klm0=BRoM]mBSY3l=Zm<Aj:mBNm9[9\":\n                value = \"N?_2hBEJa_klm0=BRoM]mBSY3l=Zm<Aj:mBNm9[9\";\n                break;\n            case \"emoYDC`E3JS]IU[X55VKF<e5CjkZb0S0VYQlcS]I\":\n                value = \"emoYDC`E3JS]IU[X55VKF<e5CjkZb0S0VYQlcS]I\";\n                break;\n            case \"Ye]@FRVZi8Rbn0;43c8lo5`W]1CK;cfa2485N45m\":\n                value = \"Ye]@FRVZi8Rbn0;43c8lo5`W]1CK;cfa2485N45m\";\n                break;\n            case \"[Q0V3M_N2;9jTP=79iBK6<edbYXh;`FcaEGD0RhD\":\n                value = \"[Q0V3M_N2;9jTP=79iBK6<edbYXh;`FcaEGD0RhD\";\n                break;\n            case \"<9Ria992H`W:DNX7lm]LV]9LUnJKDXcCo6Zd_FM]\":\n                value = \"<9Ria992H`W:DNX7lm]LV]9LUnJKDXcCo6Zd_FM]\";\n                break;\n            case \"[Z`j:cCFgh2cd3:>1Z@T0o<Q<0o_;11]nMd3bP9c\":\n                value = \"[Z`j:cCFgh2cd3:>1Z@T0o<Q<0o_;11]nMd3bP9c\";\n                break;\n            case \"d2U5RWR:j0RS9MZZP3[f@NPgKFS9mQi:na@4Z_G0\":\n                value = \"d2U5RWR:j0RS9MZZP3[f@NPgKFS9mQi:na@4Z_G0\";\n                break;\n            case \"n7AOl<DYj1]k>F7FaW^5b2Ki6UP0@=glIc@RE]3>\":\n                value = \"n7AOl<DYj1]k>F7FaW^5b2Ki6UP0@=glIc@RE]3>\";\n                break;\n            case \"H==7DT_M5125HT:m@`7cgg>WbZ4HAFg`Am:Ba:fF\":\n                value = \"H==7DT_M5125HT:m@`7cgg>WbZ4HAFg`Am:Ba:fF\";\n                break;\n            case \"iEj07Ik=?G35AfEf?8@5[@4OGYeXIHYH]CZlHY7:\":\n                value = \"iEj07Ik=?G35AfEf?8@5[@4OGYeXIHYH]CZlHY7:\";\n                break;\n            case \">AcFS3V9Y@g<55K`=QnYTS=B^CS@kg6:Hc_UaRTj\":\n                value = \">AcFS3V9Y@g<55K`=QnYTS=B^CS@kg6:Hc_UaRTj\";\n                break;\n            case \"d1QZgJ_jT]UeL^UF2XWS@I?Hdi1MTm9Z3mdV7]0:\":\n                value = \"d1QZgJ_jT]UeL^UF2XWS@I?Hdi1MTm9Z3mdV7]0:\";\n                break;\n            case \"fVObMkcK:_AQae0VY4N]bDXXI_KkoeNZ9ohT?gfU\":\n                value = \"fVObMkcK:_AQae0VY4N]bDXXI_KkoeNZ9ohT?gfU\";\n                break;\n            case \"9o4i04]a4g2PRLBl@`]OaoY]1<h3on[5=I3U[9RR\":\n                value = \"9o4i04]a4g2PRLBl@`]OaoY]1<h3on[5=I3U[9RR\";\n                break;\n            case \"A1>CNg1bZTYE64G<Adn;aE957eWjEcaXZUf<TlGj\":\n                value = \"A1>CNg1bZTYE64G<Adn;aE957eWjEcaXZUf<TlGj\";\n                break;\n            case \"SK`1T7]RZZR]lkZ`nFcm]k0RJlcF>eN5=jEi=A^k\":\n                value = \"SK`1T7]RZZR]lkZ`nFcm]k0RJlcF>eN5=jEi=A^k\";\n                break;\n            case \"0@U=MkSf3niYF;8aC0U]IX=X[Y]Kjmj<4CR5:4R4\":\n                value = \"0@U=MkSf3niYF;8aC0U]IX=X[Y]Kjmj<4CR5:4R4\";\n                break;\n            case \"4g1JY?VRdh5RYS[Z;ElS=5I`7?>OKlD3mF1;]M<O\":\n                value = \"4g1JY?VRdh5RYS[Z;ElS=5I`7?>OKlD3mF1;]M<O\";\n                break;\n            case \"EH=noQ6]]@Vj5PDW;KFeEE7j>I<Q>4243W`AGHAe\":\n                value = \"EH=noQ6]]@Vj5PDW;KFeEE7j>I<Q>4243W`AGHAe\";\n                break;\n            case \"?k3Amd3aFf3_4S<bJ9;UdR7WYVmbZLh[2ekHKdTM\":\n                value = \"?k3Amd3aFf3_4S<bJ9;UdR7WYVmbZLh[2ekHKdTM\";\n                break;\n            case \"HR9nATB9C[FY7B]9iI6IbodSencFWSVlhL879C:W\":\n                value = \"HR9nATB9C[FY7B]9iI6IbodSencFWSVlhL879C:W\";\n                break;\n            case \"XPTnWmDfL^AIH];Ek6l1AV9J020j<W:V6SU9VA@D\":\n                value = \"XPTnWmDfL^AIH];Ek6l1AV9J020j<W:V6SU9VA@D\";\n                break;\n            case \"MXO]7S@eM`o>LUXfLTk^m3eP2NbAj8N^[]J7PCh9\":\n                value = \"MXO]7S@eM`o>LUXfLTk^m3eP2NbAj8N^[]J7PCh9\";\n                break;\n            case \"L=FTZJ_V59eFjg_REMagg4n0Sng1]3mOgEAQ]EL4\":\n                value = \"L=FTZJ_V59eFjg_REMagg4n0Sng1]3mOgEAQ]EL4\";\n                break;\n        }\nreturn (value == test);",
+    "returnType": "bool",
+    "parameters": [
+      {
+        "name": "input_test",
+        "type": "string"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R264",
+    "file": "SwitchTests.cs",
+    "test": "CS0162_UnreachableCodeInSwitchCase_03",
+    "method": "M",
+    "line": 7696,
+    "code": "switch (1)\n    {\n      case 1:\n        return 0;\n    }",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R265",
+    "file": "SwitchTests.cs",
+    "test": "Regress947580",
+    "method": "boo",
+    "line": 8450,
+    "code": "switch (i) {\n            case 42:\n                var x = \"goo\";\n                if (x != \"bar\")\n                break;\n            return x;\n        }\nreturn null;",
+    "returnType": "string",
+    "parameters": [
+      {
+        "name": "i",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  },
+  {
+    "id": "R266",
+    "file": "SwitchTests.cs",
+    "test": "Regress947580a",
+    "method": "boo",
+    "line": 8498,
+    "code": "switch (i) {\n            case 42:\n                var x = \"goo\";\n                if (x != \"bar\")\n                break;\n             break;\n        }\nreturn null;",
+    "returnType": "string",
+    "parameters": [
+      {
+        "name": "i",
+        "type": "int"
+      }
+    ],
+    "adaptation": "保留函数核心；显式局部类型改为 var 加同类型转换；局部自增减改为 +=/-=1；可写形参复制到局部；移除 Console 输出、不可达尾句与 IL 断言"
+  }
+]

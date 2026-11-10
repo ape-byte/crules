@@ -1,0 +1,79 @@
+{
+  "repository": "https://github.com/dotnet/roslyn",
+  "commit": "636a46f73c2006fad15339a5ba8c9ac5cd1c10c8",
+  "hashFormat": "SHA-256 of UTF-8 without BOM, LF",
+  "files": [
+    {
+      "localName": "CodeGenImplicitlyTypeArraysTests.cs",
+      "path": "src/Compilers/CSharp/Test/Emit/CodeGen/CodeGenImplicitlyTypeArraysTests.cs",
+      "sha256": "76d86b28eb4b515233fac6418c5b66ef4f0a01459913fe15a0086f0be0ea9950",
+      "url": "https://github.com/dotnet/roslyn/blob/636a46f73c2006fad15339a5ba8c9ac5cd1c10c8/src/Compilers/CSharp/Test/Emit/CodeGen/CodeGenImplicitlyTypeArraysTests.cs"
+    },
+    {
+      "localName": "CodeGenOperators.cs",
+      "path": "src/Compilers/CSharp/Test/Emit/CodeGen/CodeGenOperators.cs",
+      "sha256": "aa20ed4add961c91ed7242290c6dc1ae87259e87069de0376501c0d8a158f4a3",
+      "url": "https://github.com/dotnet/roslyn/blob/636a46f73c2006fad15339a5ba8c9ac5cd1c10c8/src/Compilers/CSharp/Test/Emit/CodeGen/CodeGenOperators.cs"
+    },
+    {
+      "localName": "CodeGenTests.cs",
+      "path": "src/Compilers/CSharp/Test/Emit/CodeGen/CodeGenTests.cs",
+      "sha256": "1ba97d551e99ba3e7fd5f43968a615c783994cb8360eed8b1990b3e845c8c882",
+      "url": "https://github.com/dotnet/roslyn/blob/636a46f73c2006fad15339a5ba8c9ac5cd1c10c8/src/Compilers/CSharp/Test/Emit/CodeGen/CodeGenTests.cs"
+    },
+    {
+      "localName": "FlowDiagnosticTests.cs",
+      "path": "src/Compilers/CSharp/Test/Emit3/FlowAnalysis/FlowDiagnosticTests.cs",
+      "sha256": "a3c9ca05c43d95d052bcc249aecfdae82cb9c8b93fbebd6fc85b58875f6b83e7",
+      "url": "https://github.com/dotnet/roslyn/blob/636a46f73c2006fad15339a5ba8c9ac5cd1c10c8/src/Compilers/CSharp/Test/Emit3/FlowAnalysis/FlowDiagnosticTests.cs"
+    },
+    {
+      "localName": "FlowTests.cs",
+      "path": "src/Compilers/CSharp/Test/Emit3/FlowAnalysis/FlowTests.cs",
+      "sha256": "00fbb4fe38af12bbec810123e284ec4763470bd773db46f9ce5b73e59b125706",
+      "url": "https://github.com/dotnet/roslyn/blob/636a46f73c2006fad15339a5ba8c9ac5cd1c10c8/src/Compilers/CSharp/Test/Emit3/FlowAnalysis/FlowTests.cs"
+    },
+    {
+      "localName": "ImplicitObjectCreationTests.cs",
+      "path": "src/Compilers/CSharp/Test/Semantic/Semantics/ImplicitObjectCreationTests.cs",
+      "sha256": "66e99c603764cab8fb840c9e0be95b9ba41253e26696cba8c785843502695dce",
+      "url": "https://github.com/dotnet/roslyn/blob/636a46f73c2006fad15339a5ba8c9ac5cd1c10c8/src/Compilers/CSharp/Test/Semantic/Semantics/ImplicitObjectCreationTests.cs"
+    },
+    {
+      "localName": "ObjectAndCollectionInitializerTests.cs",
+      "path": "src/Compilers/CSharp/Test/Emit/CodeGen/ObjectAndCollectionInitializerTests.cs",
+      "sha256": "3ffedb17724bc77eb5b2d59f3c29bac99183be304eab96c71ef20ce67060b211",
+      "url": "https://github.com/dotnet/roslyn/blob/636a46f73c2006fad15339a5ba8c9ac5cd1c10c8/src/Compilers/CSharp/Test/Emit/CodeGen/ObjectAndCollectionInitializerTests.cs"
+    },
+    {
+      "localName": "PatternMatchingTests2.cs",
+      "path": "src/Compilers/CSharp/Test/Emit3/Semantics/PatternMatchingTests2.cs",
+      "sha256": "e92193baf8a5cafbb3fa4a5cb54c02ee69cc4f5893929175bbd3c031c00156d2",
+      "url": "https://github.com/dotnet/roslyn/blob/636a46f73c2006fad15339a5ba8c9ac5cd1c10c8/src/Compilers/CSharp/Test/Emit3/Semantics/PatternMatchingTests2.cs"
+    },
+    {
+      "localName": "PatternMatchingTests3.cs",
+      "path": "src/Compilers/CSharp/Test/Emit3/Semantics/PatternMatchingTests3.cs",
+      "sha256": "bbe20379bd8dfe0d1d99700e6d949f1bec4177acc242ce2534a8089280723dbe",
+      "url": "https://github.com/dotnet/roslyn/blob/636a46f73c2006fad15339a5ba8c9ac5cd1c10c8/src/Compilers/CSharp/Test/Emit3/Semantics/PatternMatchingTests3.cs"
+    },
+    {
+      "localName": "SemanticSwitchTests.cs",
+      "path": "src/Compilers/CSharp/Test/Semantic/Semantics/SwitchTests.cs",
+      "sha256": "ca5083b5311b079aa37db61613f4350e9978c1c968de1827a149ad225c3cbdf4",
+      "url": "https://github.com/dotnet/roslyn/blob/636a46f73c2006fad15339a5ba8c9ac5cd1c10c8/src/Compilers/CSharp/Test/Semantic/Semantics/SwitchTests.cs"
+    },
+    {
+      "localName": "SwitchTests.cs",
+      "path": "src/Compilers/CSharp/Test/Emit/CodeGen/SwitchTests.cs",
+      "sha256": "30effc95f1dc44c94502482a4b48dc982d6826671fd2a2921c612d90b6d852a0",
+      "url": "https://github.com/dotnet/roslyn/blob/636a46f73c2006fad15339a5ba8c9ac5cd1c10c8/src/Compilers/CSharp/Test/Emit/CodeGen/SwitchTests.cs"
+    },
+    {
+      "localName": "TargetTypedSwitchExpressionTests.cs",
+      "path": "src/Compilers/CSharp/Test/Semantic/Semantics/TargetTypedSwitchExpressionTests.cs",
+      "sha256": "174c41adaa85c847551befcf352929c867aea6745f2513f7bbe5db86e34d0e9a",
+      "url": "https://github.com/dotnet/roslyn/blob/636a46f73c2006fad15339a5ba8c9ac5cd1c10c8/src/Compilers/CSharp/Test/Semantic/Semantics/TargetTypedSwitchExpressionTests.cs"
+    }
+  ]
+}

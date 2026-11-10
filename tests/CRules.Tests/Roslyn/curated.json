@@ -1,0 +1,216 @@
+[
+  {
+    "id": "C0",
+    "file": "PatternMatchingTests2.cs",
+    "test": "SwitchExpression_01",
+    "method": "curated",
+    "line": 1,
+    "code": "var r = 1 switch { _ => 0, }; return r;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "提取或等价改写支持范围内的表达式/语句；完整代码由 Roslyn 与 CRules 同时执行"
+  },
+  {
+    "id": "C1",
+    "file": "CodeGenOperators.cs",
+    "test": "TestCompoundAssignmentOperators",
+    "method": "curated",
+    "line": 1,
+    "code": "var b=(short)(100);b-=70;b*=2;return b;",
+    "returnType": "short",
+    "parameters": [],
+    "adaptation": "原短整型局部复合赋值及 byte/sbyte/ushort/char/nullable 溢出边界变体；显式局部声明改为 var 加同类型转换"
+  },
+  {
+    "id": "C2",
+    "file": "CodeGenOperators.cs",
+    "test": "TestCompoundAssignmentOperators",
+    "method": "curated",
+    "line": 1,
+    "code": "var b=(byte)(250);b+=10;return b;",
+    "returnType": "byte",
+    "parameters": [],
+    "adaptation": "原短整型局部复合赋值及 byte/sbyte/ushort/char/nullable 溢出边界变体；显式局部声明改为 var 加同类型转换"
+  },
+  {
+    "id": "C3",
+    "file": "CodeGenOperators.cs",
+    "test": "TestCompoundAssignmentOperators",
+    "method": "curated",
+    "line": 1,
+    "code": "var b=(sbyte)(-120);b-=20;return b;",
+    "returnType": "sbyte",
+    "parameters": [],
+    "adaptation": "原短整型局部复合赋值及 byte/sbyte/ushort/char/nullable 溢出边界变体；显式局部声明改为 var 加同类型转换"
+  },
+  {
+    "id": "C4",
+    "file": "CodeGenOperators.cs",
+    "test": "TestCompoundAssignmentOperators",
+    "method": "curated",
+    "line": 1,
+    "code": "var b=(ushort)(65000);b*=2;return b;",
+    "returnType": "ushort",
+    "parameters": [],
+    "adaptation": "原短整型局部复合赋值及 byte/sbyte/ushort/char/nullable 溢出边界变体；显式局部声明改为 var 加同类型转换"
+  },
+  {
+    "id": "C5",
+    "file": "CodeGenOperators.cs",
+    "test": "TestCompoundAssignmentOperators",
+    "method": "curated",
+    "line": 1,
+    "code": "var b=(char)(65);b+=(char)1;return b;",
+    "returnType": "char",
+    "parameters": [],
+    "adaptation": "原短整型局部复合赋值及 byte/sbyte/ushort/char/nullable 溢出边界变体；显式局部声明改为 var 加同类型转换"
+  },
+  {
+    "id": "C6",
+    "file": "CodeGenOperators.cs",
+    "test": "TestCompoundAssignmentOperators",
+    "method": "curated",
+    "line": 1,
+    "code": "var b=(byte?)(250);b+=10;return b;",
+    "returnType": "byte?",
+    "parameters": [],
+    "adaptation": "原短整型局部复合赋值及 byte/sbyte/ushort/char/nullable 溢出边界变体；显式局部声明改为 var 加同类型转换"
+  },
+  {
+    "id": "C7",
+    "file": "CodeGenOperators.cs",
+    "test": "TestCompoundAssignmentOperators",
+    "method": "curated",
+    "line": 1,
+    "code": "var s=string.Empty;s+=789.ToString();s+=987.ToString();return s;",
+    "returnType": "string",
+    "parameters": [],
+    "adaptation": "提取或等价改写支持范围内的表达式/语句；完整代码由 Roslyn 与 CRules 同时执行"
+  },
+  {
+    "id": "C8",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "ObjectInitializerTest_ClassType",
+    "method": "curated",
+    "line": 1,
+    "code": "var i=new MemberInitializerTest(){x=1,y=2};return i;",
+    "returnType": "MemberInitializerTest",
+    "parameters": [],
+    "adaptation": "提取或等价改写支持范围内的表达式/语句；完整代码由 Roslyn 与 CRules 同时执行"
+  },
+  {
+    "id": "C9",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "ObjectInitializerTest_StructType",
+    "method": "curated",
+    "line": 1,
+    "code": "var i=new MemberInitializerValue(){x=1,y=2};return i;",
+    "returnType": "MemberInitializerValue",
+    "parameters": [],
+    "adaptation": "提取或等价改写支持范围内的表达式/语句；完整代码由 Roslyn 与 CRules 同时执行"
+  },
+  {
+    "id": "C10",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "ObjectInitializerTest_AssignFieldWithSameNameAsLocal",
+    "method": "curated",
+    "line": 1,
+    "code": "var x=1;var i=new MemberInitializerTest(){x=x,y=2};return i;",
+    "returnType": "MemberInitializerTest",
+    "parameters": [],
+    "adaptation": "提取或等价改写支持范围内的表达式/语句；完整代码由 Roslyn 与 CRules 同时执行"
+  },
+  {
+    "id": "C11",
+    "file": "ImplicitObjectCreationTests.cs",
+    "test": "Return",
+    "method": "curated",
+    "line": 1,
+    "code": "return new();",
+    "returnType": "MemberInitializerTest",
+    "parameters": [],
+    "adaptation": "原类 C 用公开测试夹具替代，保留直接 return new()"
+  },
+  {
+    "id": "C12",
+    "file": "ImplicitObjectCreationTests.cs",
+    "test": "TestObjectAndCollectionInitializer",
+    "method": "curated",
+    "line": 1,
+    "code": "return new() { x=1,y=2 };",
+    "returnType": "MemberInitializerTest",
+    "parameters": [],
+    "adaptation": "提取目标类型对象初始化；嵌套 new、字典及循环不在本轮范围"
+  },
+  {
+    "id": "C13",
+    "file": "FlowDiagnosticTests.cs",
+    "test": "IfFalse",
+    "method": "curated",
+    "line": 1,
+    "code": "if(false) {} return 1;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "原 if(false) 空块保留，补充执行器必需的返回值"
+  },
+  {
+    "id": "C14",
+    "file": "FlowTests.cs",
+    "test": "IfStatement",
+    "method": "curated",
+    "line": 1,
+    "code": "if(flag) return 1; else return 2;",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "flag",
+        "type": "bool"
+      }
+    ],
+    "adaptation": "将原 if/else 控制流改为有返回值的可执行片段"
+  },
+  {
+    "id": "C15",
+    "file": "FlowTests.cs",
+    "test": "IfConditionalConstant",
+    "method": "curated",
+    "line": 1,
+    "code": "if(true || false) return 1;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "原布尔常量条件变体，检查唯一可达结束路径"
+  },
+  {
+    "id": "C16",
+    "file": "SemanticSwitchTests.cs",
+    "test": "TraditionalSwitchIsIncomplete_01",
+    "method": "curated",
+    "line": 2693,
+    "code": "switch(ctx){case true:return 1;case false:return 0;case null:return -1;}",
+    "returnType": "int",
+    "parameters": [
+      {
+        "name": "ctx",
+        "type": "bool?"
+      }
+    ],
+    "adaptation": "原 nullable bool 闭合值域 switch，选择值改为参数以覆盖 null/true/false"
+  },
+  {
+    "id": "C17",
+    "file": "ObjectAndCollectionInitializerTests.cs",
+    "test": "NestedIndexerInitializerArray",
+    "method": "curated",
+    "line": 2104,
+    "code": "return new int[length];",
+    "returnType": "int[]",
+    "parameters": [
+      {
+        "name": "length",
+        "type": "int"
+      }
+    ],
+    "inputProfile": "bounded_array_length",
+    "adaptation": "原 new int[2] 的动态长度边界变体，限定输入 -1/0/1/3，比较创建结果或异常"
+  }
+]
