@@ -13,8 +13,7 @@ public static class LifecycleMeasurements
         var watch = Stopwatch.StartNew();
         int result;
         if (mode == "clr")
-            result = new RuleCompiler().Compile<RoutingInput, int>(RoutingBenchmarks.ClrSource)
-                .RequireExecutable().Execute(new(750, true));
+            result = BenchmarkCompiler.Compile<RoutingInput, int>(RoutingBenchmarks.ClrSource)(new(750, true));
         else
         {
             using var engine = new Engine();
@@ -55,7 +54,7 @@ public static class LifecycleMeasurements
         string fullPath = Path.GetFullPath(output); Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
         await File.WriteAllTextAsync(fullPath, JsonSerializer.Serialize(new
         {
-            Date = "2026-11-09",
+            Date = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(8)).ToString("yyyy-MM-dd"),
             Runtime = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription,
             Note = "Tail samples are serial local Stopwatch probes, include timer overhead, and are not production load SLO measurements.",
             Cold = cold,

@@ -22,7 +22,7 @@ public class RoutingBenchmarks : IDisposable
     [GlobalSetup]
     public void Setup()
     {
-        _compiled = new RuleCompiler().Compile<RoutingInput, int>(ClrSource).RequireExecutable().Execute;
+        _compiled = BenchmarkCompiler.Compile<RoutingInput, int>(ClrSource);
         _engine.Execute(Engine.PrepareScript(JsSource + "\nconst input={tokens:750,premium:true};"));
         _function = _engine.GetValue("decide"); _arguments = [_engine.Evaluate("input")];
         if (NativeDirect() != CRulesHot() || NativeDirect() != JintHot()) throw new InvalidOperationException("路由结果不一致。");
@@ -63,7 +63,7 @@ public class AccountingBenchmarks : IDisposable
     [GlobalSetup]
     public void Setup()
     {
-        _compiled = new RuleCompiler(new() { DecimalOnly = true }).Compile<AccountingInput, decimal>(ClrSource).RequireExecutable().Execute;
+        _compiled = BenchmarkCompiler.Compile<AccountingInput, decimal>(ClrSource, decimalOnly: true);
         // decimal 结果以字符串穿过 JS 边界；互操作成本包含在此组中。
         _engine.SetValue("mul", (Func<string, string, string>)((a, b) => S(D(a) * D(b))));
         _engine.SetValue("add", (Func<string, string, string>)((a, b) => S(D(a) + D(b))));
@@ -97,7 +97,7 @@ public class CollectionBenchmarks : IDisposable
     public void Setup()
     {
         _input = new(Enumerable.Range(0, Count).Select(i => (long)i).ToArray(), Count / 2);
-        _compiled = new RuleCompiler(new() { AllowRuntimeLambdaBinding = true }).Compile<CollectionInput, long>("var t = ctx.Threshold; return ctx.Items.Where(x => x > t).Sum();").RequireExecutable().Execute;
+        _compiled = BenchmarkCompiler.Compile<CollectionInput, long>("var t = ctx.Threshold; return ctx.Items.Where(x => x > t).Sum();", lambda: true);
         _engine.Execute(Engine.PrepareScript($"function decide(ctx){{return ctx.items.filter(x=>x>ctx.threshold).reduce((a,b)=>a+b,0);}} const input={{items:[{string.Join(',', _input.Items)}],threshold:{_input.Threshold}}};"));
         _function = _engine.GetValue("decide"); _arguments = [_engine.Evaluate("input")];
         if (NativeLinq() != CRulesHot() || NativeLinq() != JintHot()) throw new InvalidOperationException("集合结果不一致。");

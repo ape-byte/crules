@@ -11,11 +11,37 @@ public sealed record BusinessMeasurement(string Scenario, string Mode, int Round
     double PrepareMs, double ElapsedMs, double CpuMs, long AllocatedBytes, int Gen0, int Gen1, int Gen2,
     long WorkingSetBefore, long WorkingSetAfter, long PeakWorkingSet, long ManagedHeapBefore, long ManagedHeapAfter,
     long ManagedHeapAfterCleanup, long CommittedBefore, long CommittedAfter, ulong ResultChecksum, ulong ContextChecksum,
-    string Runtime, int ProcessId);
+    string Runtime, int ProcessId, int WarmupCount, double WarmupMs);
 
 public static class BusinessWorkloads
 {
     public static readonly JsonSerializerOptions Json = new() { WriteIndented = true };
+
+    public static void RunCompileWorker(string[] args)
+    {
+        var scenario = BusinessRules.Scenarios.Single(s => s.Id == args[1]);
+        int count = int.Parse(args[2]);
+        var compiler = BenchmarkCompiler.Create();
+        string code = BusinessRules.Clr(scenario);
+        for (int i = 0; i < 5; i++) BenchmarkCompiler.Compile<BusinessContext, long>(compiler, code);
+        GC.Collect(); GC.WaitForPendingFinalizers(); GC.Collect();
+        long before = GC.GetTotalAllocatedBytes(true);
+        int g0 = GC.CollectionCount(0), g1 = GC.CollectionCount(1), g2 = GC.CollectionCount(2);
+        var timer = Stopwatch.StartNew();
+        Func<BusinessContext, long>? compiled = null;
+        for (int i = 0; i < count; i++) compiled = BenchmarkCompiler.Compile<BusinessContext, long>(compiler, code);
+        timer.Stop();
+        long allocated = GC.GetTotalAllocatedBytes(true) - before;
+        var context = BusinessContexts.Create(new Random(20261109), 0, scenario.Large);
+        if (compiled!(context) != BusinessRules.Reference(scenario, context)) throw new InvalidOperationException("Compile probe result mismatch.");
+        File.WriteAllText(args[3], JsonSerializer.Serialize(new
+        {
+            Scenario = scenario.Id, Round = int.Parse(args[4]), Count = count,
+            ElapsedMs = timer.Elapsed.TotalMilliseconds, AllocatedBytes = allocated,
+            Gen0 = GC.CollectionCount(0) - g0, Gen1 = GC.CollectionCount(1) - g1, Gen2 = GC.CollectionCount(2) - g2,
+            SourceSha256 = Convert.ToHexString(SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(code)))
+        }, Json));
+    }
 
     public static void RunWorker(string[] args)
     {
@@ -28,12 +54,16 @@ public static class BusinessWorkloads
         var executor = new BusinessExecutor(scenario, mode);
         prepare.Stop();
         var warmRandom = new Random(seed + 1);
-        for (int i = 0; i < 2000; i++)
+        var warmTimer = Stopwatch.StartNew();
+        int warmCount = 0;
+        for (int i = 0; i < 2000 || warmTimer.ElapsedMilliseconds < 750; i++)
         {
             var ctx = BusinessContexts.Create(warmRandom, i, scenario.Large);
             long result = executor.Execute(ctx);
             if (mode != "BuildOnly" && result != BusinessRules.Reference(scenario, ctx)) throw new InvalidOperationException("预热结果不一致。");
+            warmCount++;
         }
+        warmTimer.Stop();
         GC.Collect(); GC.WaitForPendingFinalizers(); GC.Collect();
         using var process = Process.GetCurrentProcess(); process.Refresh();
         long wsBefore = process.WorkingSet64, heapBefore = GC.GetTotalMemory(false);
@@ -67,7 +97,7 @@ public static class BusinessWorkloads
         var measurement = new BusinessMeasurement(scenario.Id, mode, round, count, seed, prepare.Elapsed.TotalMilliseconds,
             watch.Elapsed.TotalMilliseconds, cpu.TotalMilliseconds, allocated, g0, g1, g2,
             wsBefore, wsAfter, peak, heapBefore, heapAfter, heapCleanup, committedBefore, committedAfter,
-            resultHash, contextHash, RuntimeInformation.FrameworkDescription, Environment.ProcessId);
+            resultHash, contextHash, RuntimeInformation.FrameworkDescription, Environment.ProcessId, warmCount, warmTimer.Elapsed.TotalMilliseconds);
         File.WriteAllText(output, JsonSerializer.Serialize(measurement, Json));
     }
 
@@ -121,7 +151,7 @@ public static class BusinessWorkloads
         List<BusinessMeasurement> results = [];
         File.WriteAllText(Path.Combine(output, "manifest.json"), JsonSerializer.Serialize(new
         {
-            Date = "2026-11-09",
+            Date = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(8)).ToString("yyyy-MM-dd"),
             Count = count,
             Rounds = rounds,
             Seed = seed,
@@ -140,6 +170,7 @@ public static class BusinessWorkloads
             AssemblyHashes = sourceHashes
         }, Json));
 
+        if (rounds == 0) { Console.WriteLine("INPUTS_EXPORTED"); return; }
         // 各轮旋转实现顺序，避免总把某个实现放在热机或低温阶段。
         for (int round = 1; round <= rounds; round++)
             foreach (var scenario in BusinessRules.Scenarios)

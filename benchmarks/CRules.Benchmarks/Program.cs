@@ -1,6 +1,7 @@
 using BenchmarkDotNet.Running;
 using CRules.Benchmarks;
 if (args.Length > 0 && args[0] == "--business-worker") BusinessWorkloads.RunWorker(args);
+else if (args.Length > 0 && args[0] == "--compile-worker") BusinessWorkloads.RunCompileWorker(args);
 else if (args.Length > 0 && args[0] == "--business-suite") await BusinessWorkloads.RunSuiteAsync(args);
 else if (args.Length > 0 && args[0] == "--business-singleton") await BusinessWorkloads.RunSingletonSupplementAsync(args);
 else if (args.Length > 0 && args[0] == "--business-prepare") await BusinessWorkloads.RunPreparationAsync(args);

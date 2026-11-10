@@ -7,7 +7,7 @@ namespace CRules.Benchmarks;
 
 public sealed class BusinessExecutor : IDisposable
 {
-    public static readonly string[] Modes = ["BuildOnly", "NativeReference", "CRules", "JintClr", "JintJson", "JintSingleton", "JintIsolatedJson"];
+    public static readonly string[] Modes = ["BuildOnly", "NativeReference", "NativeEquivalent", "CRules", "JintClr", "JintJson", "JintSingleton", "JintIsolatedJson"];
     private readonly BusinessScenario _scenario;
     private readonly string _mode;
     private readonly Func<BusinessContext, long>? _clr;
@@ -21,7 +21,8 @@ public sealed class BusinessExecutor : IDisposable
         _scenario = scenario; _mode = mode;
         string script = BusinessRules.Javascript(scenario);
         if (mode == "CRules")
-            _clr = new RuleCompiler().Compile<BusinessContext, long>(BusinessRules.Clr(scenario)).RequireExecutable().Execute;
+            _clr = BenchmarkCompiler.Compile<BusinessContext, long>(BusinessRules.Clr(scenario));
+        else if (mode == "NativeEquivalent") _clr = NativeBusinessEquivalent.Get(scenario.Id);
         else if (mode is "JintClr" or "JintJson" or "JintSingleton")
         {
             _engine = new Engine();
@@ -42,7 +43,7 @@ public sealed class BusinessExecutor : IDisposable
     {
         if (_mode == "BuildOnly") return 0;
         if (_mode == "NativeReference") return BusinessRules.Reference(_scenario, context);
-        if (_mode == "CRules") return _clr!(context);
+        if (_mode is "CRules" or "NativeEquivalent") return _clr!(context);
         if (_mode == "JintSingleton")
         {
             _engine!.SetValue("ctx", context);

@@ -1,0 +1,463 @@
+// Generated from the same rule text; regenerate using generate-native-equivalent.py.
+using System.Runtime.CompilerServices;
+namespace CRules.Benchmarks;
+public static class NativeBusinessEquivalent {
+public static Func<BusinessContext,long> Get(string id) => id switch { "S1" => S1,"S2" => S2,"S3" => S3,"S4" => S4,"S5" => S5, _ => throw new ArgumentOutOfRangeException(nameof(id)) };
+[MethodImpl(MethodImplOptions.NoInlining)]
+private static long S1(BusinessContext ctx) {
+var v0 = ctx.Request.InputTokens * ctx.Pricing.InputRate + ctx.Request.OutputTokens * ctx.Pricing.OutputRate;
+if (ctx.Request.Vip) { v0 = v0 * 9; } else { v0 = v0 * 10; }
+return v0 + ctx.Request.CacheTokens * ctx.Pricing.CacheRate + ctx.Metrics[0];
+
+}
+[MethodImpl(MethodImplOptions.NoInlining)]
+private static long S2(BusinessContext ctx) {
+var v0 = ctx.Request.InputTokens * ctx.Pricing.InputRate + ctx.Request.OutputTokens * ctx.Pricing.OutputRate;
+var v1 = v0 + ctx.Metrics[1] * 2 + ctx.Request.InputTokens % 18 + ctx.Pricing.OutputRate;
+var v2 = v1 + ctx.Metrics[2] * 3 + ctx.Request.InputTokens % 19 + ctx.Pricing.OutputRate;
+var v3 = v2 + ctx.Metrics[3] * 4 + ctx.Request.InputTokens % 20 + ctx.Pricing.OutputRate;
+var v4 = v3 + ctx.Metrics[4] * 5 + ctx.Request.InputTokens % 21 + ctx.Pricing.OutputRate;
+var v5 = v4 + ctx.Metrics[5] * 6 + ctx.Request.InputTokens % 22 + ctx.Pricing.OutputRate;
+var v6 = v5 + ctx.Metrics[6] * 7 + ctx.Request.InputTokens % 23 + ctx.Pricing.OutputRate;
+var v7 = v6 + ctx.Metrics[7] * 1 + ctx.Request.InputTokens % 24 + ctx.Pricing.OutputRate;
+var v8 = v7 + ctx.Metrics[0] * 2 + ctx.Request.InputTokens % 25 + ctx.Pricing.OutputRate;
+var v9 = v8 + ctx.Metrics[1] * 3 + ctx.Request.InputTokens % 26 + ctx.Pricing.OutputRate;
+var v10 = v9 + ctx.Metrics[2] * 4 + ctx.Request.InputTokens % 27 + ctx.Pricing.OutputRate;
+var v11 = v10 + ctx.Metrics[3] * 5 + ctx.Request.InputTokens % 28 + ctx.Pricing.OutputRate;
+var v12 = v11 + ctx.Metrics[4] * 6 + ctx.Request.InputTokens % 29 + ctx.Pricing.OutputRate;
+var v13 = v12 + ctx.Metrics[5] * 7 + ctx.Request.InputTokens % 30 + ctx.Pricing.OutputRate;
+var v14 = v13 + ctx.Metrics[6] * 1 + ctx.Request.InputTokens % 31 + ctx.Pricing.OutputRate;
+var v15 = v14 + ctx.Metrics[7] * 2 + ctx.Request.InputTokens % 32 + ctx.Pricing.OutputRate;
+var v16 = v15 + ctx.Metrics[0] * 3 + ctx.Request.InputTokens % 33 + ctx.Pricing.OutputRate;
+var v17 = v16 + ctx.Metrics[1] * 4 + ctx.Request.InputTokens % 34 + ctx.Pricing.OutputRate;
+var v18 = v17 + ctx.Metrics[2] * 5 + ctx.Request.InputTokens % 35 + ctx.Pricing.OutputRate;
+var v19 = v18 + ctx.Metrics[3] * 6 + ctx.Request.InputTokens % 36 + ctx.Pricing.OutputRate;
+var v20 = v19 + ctx.Metrics[4] * 7 + ctx.Request.InputTokens % 37 + ctx.Pricing.OutputRate;
+var v21 = v20 + ctx.Metrics[5] * 1 + ctx.Request.InputTokens % 38 + ctx.Pricing.OutputRate;
+var v22 = v21 + ctx.Metrics[6] * 2 + ctx.Request.InputTokens % 39 + ctx.Pricing.OutputRate;
+var v23 = v22 + ctx.Metrics[7] * 3 + ctx.Request.InputTokens % 40 + ctx.Pricing.OutputRate;
+var v24 = v23 + ctx.Metrics[0] * 4 + ctx.Request.InputTokens % 41 + ctx.Pricing.OutputRate;
+var v25 = v24 + ctx.Metrics[1] * 5 + ctx.Request.InputTokens % 42 + ctx.Pricing.OutputRate;
+var v26 = v25 + ctx.Metrics[2] * 6 + ctx.Request.InputTokens % 43 + ctx.Pricing.OutputRate;
+var v27 = v26 + ctx.Metrics[3] * 7 + ctx.Request.InputTokens % 44 + ctx.Pricing.OutputRate;
+var v28 = v27 + ctx.Metrics[4] * 1 + ctx.Request.InputTokens % 45 + ctx.Pricing.OutputRate;
+var v29 = v28 + ctx.Metrics[5] * 2 + ctx.Request.InputTokens % 46 + ctx.Pricing.OutputRate;
+var v30 = v29 + ctx.Metrics[6] * 3 + ctx.Request.InputTokens % 47 + ctx.Pricing.OutputRate;
+var v31 = v30 + ctx.Metrics[7] * 4 + ctx.Request.InputTokens % 48 + ctx.Pricing.OutputRate;
+var v32 = v31 + ctx.Metrics[0] * 5 + ctx.Request.InputTokens % 49 + ctx.Pricing.OutputRate;
+var v33 = v32 + ctx.Metrics[1] * 6 + ctx.Request.InputTokens % 50 + ctx.Pricing.OutputRate;
+var v34 = v33 + ctx.Metrics[2] * 7 + ctx.Request.InputTokens % 51 + ctx.Pricing.OutputRate;
+var v35 = v34 + ctx.Metrics[3] * 1 + ctx.Request.InputTokens % 52 + ctx.Pricing.OutputRate;
+var v36 = v35 + ctx.Metrics[4] * 2 + ctx.Request.InputTokens % 53 + ctx.Pricing.OutputRate;
+var v37 = v36 + ctx.Metrics[5] * 3 + ctx.Request.InputTokens % 54 + ctx.Pricing.OutputRate;
+var v38 = v37 + ctx.Metrics[6] * 4 + ctx.Request.InputTokens % 55 + ctx.Pricing.OutputRate;
+var v39 = v38 + ctx.Metrics[7] * 5 + ctx.Request.InputTokens % 56 + ctx.Pricing.OutputRate;
+var v40 = v39 + ctx.Metrics[0] * 6 + ctx.Request.InputTokens % 57 + ctx.Pricing.OutputRate;
+var v41 = v40 + ctx.Metrics[1] * 7 + ctx.Request.InputTokens % 58 + ctx.Pricing.OutputRate;
+var v42 = v41 + ctx.Metrics[2] * 1 + ctx.Request.InputTokens % 59 + ctx.Pricing.OutputRate;
+var v43 = v42 + ctx.Metrics[3] * 2 + ctx.Request.InputTokens % 60 + ctx.Pricing.OutputRate;
+var v44 = v43 + ctx.Metrics[4] * 3 + ctx.Request.InputTokens % 61 + ctx.Pricing.OutputRate;
+var v45 = v44 + ctx.Metrics[5] * 4 + ctx.Request.InputTokens % 62 + ctx.Pricing.OutputRate;
+var v46 = v45 + ctx.Metrics[6] * 5 + ctx.Request.InputTokens % 63 + ctx.Pricing.OutputRate;
+var v47 = v46 + ctx.Metrics[7] * 6 + ctx.Request.InputTokens % 64 + ctx.Pricing.OutputRate;
+var v48 = v47 + ctx.Metrics[0] * 7 + ctx.Request.InputTokens % 65 + ctx.Pricing.OutputRate;
+var v49 = v48 + ctx.Metrics[1] * 1 + ctx.Request.InputTokens % 66 + ctx.Pricing.OutputRate;
+var v50 = v49 + ctx.Metrics[2] * 2 + ctx.Request.InputTokens % 67 + ctx.Pricing.OutputRate;
+var v51 = v50 + ctx.Metrics[3] * 3 + ctx.Request.InputTokens % 68 + ctx.Pricing.OutputRate;
+var v52 = v51 + ctx.Metrics[4] * 4 + ctx.Request.InputTokens % 69 + ctx.Pricing.OutputRate;
+var v53 = v52 + ctx.Metrics[5] * 5 + ctx.Request.InputTokens % 70 + ctx.Pricing.OutputRate;
+var v54 = v53 + ctx.Metrics[6] * 6 + ctx.Request.InputTokens % 71 + ctx.Pricing.OutputRate;
+var v55 = v54 + ctx.Metrics[7] * 7 + ctx.Request.InputTokens % 72 + ctx.Pricing.OutputRate;
+var v56 = v55 + ctx.Metrics[0] * 1 + ctx.Request.InputTokens % 73 + ctx.Pricing.OutputRate;
+var v57 = v56 + ctx.Metrics[1] * 2 + ctx.Request.InputTokens % 74 + ctx.Pricing.OutputRate;
+var v58 = v57 + ctx.Metrics[2] * 3 + ctx.Request.InputTokens % 75 + ctx.Pricing.OutputRate;
+var v59 = v58 + ctx.Metrics[3] * 4 + ctx.Request.InputTokens % 76 + ctx.Pricing.OutputRate;
+var v60 = v59 + ctx.Metrics[4] * 5 + ctx.Request.InputTokens % 77 + ctx.Pricing.OutputRate;
+var v61 = v60 + ctx.Metrics[5] * 6 + ctx.Request.InputTokens % 78 + ctx.Pricing.OutputRate;
+var v62 = v61 + ctx.Metrics[6] * 7 + ctx.Request.InputTokens % 79 + ctx.Pricing.OutputRate;
+var v63 = v62 + ctx.Metrics[7] * 1 + ctx.Request.InputTokens % 80 + ctx.Pricing.OutputRate;
+var v64 = v63 + ctx.Metrics[0] * 2 + ctx.Request.InputTokens % 81 + ctx.Pricing.OutputRate;
+var v65 = v64 + ctx.Metrics[1] * 3 + ctx.Request.InputTokens % 82 + ctx.Pricing.OutputRate;
+var v66 = v65 + ctx.Metrics[2] * 4 + ctx.Request.InputTokens % 83 + ctx.Pricing.OutputRate;
+var v67 = v66 + ctx.Metrics[3] * 5 + ctx.Request.InputTokens % 84 + ctx.Pricing.OutputRate;
+var v68 = v67 + ctx.Metrics[4] * 6 + ctx.Request.InputTokens % 85 + ctx.Pricing.OutputRate;
+var v69 = v68 + ctx.Metrics[5] * 7 + ctx.Request.InputTokens % 86 + ctx.Pricing.OutputRate;
+var v70 = v69 + ctx.Metrics[6] * 1 + ctx.Request.InputTokens % 87 + ctx.Pricing.OutputRate;
+var v71 = v70 + ctx.Metrics[7] * 2 + ctx.Request.InputTokens % 88 + ctx.Pricing.OutputRate;
+var v72 = v71 + ctx.Metrics[0] * 3 + ctx.Request.InputTokens % 89 + ctx.Pricing.OutputRate;
+var v73 = v72 + ctx.Metrics[1] * 4 + ctx.Request.InputTokens % 90 + ctx.Pricing.OutputRate;
+var v74 = v73 + ctx.Metrics[2] * 5 + ctx.Request.InputTokens % 91 + ctx.Pricing.OutputRate;
+var v75 = v74 + ctx.Metrics[3] * 6 + ctx.Request.InputTokens % 92 + ctx.Pricing.OutputRate;
+var v76 = v75 + ctx.Metrics[4] * 7 + ctx.Request.InputTokens % 93 + ctx.Pricing.OutputRate;
+var v77 = v76 + ctx.Metrics[5] * 1 + ctx.Request.InputTokens % 94 + ctx.Pricing.OutputRate;
+var v78 = v77 + ctx.Metrics[6] * 2 + ctx.Request.InputTokens % 95 + ctx.Pricing.OutputRate;
+var v79 = v78 + ctx.Metrics[7] * 3 + ctx.Request.InputTokens % 96 + ctx.Pricing.OutputRate;
+var v80 = v79 + ctx.Metrics[0] * 4 + ctx.Request.InputTokens % 97 + ctx.Pricing.OutputRate;
+var v81 = v80 + ctx.Metrics[1] * 5 + ctx.Request.InputTokens % 98 + ctx.Pricing.OutputRate;
+var v82 = v81 + ctx.Metrics[2] * 6 + ctx.Request.InputTokens % 99 + ctx.Pricing.OutputRate;
+var v83 = v82 + ctx.Metrics[3] * 7 + ctx.Request.InputTokens % 100 + ctx.Pricing.OutputRate;
+var v84 = v83 + ctx.Metrics[4] * 1 + ctx.Request.InputTokens % 101 + ctx.Pricing.OutputRate;
+var v85 = v84 + ctx.Metrics[5] * 2 + ctx.Request.InputTokens % 102 + ctx.Pricing.OutputRate;
+var v86 = v85 + ctx.Metrics[6] * 3 + ctx.Request.InputTokens % 103 + ctx.Pricing.OutputRate;
+var v87 = v86 + ctx.Metrics[7] * 4 + ctx.Request.InputTokens % 104 + ctx.Pricing.OutputRate;
+var v88 = v87 + ctx.Metrics[0] * 5 + ctx.Request.InputTokens % 105 + ctx.Pricing.OutputRate;
+var v89 = v88 + ctx.Metrics[1] * 6 + ctx.Request.InputTokens % 106 + ctx.Pricing.OutputRate;
+var v90 = v89 + ctx.Metrics[2] * 7 + ctx.Request.InputTokens % 107 + ctx.Pricing.OutputRate;
+var v91 = v90 + ctx.Metrics[3] * 1 + ctx.Request.InputTokens % 108 + ctx.Pricing.OutputRate;
+var v92 = v91 + ctx.Metrics[4] * 2 + ctx.Request.InputTokens % 109 + ctx.Pricing.OutputRate;
+var v93 = v92 + ctx.Metrics[5] * 3 + ctx.Request.InputTokens % 110 + ctx.Pricing.OutputRate;
+var v94 = v93 + ctx.Metrics[6] * 4 + ctx.Request.InputTokens % 111 + ctx.Pricing.OutputRate;
+var v95 = v94 + ctx.Metrics[7] * 5 + ctx.Request.InputTokens % 112 + ctx.Pricing.OutputRate;
+var v96 = v95 + ctx.Metrics[0] * 6 + ctx.Request.InputTokens % 113 + ctx.Pricing.OutputRate;
+var v97 = v96 + ctx.Metrics[1] * 7 + ctx.Request.InputTokens % 114 + ctx.Pricing.OutputRate;
+var v98 = v97 + ctx.Metrics[2] * 1 + ctx.Request.InputTokens % 115 + ctx.Pricing.OutputRate;
+var v99 = v98 + ctx.Metrics[3] * 2 + ctx.Request.InputTokens % 116 + ctx.Pricing.OutputRate;
+return v99;
+
+}
+[MethodImpl(MethodImplOptions.NoInlining)]
+private static long S3(BusinessContext ctx) {
+var v0 = ctx.Request.InputTokens * ctx.Pricing.InputRate + ctx.Request.OutputTokens * ctx.Pricing.OutputRate;
+var v1 = v0 + ctx.Metrics[1] * 2 + ctx.Request.InputTokens % 18 + ctx.Pricing.OutputRate;
+var v2 = v1 + ctx.Metrics[2] * 3 + ctx.Request.InputTokens % 19 + ctx.Pricing.OutputRate;
+var v3 = v2 + ctx.Metrics[3] * 4 + ctx.Request.InputTokens % 20 + ctx.Pricing.OutputRate;
+var v4 = v3 + ctx.Metrics[4] * 5 + ctx.Request.InputTokens % 21 + ctx.Pricing.OutputRate;
+var v5 = v4 + ctx.Metrics[5] * 6 + ctx.Request.InputTokens % 22 + ctx.Pricing.OutputRate;
+var v6 = v5 + ctx.Metrics[6] * 7 + ctx.Request.InputTokens % 23 + ctx.Pricing.OutputRate;
+var v7 = v6 + ctx.Metrics[7] * 1 + ctx.Request.InputTokens % 24 + ctx.Pricing.OutputRate;
+var v8 = v7 + ctx.Metrics[0] * 2 + ctx.Request.InputTokens % 25 + ctx.Pricing.OutputRate;
+var v9 = v8 + ctx.Metrics[1] * 3 + ctx.Request.InputTokens % 26 + ctx.Pricing.OutputRate;
+var v10 = v9 + ctx.Metrics[2] * 4 + ctx.Request.InputTokens % 27 + ctx.Pricing.OutputRate;
+var v11 = v10 + ctx.Metrics[3] * 5 + ctx.Request.InputTokens % 28 + ctx.Pricing.OutputRate;
+var v12 = v11 + ctx.Metrics[4] * 6 + ctx.Request.InputTokens % 29 + ctx.Pricing.OutputRate;
+var v13 = v12 + ctx.Metrics[5] * 7 + ctx.Request.InputTokens % 30 + ctx.Pricing.OutputRate;
+var v14 = v13 + ctx.Metrics[6] * 1 + ctx.Request.InputTokens % 31 + ctx.Pricing.OutputRate;
+var v15 = v14 + ctx.Metrics[7] * 2 + ctx.Request.InputTokens % 32 + ctx.Pricing.OutputRate;
+var v16 = v15 + ctx.Metrics[0] * 3 + ctx.Request.InputTokens % 33 + ctx.Pricing.OutputRate;
+var v17 = v16 + ctx.Metrics[1] * 4 + ctx.Request.InputTokens % 34 + ctx.Pricing.OutputRate;
+var v18 = v17 + ctx.Metrics[2] * 5 + ctx.Request.InputTokens % 35 + ctx.Pricing.OutputRate;
+var v19 = v18 + ctx.Metrics[3] * 6 + ctx.Request.InputTokens % 36 + ctx.Pricing.OutputRate;
+var v20 = v19 + ctx.Metrics[4] * 7 + ctx.Request.InputTokens % 37 + ctx.Pricing.OutputRate;
+var v21 = v20 + ctx.Metrics[5] * 1 + ctx.Request.InputTokens % 38 + ctx.Pricing.OutputRate;
+var v22 = v21 + ctx.Metrics[6] * 2 + ctx.Request.InputTokens % 39 + ctx.Pricing.OutputRate;
+var v23 = v22 + ctx.Metrics[7] * 3 + ctx.Request.InputTokens % 40 + ctx.Pricing.OutputRate;
+var v24 = v23 + ctx.Metrics[0] * 4 + ctx.Request.InputTokens % 41 + ctx.Pricing.OutputRate;
+var v25 = v24 + ctx.Metrics[1] * 5 + ctx.Request.InputTokens % 42 + ctx.Pricing.OutputRate;
+var v26 = v25 + ctx.Metrics[2] * 6 + ctx.Request.InputTokens % 43 + ctx.Pricing.OutputRate;
+var v27 = v26 + ctx.Metrics[3] * 7 + ctx.Request.InputTokens % 44 + ctx.Pricing.OutputRate;
+var v28 = v27 + ctx.Metrics[4] * 1 + ctx.Request.InputTokens % 45 + ctx.Pricing.OutputRate;
+var v29 = v28 + ctx.Metrics[5] * 2 + ctx.Request.InputTokens % 46 + ctx.Pricing.OutputRate;
+var v30 = v29 + ctx.Metrics[6] * 3 + ctx.Request.InputTokens % 47 + ctx.Pricing.OutputRate;
+var v31 = v30 + ctx.Metrics[7] * 4 + ctx.Request.InputTokens % 48 + ctx.Pricing.OutputRate;
+var v32 = v31 + ctx.Metrics[0] * 5 + ctx.Request.InputTokens % 49 + ctx.Pricing.OutputRate;
+var v33 = v32 + ctx.Metrics[1] * 6 + ctx.Request.InputTokens % 50 + ctx.Pricing.OutputRate;
+var v34 = v33 + ctx.Metrics[2] * 7 + ctx.Request.InputTokens % 51 + ctx.Pricing.OutputRate;
+var v35 = v34 + ctx.Metrics[3] * 1 + ctx.Request.InputTokens % 52 + ctx.Pricing.OutputRate;
+var v36 = v35 + ctx.Metrics[4] * 2 + ctx.Request.InputTokens % 53 + ctx.Pricing.OutputRate;
+var v37 = v36 + ctx.Metrics[5] * 3 + ctx.Request.InputTokens % 54 + ctx.Pricing.OutputRate;
+var v38 = v37 + ctx.Metrics[6] * 4 + ctx.Request.InputTokens % 55 + ctx.Pricing.OutputRate;
+var v39 = v38 + ctx.Metrics[7] * 5 + ctx.Request.InputTokens % 56 + ctx.Pricing.OutputRate;
+var v40 = v39 + ctx.Metrics[0] * 6 + ctx.Request.InputTokens % 57 + ctx.Pricing.OutputRate;
+var v41 = v40 + ctx.Metrics[1] * 7 + ctx.Request.InputTokens % 58 + ctx.Pricing.OutputRate;
+var v42 = v41 + ctx.Metrics[2] * 1 + ctx.Request.InputTokens % 59 + ctx.Pricing.OutputRate;
+var v43 = v42 + ctx.Metrics[3] * 2 + ctx.Request.InputTokens % 60 + ctx.Pricing.OutputRate;
+var v44 = v43 + ctx.Metrics[4] * 3 + ctx.Request.InputTokens % 61 + ctx.Pricing.OutputRate;
+var v45 = v44 + ctx.Metrics[5] * 4 + ctx.Request.InputTokens % 62 + ctx.Pricing.OutputRate;
+var v46 = v45 + ctx.Metrics[6] * 5 + ctx.Request.InputTokens % 63 + ctx.Pricing.OutputRate;
+var v47 = v46 + ctx.Metrics[7] * 6 + ctx.Request.InputTokens % 64 + ctx.Pricing.OutputRate;
+var v48 = v47 + ctx.Metrics[0] * 7 + ctx.Request.InputTokens % 65 + ctx.Pricing.OutputRate;
+var v49 = v48 + ctx.Metrics[1] * 1 + ctx.Request.InputTokens % 66 + ctx.Pricing.OutputRate;
+var v50 = v49 + ctx.Metrics[2] * 2 + ctx.Request.InputTokens % 67 + ctx.Pricing.OutputRate;
+var v51 = v50 + ctx.Metrics[3] * 3 + ctx.Request.InputTokens % 68 + ctx.Pricing.OutputRate;
+var v52 = v51 + ctx.Metrics[4] * 4 + ctx.Request.InputTokens % 69 + ctx.Pricing.OutputRate;
+var v53 = v52 + ctx.Metrics[5] * 5 + ctx.Request.InputTokens % 70 + ctx.Pricing.OutputRate;
+var v54 = v53 + ctx.Metrics[6] * 6 + ctx.Request.InputTokens % 71 + ctx.Pricing.OutputRate;
+var v55 = v54 + ctx.Metrics[7] * 7 + ctx.Request.InputTokens % 72 + ctx.Pricing.OutputRate;
+var v56 = v55 + ctx.Metrics[0] * 1 + ctx.Request.InputTokens % 73 + ctx.Pricing.OutputRate;
+var v57 = v56 + ctx.Metrics[1] * 2 + ctx.Request.InputTokens % 74 + ctx.Pricing.OutputRate;
+var v58 = v57 + ctx.Metrics[2] * 3 + ctx.Request.InputTokens % 75 + ctx.Pricing.OutputRate;
+var v59 = v58 + ctx.Metrics[3] * 4 + ctx.Request.InputTokens % 76 + ctx.Pricing.OutputRate;
+var v60 = v59 + ctx.Metrics[4] * 5 + ctx.Request.InputTokens % 77 + ctx.Pricing.OutputRate;
+var v61 = v60 + ctx.Metrics[5] * 6 + ctx.Request.InputTokens % 78 + ctx.Pricing.OutputRate;
+var v62 = v61 + ctx.Metrics[6] * 7 + ctx.Request.InputTokens % 79 + ctx.Pricing.OutputRate;
+var v63 = v62 + ctx.Metrics[7] * 1 + ctx.Request.InputTokens % 80 + ctx.Pricing.OutputRate;
+var v64 = v63 + ctx.Metrics[0] * 2 + ctx.Request.InputTokens % 81 + ctx.Pricing.OutputRate;
+var v65 = v64 + ctx.Metrics[1] * 3 + ctx.Request.InputTokens % 82 + ctx.Pricing.OutputRate;
+var v66 = v65 + ctx.Metrics[2] * 4 + ctx.Request.InputTokens % 83 + ctx.Pricing.OutputRate;
+var v67 = v66 + ctx.Metrics[3] * 5 + ctx.Request.InputTokens % 84 + ctx.Pricing.OutputRate;
+var v68 = v67 + ctx.Metrics[4] * 6 + ctx.Request.InputTokens % 85 + ctx.Pricing.OutputRate;
+var v69 = v68 + ctx.Metrics[5] * 7 + ctx.Request.InputTokens % 86 + ctx.Pricing.OutputRate;
+var v70 = v69 + ctx.Metrics[6] * 1 + ctx.Request.InputTokens % 87 + ctx.Pricing.OutputRate;
+var v71 = v70 + ctx.Metrics[7] * 2 + ctx.Request.InputTokens % 88 + ctx.Pricing.OutputRate;
+var v72 = v71 + ctx.Metrics[0] * 3 + ctx.Request.InputTokens % 89 + ctx.Pricing.OutputRate;
+var v73 = v72 + ctx.Metrics[1] * 4 + ctx.Request.InputTokens % 90 + ctx.Pricing.OutputRate;
+var v74 = v73 + ctx.Metrics[2] * 5 + ctx.Request.InputTokens % 91 + ctx.Pricing.OutputRate;
+var v75 = v74 + ctx.Metrics[3] * 6 + ctx.Request.InputTokens % 92 + ctx.Pricing.OutputRate;
+var v76 = v75 + ctx.Metrics[4] * 7 + ctx.Request.InputTokens % 93 + ctx.Pricing.OutputRate;
+var v77 = v76 + ctx.Metrics[5] * 1 + ctx.Request.InputTokens % 94 + ctx.Pricing.OutputRate;
+var v78 = v77 + ctx.Metrics[6] * 2 + ctx.Request.InputTokens % 95 + ctx.Pricing.OutputRate;
+var v79 = v78 + ctx.Metrics[7] * 3 + ctx.Request.InputTokens % 96 + ctx.Pricing.OutputRate;
+var v80 = v79 + ctx.Metrics[0] * 4 + ctx.Request.InputTokens % 97 + ctx.Pricing.OutputRate;
+var v81 = v80 + ctx.Metrics[1] * 5 + ctx.Request.InputTokens % 98 + ctx.Pricing.OutputRate;
+var v82 = v81 + ctx.Metrics[2] * 6 + ctx.Request.InputTokens % 99 + ctx.Pricing.OutputRate;
+var v83 = v82 + ctx.Metrics[3] * 7 + ctx.Request.InputTokens % 100 + ctx.Pricing.OutputRate;
+var v84 = v83 + ctx.Metrics[4] * 1 + ctx.Request.InputTokens % 101 + ctx.Pricing.OutputRate;
+var v85 = v84 + ctx.Metrics[5] * 2 + ctx.Request.InputTokens % 102 + ctx.Pricing.OutputRate;
+var v86 = v85 + ctx.Metrics[6] * 3 + ctx.Request.InputTokens % 103 + ctx.Pricing.OutputRate;
+var v87 = v86 + ctx.Metrics[7] * 4 + ctx.Request.InputTokens % 104 + ctx.Pricing.OutputRate;
+var v88 = v87 + ctx.Metrics[0] * 5 + ctx.Request.InputTokens % 105 + ctx.Pricing.OutputRate;
+var v89 = v88 + ctx.Metrics[1] * 6 + ctx.Request.InputTokens % 106 + ctx.Pricing.OutputRate;
+var v90 = v89 + ctx.Metrics[2] * 7 + ctx.Request.InputTokens % 107 + ctx.Pricing.OutputRate;
+var v91 = v90 + ctx.Metrics[3] * 1 + ctx.Request.InputTokens % 108 + ctx.Pricing.OutputRate;
+var v92 = v91 + ctx.Metrics[4] * 2 + ctx.Request.InputTokens % 109 + ctx.Pricing.OutputRate;
+var v93 = v92 + ctx.Metrics[5] * 3 + ctx.Request.InputTokens % 110 + ctx.Pricing.OutputRate;
+var v94 = v93 + ctx.Metrics[6] * 4 + ctx.Request.InputTokens % 111 + ctx.Pricing.OutputRate;
+var v95 = v94 + ctx.Metrics[7] * 5 + ctx.Request.InputTokens % 112 + ctx.Pricing.OutputRate;
+var v96 = v95 + ctx.Metrics[0] * 6 + ctx.Request.InputTokens % 113 + ctx.Pricing.OutputRate;
+var v97 = v96 + ctx.Metrics[1] * 7 + ctx.Request.InputTokens % 114 + ctx.Pricing.OutputRate;
+var v98 = v97 + ctx.Metrics[2] * 1 + ctx.Request.InputTokens % 115 + ctx.Pricing.OutputRate;
+var v99 = v98 + ctx.Metrics[3] * 2 + ctx.Request.InputTokens % 116 + ctx.Pricing.OutputRate;
+if ((ctx.Request.Flags + 0) % 4 == 0) {
+    v99 = v99 + ctx.Pricing.InputRate * 1;
+    if (ctx.Request.Vip) { v99 = v99 + 17; } else { v99 = v99 - 11; }
+} else if ((ctx.Request.Flags + 0) % 4 == 1) {
+    v99 = v99 + ctx.Pricing.OutputRate * 2;
+} else if ((ctx.Request.Flags + 0) % 4 == 2) {
+    v99 = v99 + ctx.Request.CacheTokens % 23;
+} else { v99 = v99 - ctx.Metrics[0]; }
+if ((ctx.Request.Flags + 1) % 4 == 0) {
+    v99 = v99 + ctx.Pricing.InputRate * 2;
+    if (ctx.Request.Vip) { v99 = v99 + 17; } else { v99 = v99 - 11; }
+} else if ((ctx.Request.Flags + 1) % 4 == 1) {
+    v99 = v99 + ctx.Pricing.OutputRate * 3;
+} else if ((ctx.Request.Flags + 1) % 4 == 2) {
+    v99 = v99 + ctx.Request.CacheTokens % 24;
+} else { v99 = v99 - ctx.Metrics[1]; }
+if ((ctx.Request.Flags + 2) % 4 == 0) {
+    v99 = v99 + ctx.Pricing.InputRate * 3;
+    if (ctx.Request.Vip) { v99 = v99 + 17; } else { v99 = v99 - 11; }
+} else if ((ctx.Request.Flags + 2) % 4 == 1) {
+    v99 = v99 + ctx.Pricing.OutputRate * 4;
+} else if ((ctx.Request.Flags + 2) % 4 == 2) {
+    v99 = v99 + ctx.Request.CacheTokens % 25;
+} else { v99 = v99 - ctx.Metrics[2]; }
+if ((ctx.Request.Flags + 3) % 4 == 0) {
+    v99 = v99 + ctx.Pricing.InputRate * 4;
+    if (ctx.Request.Vip) { v99 = v99 + 17; } else { v99 = v99 - 11; }
+} else if ((ctx.Request.Flags + 3) % 4 == 1) {
+    v99 = v99 + ctx.Pricing.OutputRate * 5;
+} else if ((ctx.Request.Flags + 3) % 4 == 2) {
+    v99 = v99 + ctx.Request.CacheTokens % 26;
+} else { v99 = v99 - ctx.Metrics[3]; }
+if ((ctx.Request.Flags + 4) % 4 == 0) {
+    v99 = v99 + ctx.Pricing.InputRate * 5;
+    if (ctx.Request.Vip) { v99 = v99 + 17; } else { v99 = v99 - 11; }
+} else if ((ctx.Request.Flags + 4) % 4 == 1) {
+    v99 = v99 + ctx.Pricing.OutputRate * 6;
+} else if ((ctx.Request.Flags + 4) % 4 == 2) {
+    v99 = v99 + ctx.Request.CacheTokens % 27;
+} else { v99 = v99 - ctx.Metrics[4]; }
+if ((ctx.Request.Flags + 5) % 4 == 0) {
+    v99 = v99 + ctx.Pricing.InputRate * 6;
+    if (ctx.Request.Vip) { v99 = v99 + 17; } else { v99 = v99 - 11; }
+} else if ((ctx.Request.Flags + 5) % 4 == 1) {
+    v99 = v99 + ctx.Pricing.OutputRate * 7;
+} else if ((ctx.Request.Flags + 5) % 4 == 2) {
+    v99 = v99 + ctx.Request.CacheTokens % 28;
+} else { v99 = v99 - ctx.Metrics[5]; }
+if ((ctx.Request.Flags + 6) % 4 == 0) {
+    v99 = v99 + ctx.Pricing.InputRate * 7;
+    if (ctx.Request.Vip) { v99 = v99 + 17; } else { v99 = v99 - 11; }
+} else if ((ctx.Request.Flags + 6) % 4 == 1) {
+    v99 = v99 + ctx.Pricing.OutputRate * 8;
+} else if ((ctx.Request.Flags + 6) % 4 == 2) {
+    v99 = v99 + ctx.Request.CacheTokens % 29;
+} else { v99 = v99 - ctx.Metrics[6]; }
+if ((ctx.Request.Flags + 7) % 4 == 0) {
+    v99 = v99 + ctx.Pricing.InputRate * 8;
+    if (ctx.Request.Vip) { v99 = v99 + 17; } else { v99 = v99 - 11; }
+} else if ((ctx.Request.Flags + 7) % 4 == 1) {
+    v99 = v99 + ctx.Pricing.OutputRate * 9;
+} else if ((ctx.Request.Flags + 7) % 4 == 2) {
+    v99 = v99 + ctx.Request.CacheTokens % 30;
+} else { v99 = v99 - ctx.Metrics[7]; }
+return v99;
+
+}
+[MethodImpl(MethodImplOptions.NoInlining)]
+private static long S4(BusinessContext ctx) {
+var v0 = ctx.Request.InputTokens * ctx.Pricing.InputRate + ctx.Request.OutputTokens * ctx.Pricing.OutputRate;
+if (ctx.Request.Vip) { v0 = v0 * 9; } else { v0 = v0 * 10; }
+return v0 + ctx.Request.CacheTokens * ctx.Pricing.CacheRate + ctx.Metrics[0];
+
+}
+[MethodImpl(MethodImplOptions.NoInlining)]
+private static long S5(BusinessContext ctx) {
+var v0 = ctx.Request.InputTokens * ctx.Pricing.InputRate + ctx.Request.OutputTokens * ctx.Pricing.OutputRate;
+var v1 = v0 + ctx.Metrics[1] * 2 + ctx.Request.InputTokens % 18 + ctx.Items[1].Quantity * ctx.Items[1].UnitPrice;
+var v2 = v1 + ctx.Metrics[2] * 3 + ctx.Request.InputTokens % 19 + ctx.Items[2].Quantity * ctx.Items[2].UnitPrice;
+var v3 = v2 + ctx.Metrics[3] * 4 + ctx.Request.InputTokens % 20 + ctx.Items[3].Quantity * ctx.Items[3].UnitPrice;
+var v4 = v3 + ctx.Metrics[4] * 5 + ctx.Request.InputTokens % 21 + ctx.Items[4].Quantity * ctx.Items[4].UnitPrice;
+var v5 = v4 + ctx.Metrics[5] * 6 + ctx.Request.InputTokens % 22 + ctx.Items[5].Quantity * ctx.Items[5].UnitPrice;
+var v6 = v5 + ctx.Metrics[6] * 7 + ctx.Request.InputTokens % 23 + ctx.Items[6].Quantity * ctx.Items[6].UnitPrice;
+var v7 = v6 + ctx.Metrics[7] * 1 + ctx.Request.InputTokens % 24 + ctx.Items[7].Quantity * ctx.Items[7].UnitPrice;
+var v8 = v7 + ctx.Metrics[8] * 2 + ctx.Request.InputTokens % 25 + ctx.Items[8].Quantity * ctx.Items[8].UnitPrice;
+var v9 = v8 + ctx.Metrics[9] * 3 + ctx.Request.InputTokens % 26 + ctx.Items[9].Quantity * ctx.Items[9].UnitPrice;
+var v10 = v9 + ctx.Metrics[10] * 4 + ctx.Request.InputTokens % 27 + ctx.Items[10].Quantity * ctx.Items[10].UnitPrice;
+var v11 = v10 + ctx.Metrics[11] * 5 + ctx.Request.InputTokens % 28 + ctx.Items[11].Quantity * ctx.Items[11].UnitPrice;
+var v12 = v11 + ctx.Metrics[12] * 6 + ctx.Request.InputTokens % 29 + ctx.Items[12].Quantity * ctx.Items[12].UnitPrice;
+var v13 = v12 + ctx.Metrics[13] * 7 + ctx.Request.InputTokens % 30 + ctx.Items[13].Quantity * ctx.Items[13].UnitPrice;
+var v14 = v13 + ctx.Metrics[14] * 1 + ctx.Request.InputTokens % 31 + ctx.Items[14].Quantity * ctx.Items[14].UnitPrice;
+var v15 = v14 + ctx.Metrics[15] * 2 + ctx.Request.InputTokens % 32 + ctx.Items[15].Quantity * ctx.Items[15].UnitPrice;
+var v16 = v15 + ctx.Metrics[16] * 3 + ctx.Request.InputTokens % 33 + ctx.Items[16].Quantity * ctx.Items[16].UnitPrice;
+var v17 = v16 + ctx.Metrics[17] * 4 + ctx.Request.InputTokens % 34 + ctx.Items[17].Quantity * ctx.Items[17].UnitPrice;
+var v18 = v17 + ctx.Metrics[18] * 5 + ctx.Request.InputTokens % 35 + ctx.Items[18].Quantity * ctx.Items[18].UnitPrice;
+var v19 = v18 + ctx.Metrics[19] * 6 + ctx.Request.InputTokens % 36 + ctx.Items[19].Quantity * ctx.Items[19].UnitPrice;
+var v20 = v19 + ctx.Metrics[20] * 7 + ctx.Request.InputTokens % 37 + ctx.Items[20].Quantity * ctx.Items[20].UnitPrice;
+var v21 = v20 + ctx.Metrics[21] * 1 + ctx.Request.InputTokens % 38 + ctx.Items[21].Quantity * ctx.Items[21].UnitPrice;
+var v22 = v21 + ctx.Metrics[22] * 2 + ctx.Request.InputTokens % 39 + ctx.Items[22].Quantity * ctx.Items[22].UnitPrice;
+var v23 = v22 + ctx.Metrics[23] * 3 + ctx.Request.InputTokens % 40 + ctx.Items[23].Quantity * ctx.Items[23].UnitPrice;
+var v24 = v23 + ctx.Metrics[24] * 4 + ctx.Request.InputTokens % 41 + ctx.Items[24].Quantity * ctx.Items[24].UnitPrice;
+var v25 = v24 + ctx.Metrics[25] * 5 + ctx.Request.InputTokens % 42 + ctx.Items[25].Quantity * ctx.Items[25].UnitPrice;
+var v26 = v25 + ctx.Metrics[26] * 6 + ctx.Request.InputTokens % 43 + ctx.Items[26].Quantity * ctx.Items[26].UnitPrice;
+var v27 = v26 + ctx.Metrics[27] * 7 + ctx.Request.InputTokens % 44 + ctx.Items[27].Quantity * ctx.Items[27].UnitPrice;
+var v28 = v27 + ctx.Metrics[28] * 1 + ctx.Request.InputTokens % 45 + ctx.Items[28].Quantity * ctx.Items[28].UnitPrice;
+var v29 = v28 + ctx.Metrics[29] * 2 + ctx.Request.InputTokens % 46 + ctx.Items[29].Quantity * ctx.Items[29].UnitPrice;
+var v30 = v29 + ctx.Metrics[30] * 3 + ctx.Request.InputTokens % 47 + ctx.Items[30].Quantity * ctx.Items[30].UnitPrice;
+var v31 = v30 + ctx.Metrics[31] * 4 + ctx.Request.InputTokens % 48 + ctx.Items[31].Quantity * ctx.Items[31].UnitPrice;
+var v32 = v31 + ctx.Metrics[32] * 5 + ctx.Request.InputTokens % 49 + ctx.Items[32].Quantity * ctx.Items[32].UnitPrice;
+var v33 = v32 + ctx.Metrics[33] * 6 + ctx.Request.InputTokens % 50 + ctx.Items[33].Quantity * ctx.Items[33].UnitPrice;
+var v34 = v33 + ctx.Metrics[34] * 7 + ctx.Request.InputTokens % 51 + ctx.Items[34].Quantity * ctx.Items[34].UnitPrice;
+var v35 = v34 + ctx.Metrics[35] * 1 + ctx.Request.InputTokens % 52 + ctx.Items[35].Quantity * ctx.Items[35].UnitPrice;
+var v36 = v35 + ctx.Metrics[36] * 2 + ctx.Request.InputTokens % 53 + ctx.Items[36].Quantity * ctx.Items[36].UnitPrice;
+var v37 = v36 + ctx.Metrics[37] * 3 + ctx.Request.InputTokens % 54 + ctx.Items[37].Quantity * ctx.Items[37].UnitPrice;
+var v38 = v37 + ctx.Metrics[38] * 4 + ctx.Request.InputTokens % 55 + ctx.Items[38].Quantity * ctx.Items[38].UnitPrice;
+var v39 = v38 + ctx.Metrics[39] * 5 + ctx.Request.InputTokens % 56 + ctx.Items[39].Quantity * ctx.Items[39].UnitPrice;
+var v40 = v39 + ctx.Metrics[40] * 6 + ctx.Request.InputTokens % 57 + ctx.Items[40].Quantity * ctx.Items[40].UnitPrice;
+var v41 = v40 + ctx.Metrics[41] * 7 + ctx.Request.InputTokens % 58 + ctx.Items[41].Quantity * ctx.Items[41].UnitPrice;
+var v42 = v41 + ctx.Metrics[42] * 1 + ctx.Request.InputTokens % 59 + ctx.Items[42].Quantity * ctx.Items[42].UnitPrice;
+var v43 = v42 + ctx.Metrics[43] * 2 + ctx.Request.InputTokens % 60 + ctx.Items[43].Quantity * ctx.Items[43].UnitPrice;
+var v44 = v43 + ctx.Metrics[44] * 3 + ctx.Request.InputTokens % 61 + ctx.Items[44].Quantity * ctx.Items[44].UnitPrice;
+var v45 = v44 + ctx.Metrics[45] * 4 + ctx.Request.InputTokens % 62 + ctx.Items[45].Quantity * ctx.Items[45].UnitPrice;
+var v46 = v45 + ctx.Metrics[46] * 5 + ctx.Request.InputTokens % 63 + ctx.Items[46].Quantity * ctx.Items[46].UnitPrice;
+var v47 = v46 + ctx.Metrics[47] * 6 + ctx.Request.InputTokens % 64 + ctx.Items[47].Quantity * ctx.Items[47].UnitPrice;
+var v48 = v47 + ctx.Metrics[48] * 7 + ctx.Request.InputTokens % 65 + ctx.Items[48].Quantity * ctx.Items[48].UnitPrice;
+var v49 = v48 + ctx.Metrics[49] * 1 + ctx.Request.InputTokens % 66 + ctx.Items[49].Quantity * ctx.Items[49].UnitPrice;
+var v50 = v49 + ctx.Metrics[50] * 2 + ctx.Request.InputTokens % 67 + ctx.Items[50].Quantity * ctx.Items[50].UnitPrice;
+var v51 = v50 + ctx.Metrics[51] * 3 + ctx.Request.InputTokens % 68 + ctx.Items[51].Quantity * ctx.Items[51].UnitPrice;
+var v52 = v51 + ctx.Metrics[52] * 4 + ctx.Request.InputTokens % 69 + ctx.Items[52].Quantity * ctx.Items[52].UnitPrice;
+var v53 = v52 + ctx.Metrics[53] * 5 + ctx.Request.InputTokens % 70 + ctx.Items[53].Quantity * ctx.Items[53].UnitPrice;
+var v54 = v53 + ctx.Metrics[54] * 6 + ctx.Request.InputTokens % 71 + ctx.Items[54].Quantity * ctx.Items[54].UnitPrice;
+var v55 = v54 + ctx.Metrics[55] * 7 + ctx.Request.InputTokens % 72 + ctx.Items[55].Quantity * ctx.Items[55].UnitPrice;
+var v56 = v55 + ctx.Metrics[56] * 1 + ctx.Request.InputTokens % 73 + ctx.Items[56].Quantity * ctx.Items[56].UnitPrice;
+var v57 = v56 + ctx.Metrics[57] * 2 + ctx.Request.InputTokens % 74 + ctx.Items[57].Quantity * ctx.Items[57].UnitPrice;
+var v58 = v57 + ctx.Metrics[58] * 3 + ctx.Request.InputTokens % 75 + ctx.Items[58].Quantity * ctx.Items[58].UnitPrice;
+var v59 = v58 + ctx.Metrics[59] * 4 + ctx.Request.InputTokens % 76 + ctx.Items[59].Quantity * ctx.Items[59].UnitPrice;
+var v60 = v59 + ctx.Metrics[60] * 5 + ctx.Request.InputTokens % 77 + ctx.Items[60].Quantity * ctx.Items[60].UnitPrice;
+var v61 = v60 + ctx.Metrics[61] * 6 + ctx.Request.InputTokens % 78 + ctx.Items[61].Quantity * ctx.Items[61].UnitPrice;
+var v62 = v61 + ctx.Metrics[62] * 7 + ctx.Request.InputTokens % 79 + ctx.Items[62].Quantity * ctx.Items[62].UnitPrice;
+var v63 = v62 + ctx.Metrics[63] * 1 + ctx.Request.InputTokens % 80 + ctx.Items[63].Quantity * ctx.Items[63].UnitPrice;
+var v64 = v63 + ctx.Metrics[64] * 2 + ctx.Request.InputTokens % 81 + ctx.Items[0].Quantity * ctx.Items[0].UnitPrice;
+var v65 = v64 + ctx.Metrics[65] * 3 + ctx.Request.InputTokens % 82 + ctx.Items[1].Quantity * ctx.Items[1].UnitPrice;
+var v66 = v65 + ctx.Metrics[66] * 4 + ctx.Request.InputTokens % 83 + ctx.Items[2].Quantity * ctx.Items[2].UnitPrice;
+var v67 = v66 + ctx.Metrics[67] * 5 + ctx.Request.InputTokens % 84 + ctx.Items[3].Quantity * ctx.Items[3].UnitPrice;
+var v68 = v67 + ctx.Metrics[68] * 6 + ctx.Request.InputTokens % 85 + ctx.Items[4].Quantity * ctx.Items[4].UnitPrice;
+var v69 = v68 + ctx.Metrics[69] * 7 + ctx.Request.InputTokens % 86 + ctx.Items[5].Quantity * ctx.Items[5].UnitPrice;
+var v70 = v69 + ctx.Metrics[70] * 1 + ctx.Request.InputTokens % 87 + ctx.Items[6].Quantity * ctx.Items[6].UnitPrice;
+var v71 = v70 + ctx.Metrics[71] * 2 + ctx.Request.InputTokens % 88 + ctx.Items[7].Quantity * ctx.Items[7].UnitPrice;
+var v72 = v71 + ctx.Metrics[72] * 3 + ctx.Request.InputTokens % 89 + ctx.Items[8].Quantity * ctx.Items[8].UnitPrice;
+var v73 = v72 + ctx.Metrics[73] * 4 + ctx.Request.InputTokens % 90 + ctx.Items[9].Quantity * ctx.Items[9].UnitPrice;
+var v74 = v73 + ctx.Metrics[74] * 5 + ctx.Request.InputTokens % 91 + ctx.Items[10].Quantity * ctx.Items[10].UnitPrice;
+var v75 = v74 + ctx.Metrics[75] * 6 + ctx.Request.InputTokens % 92 + ctx.Items[11].Quantity * ctx.Items[11].UnitPrice;
+var v76 = v75 + ctx.Metrics[76] * 7 + ctx.Request.InputTokens % 93 + ctx.Items[12].Quantity * ctx.Items[12].UnitPrice;
+var v77 = v76 + ctx.Metrics[77] * 1 + ctx.Request.InputTokens % 94 + ctx.Items[13].Quantity * ctx.Items[13].UnitPrice;
+var v78 = v77 + ctx.Metrics[78] * 2 + ctx.Request.InputTokens % 95 + ctx.Items[14].Quantity * ctx.Items[14].UnitPrice;
+var v79 = v78 + ctx.Metrics[79] * 3 + ctx.Request.InputTokens % 96 + ctx.Items[15].Quantity * ctx.Items[15].UnitPrice;
+var v80 = v79 + ctx.Metrics[80] * 4 + ctx.Request.InputTokens % 97 + ctx.Items[16].Quantity * ctx.Items[16].UnitPrice;
+var v81 = v80 + ctx.Metrics[81] * 5 + ctx.Request.InputTokens % 98 + ctx.Items[17].Quantity * ctx.Items[17].UnitPrice;
+var v82 = v81 + ctx.Metrics[82] * 6 + ctx.Request.InputTokens % 99 + ctx.Items[18].Quantity * ctx.Items[18].UnitPrice;
+var v83 = v82 + ctx.Metrics[83] * 7 + ctx.Request.InputTokens % 100 + ctx.Items[19].Quantity * ctx.Items[19].UnitPrice;
+var v84 = v83 + ctx.Metrics[84] * 1 + ctx.Request.InputTokens % 101 + ctx.Items[20].Quantity * ctx.Items[20].UnitPrice;
+var v85 = v84 + ctx.Metrics[85] * 2 + ctx.Request.InputTokens % 102 + ctx.Items[21].Quantity * ctx.Items[21].UnitPrice;
+var v86 = v85 + ctx.Metrics[86] * 3 + ctx.Request.InputTokens % 103 + ctx.Items[22].Quantity * ctx.Items[22].UnitPrice;
+var v87 = v86 + ctx.Metrics[87] * 4 + ctx.Request.InputTokens % 104 + ctx.Items[23].Quantity * ctx.Items[23].UnitPrice;
+var v88 = v87 + ctx.Metrics[88] * 5 + ctx.Request.InputTokens % 105 + ctx.Items[24].Quantity * ctx.Items[24].UnitPrice;
+var v89 = v88 + ctx.Metrics[89] * 6 + ctx.Request.InputTokens % 106 + ctx.Items[25].Quantity * ctx.Items[25].UnitPrice;
+var v90 = v89 + ctx.Metrics[90] * 7 + ctx.Request.InputTokens % 107 + ctx.Items[26].Quantity * ctx.Items[26].UnitPrice;
+var v91 = v90 + ctx.Metrics[91] * 1 + ctx.Request.InputTokens % 108 + ctx.Items[27].Quantity * ctx.Items[27].UnitPrice;
+var v92 = v91 + ctx.Metrics[92] * 2 + ctx.Request.InputTokens % 109 + ctx.Items[28].Quantity * ctx.Items[28].UnitPrice;
+var v93 = v92 + ctx.Metrics[93] * 3 + ctx.Request.InputTokens % 110 + ctx.Items[29].Quantity * ctx.Items[29].UnitPrice;
+var v94 = v93 + ctx.Metrics[94] * 4 + ctx.Request.InputTokens % 111 + ctx.Items[30].Quantity * ctx.Items[30].UnitPrice;
+var v95 = v94 + ctx.Metrics[95] * 5 + ctx.Request.InputTokens % 112 + ctx.Items[31].Quantity * ctx.Items[31].UnitPrice;
+var v96 = v95 + ctx.Metrics[96] * 6 + ctx.Request.InputTokens % 113 + ctx.Items[32].Quantity * ctx.Items[32].UnitPrice;
+var v97 = v96 + ctx.Metrics[97] * 7 + ctx.Request.InputTokens % 114 + ctx.Items[33].Quantity * ctx.Items[33].UnitPrice;
+var v98 = v97 + ctx.Metrics[98] * 1 + ctx.Request.InputTokens % 115 + ctx.Items[34].Quantity * ctx.Items[34].UnitPrice;
+var v99 = v98 + ctx.Metrics[99] * 2 + ctx.Request.InputTokens % 116 + ctx.Items[35].Quantity * ctx.Items[35].UnitPrice;
+if ((ctx.Request.Flags + 0) % 4 == 0) {
+    v99 = v99 + ctx.Pricing.InputRate * 1;
+    if (ctx.Request.Vip) { v99 = v99 + 17; } else { v99 = v99 - 11; }
+} else if ((ctx.Request.Flags + 0) % 4 == 1) {
+    v99 = v99 + ctx.Pricing.OutputRate * 2;
+} else if ((ctx.Request.Flags + 0) % 4 == 2) {
+    v99 = v99 + ctx.Request.CacheTokens % 23;
+} else { v99 = v99 - ctx.Metrics[0]; }
+if ((ctx.Request.Flags + 1) % 4 == 0) {
+    v99 = v99 + ctx.Pricing.InputRate * 2;
+    if (ctx.Request.Vip) { v99 = v99 + 17; } else { v99 = v99 - 11; }
+} else if ((ctx.Request.Flags + 1) % 4 == 1) {
+    v99 = v99 + ctx.Pricing.OutputRate * 3;
+} else if ((ctx.Request.Flags + 1) % 4 == 2) {
+    v99 = v99 + ctx.Request.CacheTokens % 24;
+} else { v99 = v99 - ctx.Metrics[1]; }
+if ((ctx.Request.Flags + 2) % 4 == 0) {
+    v99 = v99 + ctx.Pricing.InputRate * 3;
+    if (ctx.Request.Vip) { v99 = v99 + 17; } else { v99 = v99 - 11; }
+} else if ((ctx.Request.Flags + 2) % 4 == 1) {
+    v99 = v99 + ctx.Pricing.OutputRate * 4;
+} else if ((ctx.Request.Flags + 2) % 4 == 2) {
+    v99 = v99 + ctx.Request.CacheTokens % 25;
+} else { v99 = v99 - ctx.Metrics[2]; }
+if ((ctx.Request.Flags + 3) % 4 == 0) {
+    v99 = v99 + ctx.Pricing.InputRate * 4;
+    if (ctx.Request.Vip) { v99 = v99 + 17; } else { v99 = v99 - 11; }
+} else if ((ctx.Request.Flags + 3) % 4 == 1) {
+    v99 = v99 + ctx.Pricing.OutputRate * 5;
+} else if ((ctx.Request.Flags + 3) % 4 == 2) {
+    v99 = v99 + ctx.Request.CacheTokens % 26;
+} else { v99 = v99 - ctx.Metrics[3]; }
+if ((ctx.Request.Flags + 4) % 4 == 0) {
+    v99 = v99 + ctx.Pricing.InputRate * 5;
+    if (ctx.Request.Vip) { v99 = v99 + 17; } else { v99 = v99 - 11; }
+} else if ((ctx.Request.Flags + 4) % 4 == 1) {
+    v99 = v99 + ctx.Pricing.OutputRate * 6;
+} else if ((ctx.Request.Flags + 4) % 4 == 2) {
+    v99 = v99 + ctx.Request.CacheTokens % 27;
+} else { v99 = v99 - ctx.Metrics[4]; }
+if ((ctx.Request.Flags + 5) % 4 == 0) {
+    v99 = v99 + ctx.Pricing.InputRate * 6;
+    if (ctx.Request.Vip) { v99 = v99 + 17; } else { v99 = v99 - 11; }
+} else if ((ctx.Request.Flags + 5) % 4 == 1) {
+    v99 = v99 + ctx.Pricing.OutputRate * 7;
+} else if ((ctx.Request.Flags + 5) % 4 == 2) {
+    v99 = v99 + ctx.Request.CacheTokens % 28;
+} else { v99 = v99 - ctx.Metrics[5]; }
+if ((ctx.Request.Flags + 6) % 4 == 0) {
+    v99 = v99 + ctx.Pricing.InputRate * 7;
+    if (ctx.Request.Vip) { v99 = v99 + 17; } else { v99 = v99 - 11; }
+} else if ((ctx.Request.Flags + 6) % 4 == 1) {
+    v99 = v99 + ctx.Pricing.OutputRate * 8;
+} else if ((ctx.Request.Flags + 6) % 4 == 2) {
+    v99 = v99 + ctx.Request.CacheTokens % 29;
+} else { v99 = v99 - ctx.Metrics[6]; }
+if ((ctx.Request.Flags + 7) % 4 == 0) {
+    v99 = v99 + ctx.Pricing.InputRate * 8;
+    if (ctx.Request.Vip) { v99 = v99 + 17; } else { v99 = v99 - 11; }
+} else if ((ctx.Request.Flags + 7) % 4 == 1) {
+    v99 = v99 + ctx.Pricing.OutputRate * 9;
+} else if ((ctx.Request.Flags + 7) % 4 == 2) {
+    v99 = v99 + ctx.Request.CacheTokens % 30;
+} else { v99 = v99 - ctx.Metrics[7]; }
+return v99;
+
+}
+}

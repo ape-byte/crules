@@ -8,11 +8,10 @@ namespace CRules.Benchmarks;
 [MemoryDiagnoser]
 public class CompilationBenchmarks
 {
-    private readonly RuleCompiler _compiler = new();
+    private readonly RuleCompiler _compiler = BenchmarkCompiler.Create();
     // AST 与编译委托产物不同，这组单独报告，不宣称是同等工作量。
     [Benchmark]
-    public Executable<Func<RoutingInput, int>> ClrParseAuditCompile() => _compiler
-        .Compile<RoutingInput, int>(RoutingBenchmarks.ClrSource).RequireExecutable();
+    public object ClrParseAuditCompile() => BenchmarkCompiler.CompileArtifact<RoutingInput, int>(_compiler, RoutingBenchmarks.ClrSource);
     [Benchmark] public Prepared<Script> JintPrepareAst() => Engine.PrepareScript(RoutingBenchmarks.JsSource);
     [Benchmark]
     public int JintPrepareCreateExecute()
@@ -37,7 +36,7 @@ public class HostLifecycleBenchmarks : IDisposable
     [GlobalSetup]
     public void Setup()
     {
-        _compiled = new RuleCompiler().Compile<RoutingInput, int>(RoutingBenchmarks.ClrSource).RequireExecutable().Execute;
+        _compiled = BenchmarkCompiler.Compile<RoutingInput, int>(RoutingBenchmarks.ClrSource);
         if (ClrJsonSnapshot() != JintFreshEngineJson()) throw new InvalidOperationException("宿主结果不一致。");
     }
     [Benchmark(Baseline = true)]

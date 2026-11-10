@@ -15,5 +15,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(CRulesBaseline)' == 'true'">
+    <DefineConstants>$(DefineConstants);CRULES_BASELINE</DefineConstants>
+  </PropertyGroup>
 
 </Project>
