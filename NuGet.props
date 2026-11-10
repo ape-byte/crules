@@ -22,6 +22,6 @@
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)assets/nuget/$(MSBuildProjectName).md" Pack="true" PackagePath="README.md" />
     <None Include="$(MSBuildThisFileDirectory)assets/branding/crules-icon.png" Pack="true" PackagePath="icon.png" />
-    <None Include="$(MSBuildThisFileDirectory)LICENSE" Pack="true" PackagePath="LICENSE" />
+    <None Include="$(MSBuildThisFileDirectory)LICENSE" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>
