@@ -80,15 +80,10 @@ AI 时代，需求可以直接转成规则配置。AI 根据业务描述和上�
 
 ## 快速开始
 
-需要 .NET 10；仓库通过 `global.json` 固定 SDK **10.0.401**，允许同特性带的更新补丁。
+通过 NuGet 安装即可使用。当前预览版为 **0.1.0-preview.2**，包内提供 **netstandard2.0、net6.0、net8.0、net10.0** 四组资产，NuGet 会按应用的目标框架自动选择；.NET 9 使用 net8.0 资产。更多运行时验证范围见 [框架兼容性](docs/框架兼容性.md)。
 
 ```powershell
-# 构建独立核心
-dotnet restore src/CRules/CRules.csproj --locked-mode
-dotnet build src/CRules/CRules.csproj -c Release --no-restore
-
-# 在你的应用中引用
-dotnet add <应用项目.csproj> reference <CRules目录>/src/CRules/CRules.csproj
+dotnet add <应用项目.csproj> package CRules --version 0.1.0-preview.2
 ```
 
 宿主定义上下文，在规则加载时编译，在每次请求中传入数据。下面同时演示规则执行和多场景 mock 验证：
@@ -98,13 +93,13 @@ using CRules;
 
 var compiler = new RuleCompiler(new CompilerOptions { DecimalOnly = true });
 var executable = compiler.Compile<Func<decimal, decimal, decimal>>(
-    code: """
+    code: @"
         var amount = price;
         amount *= discount;
         if (amount < 0m) return 0m;
         return Math.Round(amount, 2, MidpointRounding.ToEven);
-        """,
-    parameterNames: ["price", "discount"],
+        ",
+    parameterNames: new[] { "price", "discount" },
     name: "CalculatePrice").RequireExecutable();
 
 Console.WriteLine(executable.Execute(100m, 0.9m)); // 90
@@ -182,7 +177,7 @@ NuGet 预览包的构建、依赖、本地安装与发布验证见 [NuGet 构建
 
 | 入口 | 内容 |
 | --- | --- |
-| [快速开始](docs/快速开始.md) | 项目引用、第一条规则和多个参数 |
+| [快速开始](docs/快速开始.md) | NuGet 安装、第一条规则和多个参数 |
 | [构造与执行](docs/构造与执行.md) | 三种 Compile 入口、配置、上下文、异步和诊断 |
 | [语法参考](docs/语法参考.md) | 声明、赋值、流程、集合、动态数据和明确边界 |
 | [已知问题](docs/已知问题.md) | 当前缺陷及对应解决方式 |
@@ -190,8 +185,12 @@ NuGet 预览包的构建、依赖、本地安装与发布验证见 [NuGet 构建
 | [三方性能报告](docs/性能报告.md) | 原生 C#（Roslyn 构建）、Jint、CRules 实测 |
 | [与 Jint 对比测试](docs/与Jint对比测试.md) | 输入入口、数值语义、准备/分配口径 |
 
+从源码开发 CRules 时，仓库通过 `global.json` 固定 SDK **10.0.401**，允许同特性带的更新补丁。源码构建与测试命令如下：
+
 ```powershell
-dotnet test tests/CRules.Tests -c Release -f net10.0
+dotnet restore CRules.slnx --locked-mode
+dotnet build src/CRules/CRules.csproj -c Release --no-restore
+dotnet test tests/CRules.Tests -c Release -f net10.0 --no-restore
 ```
 
 核心验证覆盖分支与作用域、decimal、动态数据、对象结果、诊断、差分和并发输入。另从 Roslyn 官方测试提取支持范围内的函数核心，逐条与 Roslyn 编译结果比较，覆盖 JIT 与 Interpreted。基准与验证记录均标明测量范围；新增场景应使用实际规则和上下文另行验证。
