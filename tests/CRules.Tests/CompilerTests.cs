@@ -56,9 +56,8 @@ public sealed class CompilerTests
     [InlineData("if (ctx.Vip) { return 1; }", "CRL2005")]
     [InlineData("return 1; var x = 2;", "CRL2006")]
     [InlineData("while (true) { return 1; }", "CRL2001")]
-    [InlineData("ctx.Amount = 1m; return 1;", "CRL1001")]
+    [InlineData("ctx.Amount = 1m; return 1;", "CRL2003")]
     [InlineData("var x = null; return 1;", "CRL2003")]
-    [InlineData("var x = 0; return (x = 1);", "CRL3001")]
     [InlineData("return DateTime.Now.Day;", "CRL4002")]
     [InlineData("return ctx.Items.Where(x => x.Bogus).Count();", "CRL3001")]
     public void Rejects_invalid_rules_with_structured_diagnostics(string text, string code)

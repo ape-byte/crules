@@ -4,7 +4,7 @@
 
 CRules is a lightweight wrapper around the public APIs of DynamicExpresso. It accepts a finite C#-style function body, an input signature and a return type, then builds a reusable executable. It is not a fork or a full C# compiler.
 
-This preview contains **netstandard2.0, net6.0, net8.0 and net10.0** assets. NuGet selects the nearest compatible target; .NET 9 uses net8.0. Runtime compatibility does not imply support for every compiler language version or every platform.
+This package contains **netstandard2.0, net6.0, net8.0 and net10.0** assets. NuGet selects the nearest compatible target, with net8.0 used on .NET 9.
 
 ```csharp
 using CRules;
@@ -23,11 +23,11 @@ var executable = new RuleCompiler()
 var result = executable.Execute(100m, 0.9m); // amount = 90m
 ```
 
-Supported features include named typed inputs, explicit or inferred initialized locals, branches, basic switches, object/List/dictionary initialization, nullable results and host Task/ValueTask results. Compile once and reuse the executable.
+Supported features include named typed inputs, initialized locals, branches, basic switches, object/List/dictionary initialization, nullable results and host Task/ValueTask results. Simple assignments produce a value and support writable locals, dictionary indexes and public set properties of rule-created objects. Compile once and reuse the executable.
 
 **NativeAOT requires `ExecutionMode = RuleExecutionMode.Interpreted` and explicit preservation of host metadata and required closed-generic code.** Windows/Linux x64 tests cover a documented profile, not arbitrary dynamic code. Experimental nested Lambda/LINQ is not part of that AOT profile.
 
-This is a preview: use `Func<...>` or the runtime Type entry point; custom delegate adaptation has a documented known issue. Rules and callable host members must be trusted and reviewed; this is not a complete in-process sandbox.
+Use `Func<...>` or the runtime Type entry point. See the known issue for custom delegate adaptation. Rules and callable host members must be trusted and reviewed.
 
 - [Quick start](https://github.com/ape-byte/crules/blob/github/docs/快速开始.md)
 - [Construction and execution](https://github.com/ape-byte/crules/blob/github/docs/构造与执行.md)

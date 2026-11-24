@@ -14,9 +14,8 @@ internal readonly record struct Slice(int Start, int Length);
 internal abstract record Statement(SourceSpan Span);
 internal sealed record Block(List<Statement> Statements, SourceSpan Location) : Statement(Location);
 internal sealed record Declaration(string Name, bool ReadOnly, Slice? TypeName, Slice Value, SourceSpan Location) : Statement(Location);
-internal sealed record Assignment(string Name, Slice Value, SourceSpan Location) : Statement(Location);
-internal sealed record IndexAssignment(Slice Target, char? Operator, Slice Value, SourceSpan Location) : Statement(Location);
-internal sealed record CallStatement(Slice Value, SourceSpan Location) : Statement(Location);
+internal sealed record IndexCompoundAssignment(Slice Target, char Operator, Slice Value, SourceSpan Location) : Statement(Location);
+internal sealed record ExpressionStatement(Slice Value, SourceSpan Location) : Statement(Location);
 internal sealed record Conditional(Slice Condition, Statement Then, Statement? Else, SourceSpan Location) : Statement(Location);
 internal sealed record Return(Slice Value, SourceSpan Location) : Statement(Location);
 internal sealed record CompoundAssignment(string Name, char Operator, Slice Value, SourceSpan Location) : Statement(Location);
@@ -72,6 +71,11 @@ internal sealed class StatementParser(string source, CompilerOptions options)
         if (++_count > options.MaxStatements) Fail("CRL4001", "语句数量超过限额。", _pos);
         Skip(); int start = _pos;
         if (Text[_pos] == '{') return ReadBlock(true);
+        if (Text[_pos] == '(')
+        {
+            var value = ExpressionUntil(';');
+            return new ExpressionStatement(value, new(start, _pos - start));
+        }
         string keyword = Identifier();
         if (keyword == "if")
         {
@@ -117,26 +121,20 @@ internal sealed class StatementParser(string source, CompilerOptions options)
             char op = Text[_pos]; _pos += 2;
             return new CompoundAssignment(keyword, op, ExpressionUntil(';'), new(start, _pos - start));
         }
-        if (Peek(_pos) is '.' or '[' or '(')
+        _pos = start;
+        var expression = ExpressionUntil(';');
+        string source = Text.Substring(expression.Start, expression.Length);
+        if (AssignmentSyntax.MightAssign(source)
+            && AssignmentSyntax.Parts(source, 0, source.Length).FirstOrDefault(part => part.Kind is '=' or '?' or '+' or '-' or '*' or '/' or '%')
+                is { Kind: '+' or '-' or '*' or '/' or '%' } compound)
         {
-            _pos = start;
-            var expression = ExpressionUntil(';');
-            string value = Text.Substring(expression.Start, expression.Length);
-            int equals = DynamicExpressoAdapter.FindBoundary(value, 0, '=');
-            if (equals >= 0)
-            {
-                string target = value[..equals].TrimEnd();
-                char? op = target.Length > 0 && "+-*/%".Contains(target[^1]) ? target[^1] : null;
-                if (op is not null) target = target[..^1].TrimEnd();
-                if (!target.EndsWith(']')) Fail("CRL1001", "仅支持局部变量或字典索引赋值。", start);
-                int valueStart = equals + 1;
-                while (valueStart < value.Length && char.IsWhiteSpace(value[valueStart])) valueStart++;
-                return new IndexAssignment(new(start, target.Length), op, new(start + valueStart, value.Length - valueStart), new(start, _pos - start));
-            }
-            return new CallStatement(expression, new(start, _pos - start));
+            string target = source[..compound.Start].TrimEnd();
+            if (!target.EndsWith(']')) Fail("CRL1001", "仅支持局部变量或字典索引复合赋值。", start);
+            int valueStart = compound.End;
+            while (valueStart < source.Length && char.IsWhiteSpace(source[valueStart])) valueStart++;
+            return new IndexCompoundAssignment(new(start, target.Length), compound.Kind, new(start + valueStart, source.Length - valueStart), new(start, _pos - start));
         }
-        Expect('=');
-        return new Assignment(keyword, ExpressionUntil(';'), new(start, _pos - start));
+        return new ExpressionStatement(expression, new(start, _pos - start));
     }
 
     private void ReadTypeSuffix(int depth)

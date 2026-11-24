@@ -5,7 +5,7 @@
 - `upstream.json`：12 个官方测试文件的完整路径、固定版本链接与规范化源码 SHA-256。
 - `inventory.json`：这 12 个文件中 1,719 个 `[Fact]`/`[Theory]` 测试方法的盘点，以及可移植核心数量和未直接提取的原因。
 - `cases.json`：自动提取的 267 个独立函数核心或集合创建表达式；每条记录有原文件、测试方法、行号、代码、签名和移植说明。
-- `curated.json`：18 个手工整理的片段或边界变体，包括局部复合赋值、默认结构体构造、目标类型 new 和闭合 bool? 值域的 switch。
+- `curated.json`：23 个手工整理的片段或边界变体。赋值表达式相关片段来自 CodeGenTests、CodeGenOperators 和 FlowTests，覆盖属性与局部变量的链式赋值，以及条件、空合并、短路和调用中的赋值。
 - `negative.json`：14 个错误语义片段。Roslyn 必须报告错误，CRules 必须返回编译诊断。
 - `dictionary.json`：新增 43 个字典核心/边界变体，来源为同一固定版本的 ObjectAndCollectionInitializerTests（DictionaryInitializerTest001、DictionaryInitializerTestSideeffects001）与 ImplicitObjectCreationTests（TestObjectAndCollectionInitializer）。保留显式声明、Add/索引初始化器与嵌套目标类型 new；Console/枚举输出改为返回值，额外变体覆盖构造、比较器、重复键、null、索引读写、方法调用和 out 参数。
 - `dictionary-negative.json`：12 个对应错误语义变体，在两种执行模式下均要求 Roslyn 与 CRules 拒绝。生成说明保存在 `tools/RoslynImport/dictionary-cases.py`；生成前校验上述官方源码 SHA-256，不混入自动提取的 267 个原有片段。

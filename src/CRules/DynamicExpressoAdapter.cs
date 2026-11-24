@@ -116,7 +116,7 @@ internal sealed class DynamicExpressoAdapter
         }
         if (calls.Count == 0) return null;
         var body = Parse(text, expected, names);
-        return new OutCalls(calls.ToDictionary(c => c.Slot, c => c.Value)).Visit(body);
+        return new ReplaceSlots(calls.ToDictionary(c => c.Slot, c => c.Value)).Visit(body);
     }
 
     private static int ReceiverStart(string text, int dot)
@@ -150,9 +150,9 @@ internal sealed class DynamicExpressoAdapter
         return false;
     }
 
-    private sealed class OutCalls(Dictionary<ParameterExpression, Expression> calls) : ExpressionVisitor
+    private sealed class ReplaceSlots(Dictionary<ParameterExpression, Expression> values) : ExpressionVisitor
     {
-        protected override Expression VisitParameter(ParameterExpression node) => calls.GetValueOrDefault(node, node);
+        protected override Expression VisitParameter(ParameterExpression node) => values.GetValueOrDefault(node, node);
     }
 
     private string RegisterType(Type type, string alias, ref int index)
@@ -174,9 +174,30 @@ internal sealed class DynamicExpressoAdapter
         return message;
     }
 
+    internal Func<Expression, Func<Type, Expression>, Expression>? BindAssignment { get; init; }
+    private int _assignmentDepth;
+
     public Expression Parse(string text, Type? expected, IEnumerable<ParameterExpression> symbols)
     {
+        var visibleSymbols = symbols;
         symbols = symbols.ToArray();
+        bool mightAssign = BindAssignment is not null && AssignmentSyntax.MightAssign(text);
+        if (mightAssign && AssignmentSyntax.Parts(text, 0, text.Length).FirstOrDefault(p => p.Kind is '=' or '?') is { Kind: '=' } equals)
+        {
+            if (_assignmentDepth >= _options.MaxDepth)
+                throw new ParseException("赋值表达式嵌套超过限额。", equals.Start);
+            _assignmentDepth++;
+            try
+            {
+                var left = Parse(text[..equals.Start].TrimEnd(), null, symbols);
+                int start = equals.End;
+                while (start < text.Length && char.IsWhiteSpace(text[start])) start++;
+                // A supported out var in an index argument adds a local before binding the RHS.
+                var assignment = BindAssignment!(left, type => ParseAt(text[start..], start, type, visibleSymbols));
+                return expected is null ? assignment : ExpressionCompatibility.ConvertImplicit(_interpreter, assignment, expected);
+            }
+            finally { _assignmentDepth--; }
+        }
         var outCall = ParseOutCalls(text, expected, symbols.ToArray());
         if (outCall is not null) return outCall;
         // 容器元素与成员值同样拥有目标类型，支持嵌套 new()。
@@ -222,7 +243,38 @@ internal sealed class DynamicExpressoAdapter
         {
             return expected is null ? initializer : ExpressionCompatibility.ConvertImplicit(_interpreter, initializer, expected);
         }
-        return ExpressionCompatibility.Parse(_interpreter, text, expected, parameters);
+        if (!mightAssign) return ExpressionCompatibility.Parse(_interpreter, text, expected, parameters);
+
+        Dictionary<ParameterExpression, Expression> assignments = new();
+        int nextName = 0;
+        var (rewritten, replacements) = AssignmentSyntax.RewriteNested(text, _options.MaxDepth, (value, start) =>
+        {
+            var assignment = ParseAt(value, start, null, symbols);
+            string name;
+            do { name = "__crules_assignment_" + nextName++; }
+            while (text.Contains(name, StringComparison.Ordinal) || symbols.Any(p => p.Name == name));
+            var slot = Expression.Parameter(assignment.Type, name);
+            assignments.Add(slot, assignment);
+            return name;
+        });
+        if (assignments.Count == 0) return ExpressionCompatibility.Parse(_interpreter, text, expected, parameters);
+        try
+        {
+            var bound = ExpressionCompatibility.Parse(_interpreter, rewritten, expected,
+                parameters.Concat(assignments.Keys.Select(p => new Parameter(p))).ToArray());
+            // Insert the tree at its original evaluation point, including inside lazy branches.
+            return new ReplaceSlots(assignments).Visit(bound);
+        }
+        catch (ParseException error)
+        {
+            throw new ParseException(DiagnosticMessage(error.Message), AssignmentSyntax.OriginalPosition(error.Position, replacements));
+        }
+    }
+
+    private Expression ParseAt(string text, int start, Type? expected, IEnumerable<ParameterExpression> symbols)
+    {
+        try { return Parse(text, expected, symbols); }
+        catch (ParseException error) { throw new ParseException(DiagnosticMessage(error.Message), start + error.Position); }
     }
 
     private Expression? ParseInitializer(string text, Parameter[] parameters)
@@ -236,7 +288,8 @@ internal sealed class DynamicExpressoAdapter
         string constructorText = text[..open].TrimEnd();
         if (constructorText.EndsWith(']')) return null;
         if (!constructorText.EndsWith(')')) constructorText += "()";
-        var creation = ValueCreation(constructorText) ?? _interpreter.Parse(constructorText, parameters).Expression as NewExpression;
+        var creation = ValueCreation(constructorText) ??
+            Parse(constructorText, null, parameters.Select(p => p.Expression).OfType<ParameterExpression>()) as NewExpression;
         if (creation is null) return null; // 数组等其他 new 形式由上游处理。
         var dictionary = DictionarySupport.Initialize(creation, text[(open + 1)..close],
             (value, target) => Parse(value.Trim(), target, parameters.Select(p => p.Expression).OfType<ParameterExpression>()));

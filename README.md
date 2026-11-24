@@ -80,10 +80,10 @@ AI 时代，需求可以直接转成规则配置。AI 根据业务描述和上�
 
 ## 快速开始
 
-通过 NuGet 安装即可使用。当前预览版为 **0.1.0-preview.2**，包内提供 **netstandard2.0、net6.0、net8.0、net10.0** 四组资产，NuGet 会按应用的目标框架自动选择；.NET 9 使用 net8.0 资产。更多运行时验证范围见 [框架兼容性](docs/框架兼容性.md)。
+包版本为 **0.2.0**，提供 **netstandard2.0、net6.0、net8.0、net10.0** 四组资产。NuGet 按应用的目标框架自动选择，.NET 9 使用 net8.0 资产。更多运行时验证范围见 [框架兼容性](docs/框架兼容性.md)。
 
 ```powershell
-dotnet add <应用项目.csproj> package CRules --version 0.1.0-preview.2
+dotnet add <应用项目.csproj> package CRules --version 0.2.0
 ```
 
 宿主定义上下文，在规则加载时编译，在每次请求中传入数据。下面同时演示规则执行和多场景 mock 验证：
@@ -120,7 +120,7 @@ foreach (var test in new[] { (100m, 0.9m, 90m), (100m, 1m, 100m), (0m, 0.9m, 0m)
 
 | 能力 | 形式 |
 | --- | --- |
-| 变量和作用域 | `var`、带初始化值的显式类型声明、`List a = new() { ... };` 元素类型推断、只读绑定 `const`、局部赋值、嵌套块 |
+| 变量和作用域 | `var`、带初始化值的显式类型声明、`List a = new() { ... };` 元素类型推断、只读绑定 `const`、普通赋值表达式、嵌套块 |
 | 条件和返回 | `if/else`、单行 if、两种基础 switch、提前返回；所有可达路径必须返回 |
 | 对象结果 | `return new() { ... };`、`return new Decision() { ... };`、`Decision a = new() { ... };` |
 | 可空结果 | 引用类型与 `Nullable<T>` 支持 `return null;` 或返回可空输入、属性、局部变量 |

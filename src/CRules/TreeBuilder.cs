@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using System.Reflection;
 using DynamicExpresso.Exceptions;
 namespace CRules;
 
@@ -7,8 +8,16 @@ internal sealed class TreeBuilder(string text, CompilerOptions options, Type ret
     private sealed record Symbol(ParameterExpression Node, bool ReadOnly);
     private readonly LabelTarget _exit = Expression.Label(returnType, "exit");
     private DynamicExpressoAdapter? _expressionAdapter;
-    private DynamicExpressoAdapter _adapter => _expressionAdapter ??= new(options, returnType) { OutArgument = ResolveOutArgument };
+    private DynamicExpressoAdapter _adapter => _expressionAdapter ??= new(options, returnType)
+    {
+        OutArgument = ResolveOutArgument,
+        BindAssignment = CompileAssignment
+    };
     private readonly Stack<Dictionary<string, Symbol>> _scopes = new();
+    private readonly HashSet<ParameterExpression> _newObjectLocals = [];
+    private readonly HashSet<ParameterExpression> _otherWrites = [];
+    private readonly Dictionary<ParameterExpression, SourceSpan> _propertyWrites = new();
+    private SourceSpan _expressionSpan;
     private int _locals;
     private readonly Stack<LabelTarget> _breakTargets = new();
     private readonly Dictionary<SwitchStatement, SwitchSection?> _constantSelections = new();
@@ -18,6 +27,9 @@ internal sealed class TreeBuilder(string text, CompilerOptions options, Type ret
     public LambdaExpression Build(Block block)
     {
         var compiled = CompileBlock(block);
+        foreach (var write in _propertyWrites)
+            if (_otherWrites.Contains(write.Key))
+                throw InvalidTarget("属性赋值的局部变量必须始终持有规则中新建的对象。", write.Value);
         if (!Returns(block)) throw new CompileFailure("CRL2005", "所有可达终止路径必须 return。", block.Span, PositionPrecision.Statement);
         var body = Expression.Block(compiled, Expression.Label(_exit, Expression.Default(returnType)));
         return Expression.Lambda(body, parameters);
@@ -88,27 +100,24 @@ internal sealed class TreeBuilder(string text, CompilerOptions options, Type ret
                 if (++_locals > options.MaxLocals) throw new CompileFailure("CRL4001", "局部变量超过限额。", d.Span);
                 var node = Expression.Variable(declaredType ?? value.Type, d.Name);
                 _scopes.Peek().Add(d.Name, new(node, d.ReadOnly));
+                if (IsNewReference(value)) _newObjectLocals.Add(node);
                 return Expression.Assign(node, value);
-            case Assignment a:
-                var symbol = Find(a.Name) ?? throw new CompileFailure("CRL2003", $"未声明变量 {a.Name}。", a.Span);
-                if (symbol.ReadOnly) throw new CompileFailure("CRL2004", $"const 不能再次赋值：{a.Name}。", a.Span);
-                return Expression.Assign(symbol.Node, Parse(a.Value, symbol.Node.Type));
-            case IndexAssignment a:
+            case IndexCompoundAssignment a:
                 if (Parse(a.Target) is not IndexExpression { Object: { } receiver, Indexer.SetMethod: { IsPublic: true } } index
                     || DictionarySupport.Contract(receiver.Type) is null)
                     throw new CompileFailure("CRL2003", "索引赋值需要可写的泛型字典。", a.Span);
-                var assignment = a.Operator is null ? Expression.Assign(index, Parse(a.Value, index.Type, allowTargetNew: true))
-                    : CompileIndexCompound(index, a);
+                var assignment = CompileIndexCompound(index, a);
                 new ExpressionAudit(options, a.Span).Visit(assignment);
                 return assignment;
-            case CallStatement call:
-                var invocation = Parse(call.Value);
-                if (invocation is not MethodCallExpression)
-                    throw new CompileFailure("CRL2001", "独立表达式语句必须是方法调用。", call.Span);
-                return Expression.Block(invocation, Expression.Empty());
+            case ExpressionStatement s:
+                var expression = Parse(s.Value);
+                if (expression is not MethodCallExpression and not BinaryExpression { NodeType: ExpressionType.Assign })
+                    throw new CompileFailure("CRL2001", "独立表达式语句必须是赋值或方法调用。", s.Span);
+                return Expression.Block(expression, Expression.Empty());
             case CompoundAssignment a:
                 var local = Find(a.Name) ?? throw new CompileFailure("CRL2003", "复合赋值只能修改已声明局部变量。", a.Span);
                 if (local.ReadOnly) throw new CompileFailure("CRL2004", $"const 不能再次赋值：{a.Name}。", a.Span);
+                if (!local.Node.Type.IsValueType) _otherWrites.Add(local.Node);
                 var rhs = text.Substring(a.Value.Start, a.Value.Length);
                 try
                 {
@@ -152,7 +161,44 @@ internal sealed class TreeBuilder(string text, CompilerOptions options, Type ret
         BinaryExpression { NodeType: ExpressionType.OrElse, Method: null } binary when BooleanConstant(binary.Left) is bool left && BooleanConstant(binary.Right) is bool right => left || right,
         _ => null
     };
-    private Expression CompileIndexCompound(IndexExpression index, IndexAssignment statement)
+    private Expression CompileAssignment(Expression target, Func<Type, Expression> bindValue)
+    {
+        switch (target)
+        {
+            case ParameterExpression local when Find(local.Name!) is { } symbol && symbol.Node == local:
+                if (symbol.ReadOnly)
+                    throw new CompileFailure("CRL2004", $"const 不能再次赋值：{local.Name}。", _expressionSpan, PositionPrecision.Expression);
+                var value = bindValue(local.Type);
+                if (!local.Type.IsValueType && !IsNewReference(value)) _otherWrites.Add(local);
+                return Expression.Assign(local, value);
+            case IndexExpression { Object: { } receiver, Indexer.SetMethod: { IsPublic: true } setter }
+                when DictionarySupport.Contract(receiver.Type) is not null && !IsInitOnly(setter):
+                return Expression.Assign(target, bindValue(target.Type));
+            case MemberExpression { Expression: ParameterExpression owner, Member: PropertyInfo property }
+                when _newObjectLocals.Contains(owner) && property.SetMethod is { IsPublic: true, IsStatic: false } setter
+                    && !IsInitOnly(setter):
+                if (!_propertyWrites.ContainsKey(owner)) _propertyWrites.Add(owner, _expressionSpan);
+                return Expression.Assign(target, bindValue(target.Type));
+            default:
+                throw InvalidTarget("赋值目标须为可写局部变量、可写泛型字典索引或规则中新建对象的公开 set 属性。", _expressionSpan);
+        }
+    }
+
+    private static CompileFailure InvalidTarget(string message, SourceSpan span) =>
+        new("CRL2003", message, span, PositionPrecision.Expression);
+
+    private static bool IsInitOnly(MethodInfo setter) =>
+        setter.ReturnParameter.GetRequiredCustomModifiers().Any(type => type.FullName == "System.Runtime.CompilerServices.IsExternalInit");
+
+    private static bool IsNewReference(Expression value)
+    {
+        if (value.Type.IsValueType) return false;
+        while (value is UnaryExpression { NodeType: ExpressionType.Convert, Method: null } conversion && !conversion.Operand.Type.IsValueType)
+            value = conversion.Operand;
+        return value is NewExpression or MemberInitExpression or ListInitExpression or NewArrayExpression;
+    }
+
+    private Expression CompileIndexCompound(IndexExpression index, IndexCompoundAssignment statement)
     {
         var receiver = Expression.Variable(index.Object!.Type, "__crules_index_receiver");
         var keys = index.Arguments.Select((a, i) => Expression.Variable(a.Type, "__crules_index_key_" + i)).ToArray();
@@ -246,6 +292,7 @@ internal sealed class TreeBuilder(string text, CompilerOptions options, Type ret
         var local = Find(name);
         if (local is null || local.ReadOnly || local.Node.Type != type)
             throw new ParseException("out 参数需要类型完全匹配的可写局部变量；不能修改形参。", 0);
+        if (!type.IsValueType) _otherWrites.Add(local.Node);
         return local.Node;
     }
     private Type ResolveLocalType(Slice name, Slice value)
@@ -266,6 +313,7 @@ internal sealed class TreeBuilder(string text, CompilerOptions options, Type ret
     }
     private Expression Parse(Slice slice, Type? expected = null, bool allowTargetNew = false)
     {
+        _expressionSpan = new(slice.Start, slice.Length);
         string expression = text.Substring(slice.Start, slice.Length);
         int insertion = -1;
         string injected = "";

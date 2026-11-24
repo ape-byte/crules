@@ -212,5 +212,60 @@
     ],
     "inputProfile": "bounded_array_length",
     "adaptation": "原 new int[2] 的动态长度边界变体，限定输入 -1/0/1/3，比较创建结果或异常"
+  },
+  {
+    "id": "C18",
+    "file": "CodeGenTests.cs",
+    "test": "AssignExprUsed",
+    "method": "curated",
+    "line": 3260,
+    "code": "var obj1 = new MemberInitializerTest(); var obj2 = new MemberInitializerTest(); int x = 0; int y = x = obj2.y = obj1.y = x = 123; return new[] { obj1.y, obj2.y, x, y };",
+    "returnType": "int[]",
+    "parameters": [],
+    "adaptation": "以受支持的实例属性替换实例字段，省略静态字段写入，以数组返回原观察值"
+  },
+  {
+    "id": "C19",
+    "file": "CodeGenTests.cs",
+    "test": "Regress15667",
+    "method": "curated",
+    "line": 13231,
+    "code": "bool b = true; int s = (b = false) ? 5 : 100; return s;",
+    "returnType": "int",
+    "parameters": [],
+    "adaptation": "局部变量显式初始化，保留赋值作为条件的表达式并直接返回"
+  },
+  {
+    "id": "C20",
+    "file": "CodeGenOperators.cs",
+    "test": "TestNullCoalesce_InterfaceRegression1b",
+    "method": "curated",
+    "line": 1711,
+    "code": "int[] a = new int[] { 1 }; IEnumerable<int> b = null; IEnumerable<int> c = (b = (IEnumerable<int>)new List<int>()) ?? a; return new[] { c.Count(), b.Count() };",
+    "returnType": "int[]",
+    "parameters": [],
+    "adaptation": "保留向接口类型赋值后参与空合并的结构，通过元素数量观察赋值和选择结果"
+  },
+  {
+    "id": "C21",
+    "file": "CodeGenOperators.cs",
+    "test": "TestTernary_InterfaceRegression1b",
+    "method": "curated",
+    "line": 4210,
+    "code": "int[] a = new int[] { 1 }; IEnumerable<int> b = null; IEnumerable<int> c = pick ? (b = (IEnumerable<int>)new List<int>()) : a; return new[] { c.Count(), b == null ? -1 : b.Count() };",
+    "returnType": "int[]",
+    "parameters": [{ "name": "pick", "type": "bool" }],
+    "adaptation": "将常量条件替换为输入，通过元素数量观察选中分支和未选中分支的副作用"
+  },
+  {
+    "id": "C22",
+    "file": "FlowTests.cs",
+    "test": "IfConditional_ComplexCondition_ConstantConsequence",
+    "method": "curated",
+    "line": 2892,
+    "code": "int x = 1; bool n = (pick && Math.Abs(x = 0) == 0 ? true : false); return new[] { n ? 1 : 0, x };",
+    "returnType": "int[]",
+    "parameters": [{ "name": "pick", "type": "bool" }],
+    "adaptation": "将夹具方法替换为等价测试条件，以结果值和局部值观察短路与方法实参赋值"
   }
 ]

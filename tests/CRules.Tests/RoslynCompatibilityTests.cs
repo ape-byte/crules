@@ -34,7 +34,7 @@ public sealed class RoslynCompatibilityTests
         var spec = Cases.Single(c => c.Id == id);
         var method = Native.Value.GetType("Oracle")!.GetMethod(id)!;
         var nativeParameters = method.GetParameters();
-        var compiled = new RuleCompiler(new() { ExecutionMode = mode, ReferencedTypes = [typeof(List<>), typeof(Dictionary<,>), typeof(StringComparer), typeof(MemberInitializerTest), typeof(MemberInitializerValue), typeof(DictionaryEvaluationProbe)] }).Compile(new CompileOptions
+        var compiled = new RuleCompiler(new() { ExecutionMode = mode, ReferencedTypes = [typeof(List<>), typeof(Dictionary<,>), typeof(IEnumerable<>), typeof(StringComparer), typeof(MemberInitializerTest), typeof(MemberInitializerValue), typeof(DictionaryEvaluationProbe)] }).Compile(new CompileOptions
         {
             Code = spec.Code,
             ReturnType = method.ReturnType,

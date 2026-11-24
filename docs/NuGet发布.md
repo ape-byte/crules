@@ -1,6 +1,6 @@
 # NuGet 构建与发布
 
-仓库当前配置为 **0.1.0-preview.2**，目标框架为 **netstandard2.0 / net6.0 / net8.0 / net10.0**。nuget.org 已有 ape-byte 发布的 0.1.0-preview.1，不能覆盖；本次递增预览版本发布多目标框架资产。新版本本地构包不代表已经上传到 nuget.org 或创建正式版。
+仓库当前配置为 **0.2.0**，目标框架为 **netstandard2.0 / net6.0 / net8.0 / net10.0**。该版本加入普通赋值表达式。上传状态以目标 NuGet 源为准。
 
 ## 一个对外包
 
@@ -33,7 +33,7 @@ dotnet pack src/CRules/CRules.csproj -c Release -o publish/packages
 本地安装示例，把来源替换成实际绝对输出目录：
 
 ```powershell
-dotnet add MyApp/MyApp.csproj package CRules --version 0.1.0-preview.2 --source ABSOLUTE_PACKAGE_DIRECTORY
+dotnet add MyApp/MyApp.csproj package CRules --version 0.2.0 --source ABSOLUTE_PACKAGE_DIRECTORY
 ```
 
 还原传递依赖时同时配置本地目录和 nuget.org。使用独立缓存验证，避免旧的同版本本地包掩盖重打包内容。正式发布的同一版本不能覆盖，修改内容应使用新版本。
@@ -43,13 +43,13 @@ dotnet add MyApp/MyApp.csproj package CRules --version 0.1.0-preview.2 --source 
 先确定版本、目标源和发布权限。包 ID 查询不到，不代表一定可注册或当前账号有权限。以下只是命令示例，尚未执行；密钥通过环境变量注入，不写入仓库：
 
 ```powershell
-dotnet nuget push publish/packages/CRules.0.1.0-preview.2.nupkg --source https://api.nuget.org/v3/index.json --api-key $env:NUGET_API_KEY
+dotnet nuget push publish/packages/CRules.0.2.0.nupkg --source https://api.nuget.org/v3/index.json --api-key $env:NUGET_API_KEY
 ```
 
 只上传 CRules。符号包置于相邻目录，按目标源的规则发布。上传后从目标源使用新缓存重新安装并核对依赖，本地 pack 成功不等于远端发布成功。包中的仓库提交也应已推送，确保源码链接可访问。
 
 ## 当前边界
 
-这是预览版。自定义 Delegate 的适配缺陷仍在 [已知问题](%E5%B7%B2%E7%9F%A5%E9%97%AE%E9%A2%98.md) 中，稳定使用 Func 或 Type 入口。不宣称完整 C#、任意动态对象或零警告的库级 AOT。NativeAOT 使用文档中的 Interpreted 配置，不沿用 JIT 性能结论。
+稳定使用 Func 或 Type 入口。自定义 Delegate 的适配缺陷见 [已知问题](%E5%B7%B2%E7%9F%A5%E9%97%AE%E9%A2%98.md)。NativeAOT 使用文档中的 Interpreted 配置。
 
 完整框架选择、依赖分组和跨框架回归命令见 [框架兼容性](%E6%A1%86%E6%9E%B6%E5%85%BC%E5%AE%B9%E6%80%A7.md)。

@@ -40,7 +40,12 @@ internal sealed class ExpressionAudit(CompilerOptions options, SourceSpan span, 
     protected override Expression VisitMember(MemberExpression node)
     { Check(node.Member); return base.VisitMember(node); }
     protected override Expression VisitMethodCall(MethodCallExpression node)
-    { Check(node.Method); return base.VisitMethodCall(node); }
+    {
+        if (node.Method.IsSpecialName && node.Method.Name.StartsWith("set_", StringComparison.Ordinal))
+            Reject("属性 setter 只能通过赋值或初始化器使用。");
+        Check(node.Method);
+        return base.VisitMethodCall(node);
+    }
     protected override Expression VisitNew(NewExpression node)
     { if (node.Constructor is not null) Check(node.Constructor); return base.VisitNew(node); }
     protected override Expression VisitIndex(IndexExpression node)
@@ -56,7 +61,11 @@ internal sealed class ExpressionAudit(CompilerOptions options, SourceSpan span, 
     { Check(node.AddMethod); return base.VisitElementInit(node); }
     protected override Expression VisitBinary(BinaryExpression node)
     {
-        if (node.NodeType == ExpressionType.Assign && node.Left is IndexExpression { Indexer.SetMethod: { } setter }) Check(setter);
+        if (node.NodeType == ExpressionType.Assign)
+        {
+            if (node.Left is IndexExpression { Indexer.SetMethod: { } indexedSetter }) Check(indexedSetter);
+            if (node.Left is MemberExpression { Member: PropertyInfo { SetMethod: { } setter } }) Check(setter);
+        }
         if (options.DecimalOnly && node.NodeType is (ExpressionType.Add or ExpressionType.Subtract
             or ExpressionType.Multiply or ExpressionType.Divide or ExpressionType.Modulo
             or ExpressionType.AddChecked or ExpressionType.SubtractChecked or ExpressionType.MultiplyChecked)

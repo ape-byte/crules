@@ -42,6 +42,20 @@ internal static class Smoke
         });
         Check("repeated_inputs", () => { if (baseline!.Execute(new(100m, false)) != 80m) throw new Exception("state leaked"); });
         Check("scope_and_assignment", () => Expect(compiler, "var x=1m;{var y=ctx.Amount;x=x+y;}return x;", 101m));
+        Check("assignment_expressions", () =>
+        {
+            var r = compiler.Compile<Func<Dictionary<string, decimal>, AotDecision?>>("""
+                var d = new AotDecision { Amount = 1m };
+                decimal y = 0m;
+                var assigned = values["a"] = d.Amount = y = 2m;
+                if (false && (d.Amount = 3m) == 3m) return null;
+                if (assigned == y && y == values["a"]) return d;
+                return null;
+                """, ["values"]).RequireExecutable();
+            if (r.Execute(new())?.Amount != 2m) throw new Exception("assignment result/order");
+            var invalid = compiler.Compile<Func<AotDecision>>("var d = new AotDecision(); d.InitOnly = 3m; return d;", []);
+            if (invalid.Success || invalid.Diagnostics[0].Code != "CRL2003") throw new Exception("init setter accepted");
+        });
         Check("const_binding", () => Expect(compiler, "const x=ctx.Amount;return x;", 100m));
         Check("early_return", () => Expect(compiler, "if(ctx.Vip){return 7m;}return 9m;", 7m));
         Check("positive_round", () => Expect(compiler, "return Math.Round(1.005m,2,MidpointRounding.ToEven);", 1m));
@@ -176,7 +190,11 @@ internal static class Smoke
     }
 }
 
-public sealed class AotDecision { public decimal Amount { get; set; } }
+public sealed class AotDecision
+{
+    public decimal Amount { get; set; }
+    public decimal InitOnly { get; init; }
+}
 public sealed class AotAsyncHost
 {
     public Task<decimal?> TaskResult() => Task.FromResult<decimal?>(2m);
